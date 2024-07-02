@@ -4,7 +4,12 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Models\Brigada\Brigada;
+use App\Models\Brigada\BrigadaUser;
 use App\Models\Site\Zona;
+use App\Models\UnidadMovil\UnidadMovil;
+use App\Models\UnidadMovil\UnidadMovilUser;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -51,6 +56,38 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->belongsTo(Zona::class);
     }
+
+    public function brigada_user() 
+    {
+        return $this->hasMany(BrigadaUser::class);
+    }
+
+    public function brigada() 
+    {
+        return $this->belongsToMany(Brigada::class);
+    }
+
+    public function unidad_movil()
+    {
+        return $this->belongsToMany(UnidadMovil::class)
+                                    ->withPivot('estado')
+                                    ->where('estado','1');
+    }
+
+
+
+    public function unidad_movil_user()
+    {
+        return $this->hasMany(UnidadMovilUser::class)->where('estado','1');
+    }
+
+    protected function setNameAttribute($value){
+        $this->attributes['name'] = ucfirst(strtolower($value));
+    }
+    protected function setSurnameAttribute($value){
+        $this->attributes['surname'] = ucfirst(strtolower($value));
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

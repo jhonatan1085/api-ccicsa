@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources\User;
 
+use App\Http\Resources\UnidadMovil\UnidadMovilResource;
+use App\Http\Resources\UnidadMovil\UnidadMovilUserResource;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -32,7 +34,8 @@ class UserResource extends JsonResource
             "role" => $this->resource->roles->first(),
             "zona" => $this->resource->zona->first(),
             "educacion" => $this->resource->educacion->first(),
-            "avatar" => env("APP_URL")."storage/".$this->resource->avatar,   
+            "avatar" => env("APP_URL")."storage/".$this->resource->avatar,  
+            //"unidad_movil" => UnidadMovilUserResource::collection('unidad_movil_user')
         ];
     }
 }

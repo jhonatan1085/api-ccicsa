@@ -71,7 +71,10 @@ class PermissionsDemoSeeder extends Seeder
        // $role2->givePermissionTo('publish articles');
        // $role2->givePermissionTo('unpublish articles');
 
-       $role3 = Role::create(['guard_name' => 'api','name' => 'Super-Admin']);
+       $role3 = Role::create(['guard_name' => 'api','name' => 'Admin']);
+       Role::create(['guard_name' => 'api','name' => 'Held Desk']);
+       $role4 = Role::create(['guard_name' => 'api','name' => 'Tecnico']);
+       Role::create(['guard_name' => 'api','name' => 'Lider']);
        // gets all permissions via Gate::before rule; see AuthServiceProvider
 
        // create demo users
@@ -104,5 +107,6 @@ class PermissionsDemoSeeder extends Seeder
            'zona_id' => 1
        ]);
        $user->assignRole($role3);
+
    }
 }

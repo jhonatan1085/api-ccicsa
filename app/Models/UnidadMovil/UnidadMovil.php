@@ -1,20 +1,18 @@
 <?php
 
-namespace App\Models\Site;
+namespace App\Models\UnidadMovil;
 
-use App\Models\Brigada\Brigada;
+use App\Models\Brigada\BrigadaUser;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Zona extends Model
+class UnidadMovil extends Model
 {
     use HasFactory;
-
     protected $fillable = [
-        "nombre"
+        "placa"
     ];
 
     public function setCreatedAtAttribute($value)
@@ -28,18 +26,20 @@ class Zona extends Model
     	date_default_timezone_set("America/Lima");
         $this->attributes["updated_at"]= Carbon::now();
     }
-    public function site() : HasMany
+
+    public function unidad_movil_user() 
     {
-        return $this->hasMany(Site::class);
+        return $this->hasMany(UnidadMovilUser::class);
     }
 
-    public function user() 
+    public function user()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsToMany(User::class);
     }
 
-    public function brigada() 
+    public function brigada_user() 
     {
-        return $this->hasMany(Brigada::class);
+        return $this->hasMany(BrigadaUser::class);
     }
+
 }

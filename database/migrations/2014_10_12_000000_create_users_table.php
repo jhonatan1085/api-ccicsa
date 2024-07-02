@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('surname');
-            $table->string('cel_corp',10);
-            $table->string('cel_per',10);
+            $table->string('cel_corp',10)->nullable('NULL');
+            $table->string('cel_per',10)->nullable('NULL');
             $table->string('dni',10)->unique();
-            $table->timestamp('birth_date')->nullable('NULL');;
+            $table->timestamp('birth_date')->nullable('NULL');
             $table->char('gender',1);
-            $table->string('address');
-            $table->string('avatar');
+            $table->string('address')->nullable('NULL');
+            $table->string('avatar')->nullable('NULL');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

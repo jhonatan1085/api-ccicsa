@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('zonas', function (Blueprint $table) {
+        Schema::create('bitacora_brigada', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre',45);
-            $table->unsignedBigInteger('region_id')->nullable();
-            $table->foreign('region_id')->references('id')->on('regions');
+            $table->unsignedBigInteger('brigada_id');
+            $table->foreign('brigada_id')->references('id')->on('brigadas');
+            $table->unsignedBigInteger('bitacora_id');
+            $table->foreign('bitacora_id')->references('id')->on('bitacoras');
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('zonas');
+        Schema::dropIfExists('bitacora_brigada');
     }
 };

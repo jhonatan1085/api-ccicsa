@@ -25,6 +25,7 @@ class Site extends Model
         "tiempo_acceso",
         "tipo_site_id",
         "zona_id",
+        "region_id",
         "region_geografica_id",
         "consesionaria_id",
         "distrito_id",
@@ -52,7 +53,7 @@ class Site extends Model
     
     public function zona()
     {
-        return $this->belongsTo(Zona::class);
+        return $this->belongsTo(Zona::class)->orderBy('nombre','asc');
     }
     public function tipo_site()
     {
@@ -99,6 +100,7 @@ class Site extends Model
     {
         return $this->belongsTo(Distrito::class);
     }
+
 
 
 }

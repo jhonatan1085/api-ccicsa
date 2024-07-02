@@ -33,7 +33,10 @@ class DatabaseSeeder extends Seeder
      $this->call(SiteSeeder::class);
      $this->call(EducacionSeeder::class);
      $this->call(PermissionsDemoSeeder::class);
-
+     $this->call(TipoBrigadas::class);
+     $this->call(Reds::class);
+     $this->call(Servs::class);
+     $this->call(TipoAverias::class);
     Model::reguard();
         
         // \App\Models\User::factory(10)->create();

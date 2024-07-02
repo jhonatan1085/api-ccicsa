@@ -1,18 +1,14 @@
 <?php
 
-namespace App\Models\Site;
+namespace App\Models\Bitacora;
 
-use App\Models\Brigada\Brigada;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Zona extends Model
+class Serv extends Model
 {
     use HasFactory;
-
     protected $fillable = [
         "nombre"
     ];
@@ -28,18 +24,9 @@ class Zona extends Model
     	date_default_timezone_set("America/Lima");
         $this->attributes["updated_at"]= Carbon::now();
     }
-    public function site() : HasMany
-    {
-        return $this->hasMany(Site::class);
-    }
 
-    public function user() 
+    public function bitacora() 
     {
-        return $this->hasMany(User::class);
-    }
-
-    public function brigada() 
-    {
-        return $this->hasMany(Brigada::class);
+        return $this->hasMany(Bitacora::class);
     }
 }

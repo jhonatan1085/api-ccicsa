@@ -36,9 +36,9 @@ class StaffsController extends Controller
     }
 
     public function config(){
-        $roles = Role::all();
-        $educacions = Educacion::all();
-        $zonas = Zona::all();
+        $roles = Role::orderBy('name')->get();
+        $educacions = Educacion::orderBy('nombre')->get();
+        $zonas = Zona::orderBy('nombre')->get();
         return response()->json([
             "roles" => $roles,
             "educacions" => $educacions,
@@ -162,4 +162,17 @@ class StaffsController extends Controller
             "message" => 200
         ]);
     }
+
+    public function usuariozona(string $id)
+    {
+        $usuarios = User::with('unidad_movil:id,placa')
+            ->select('name','surname','id')
+            ->where("zona_id", $id)
+            ->orderBy("name", "asc")
+            ->get();
+        return response()->json([
+            "usuarios" =>  $usuarios
+        ]);
+    }
+    
 }

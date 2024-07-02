@@ -89,8 +89,14 @@ class SiteResource extends JsonResource
                 "id" => $this->resource->tipo_energia->id,
                 "nombre" => $this->resource->tipo_energia->nombre,
             ]: NULL,
-
-
+            "provincia" => $this->resource->distrito->provincia ? [
+                "id" => $this->resource->distrito->provincia->id,
+                "nombre" => $this->resource->distrito->provincia->nombre,
+            ]: NULL,
+            "departamento" => $this->resource->distrito->provincia->departamento ? [
+                "id" => $this->resource->distrito->provincia->departamento->id,
+                "nombre" => $this->resource->distrito->provincia->departamento->nombre,
+            ]: NULL,
             "observacion" => $this->resource->observacion 
         ];
     }

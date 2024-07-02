@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\Bitacora\BitacorasController;
+use App\Http\Controllers\Admin\Brigada\BrigadasController;
 use App\Http\Controllers\Admin\Doctor\DoctorsController;
 use App\Http\Controllers\Admin\Doctor\SpecialityController;
 use App\Http\Controllers\Admin\Rol\RolesController;
@@ -46,6 +48,7 @@ Route::group([
 ], function ($router) {
     Route::resource("roles",RolesController::class);
 
+    Route::get("usuariozona/{id}",[StaffsController::class,"usuariozona"]);
     Route::get("staffs/config",[StaffsController::class,"config"]);
     Route::post("staffs/{id}",[StaffsController::class,"update"]);
     Route::resource("staffs",StaffsController::class);
@@ -58,6 +61,22 @@ Route::group([
 
 
     //
+
+    
+    Route::get("sitesautocomplete",[SitesController::class,"sitesautocomplete"]);
+    Route::get("distritoprov/{id}",[SitesController::class,"distritoprov"]);
+    Route::get("provinciasdep/{id}",[SitesController::class,"provinciadep"]);
+    Route::get("sites/config",[SitesController::class,"config"]);
+    Route::post("sites/{id}",[SitesController::class,"update"]);
     Route::resource("sites",SitesController::class);
+    
+    //brigadas
+    
+    Route::get("brigadas/brigadaactiva",[BrigadasController::class,"brigadaactiva"]);
+    Route::get("brigadas/config",[BrigadasController::class,"config"]);
+    Route::resource("brigadas",BrigadasController::class);
+
+    Route::get("bitacoras/config",[BitacorasController::class,"config"]);
+    Route::resource("bitacoras",BitacorasController::class);
 
 });

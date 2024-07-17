@@ -19,7 +19,8 @@ class BrigadaUserResource extends JsonResource
             "is_lider" => $this->is_lider,
             "user" => $this->user  ? [
                 "id" =>$this->user->id,
-                "nombre" =>$this->user->name . " " . $this->user->surname
+                "nombre" =>$this->user->name . " " . $this->user->surname,
+                "celular" => $this->user->cel_corp
             ]: NULL,
             "unidad_movil" => $this->unidad_movil ? [
                 "id" => $this->unidad_movil->id,

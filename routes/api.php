@@ -48,7 +48,10 @@ Route::group([
 ], function ($router) {
     Route::resource("roles",RolesController::class);
 
-    Route::get("usuariozona/{id}",[StaffsController::class,"usuariozona"]);
+    
+    Route::get("usuariozonaclaro/{id}",[StaffsController::class,"usuariozonaclaro"]);
+    Route::get("usuariozonaresponsables/{id}",[StaffsController::class,"usuariozonaresponsables"]);
+    Route::get("usuariozonatecnico/{id}",[StaffsController::class,"usuariozonatecnico"]);
     Route::get("staffs/config",[StaffsController::class,"config"]);
     Route::post("staffs/{id}",[StaffsController::class,"update"]);
     Route::resource("staffs",StaffsController::class);
@@ -62,7 +65,6 @@ Route::group([
 
     //
 
-    
     Route::get("sitesautocomplete",[SitesController::class,"sitesautocomplete"]);
     Route::get("distritoprov/{id}",[SitesController::class,"distritoprov"]);
     Route::get("provinciasdep/{id}",[SitesController::class,"provinciadep"]);
@@ -76,7 +78,12 @@ Route::group([
     Route::get("brigadas/config",[BrigadasController::class,"config"]);
     Route::resource("brigadas",BrigadasController::class);
 
+    
+    Route::get("bitacoras/viewBitacora/{id}",[BitacorasController::class,"viewBitacora"]);
+    Route::get("bitacoras/atencion/{id}",[BitacorasController::class,"listAtencion"]);
     Route::get("bitacoras/config",[BitacorasController::class,"config"]);
+    Route::post("bitacoras/addAtencionBitacora",[BitacorasController::class,"addAtencionBitacora"]);
+    
     Route::resource("bitacoras",BitacorasController::class);
 
 });

@@ -139,8 +139,6 @@ class StaffsController extends Controller
             $user->assignRole($role_new);
         }
 
-        
-        
         return response()->json([
             "message" => 200
         ]);
@@ -163,16 +161,58 @@ class StaffsController extends Controller
         ]);
     }
 
-    public function usuariozona(string $id)
+    public function usuariozonatecnico(string $id)
     {
         $usuarios = User::with('unidad_movil:id,placa')
             ->select('name','surname','id')
             ->where("zona_id", $id)
+            ->whereHas("roles", function ($q) {
+                $q->where("name", "like", "%Tecnico%");
+            })
             ->orderBy("name", "asc")
             ->get();
         return response()->json([
             "usuarios" =>  $usuarios
         ]);
     }
+
+    
+    public function usuariozonalider(string $id)
+    {
+        $usuarios = User::select('name','surname','id')
+            ->whereHas("zona_user", function ($q) use($id) {
+                $q->where("zona_id", $id)
+                ->where('is_user','1');
+            })
+            ->get();
+
+            return $usuarios;
+/*         return response()->json([
+            "usuarios" =>  $usuarios
+        ]); */
+    }
+
+    public function usuariozonaclaro(string $id)
+    {
+        $usuarios = User::select('name','surname','id')
+            ->whereHas("zona_user", function ($q) use($id) {
+                $q->where("zona_id", $id)
+                ->where('is_user','0');
+            })
+            ->get();
+            return $usuarios;
+/*         return response()->json([
+            "usuarios" =>  $usuarios
+        ]); */
+    }
+
+    public function  usuariozonaresponsables(string $id)
+    {
+        return response()->json([
+            "lidercicsa" =>  $this->usuariozonalider($id),
+            "liderclaro" =>  $this->usuariozonaclaro($id),
+        ]);
+    }
+
     
 }

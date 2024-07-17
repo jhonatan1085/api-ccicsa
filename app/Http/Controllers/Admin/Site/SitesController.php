@@ -40,7 +40,6 @@ class SitesController extends Controller
             })
             ->orderBy("nombre", "asc")
             ->paginate(100);
-
         return response()->json([
             "total" => $sites->total(),
             "sites" => SiteCollection::make($sites)

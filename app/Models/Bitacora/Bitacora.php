@@ -25,7 +25,8 @@ class Bitacora extends Model
         "serv_id",
         "site_id",
         "resp_cicsa_id",
-        "resp_claro_id"
+        "resp_claro_id",
+        "estado"
     ];
 
     public function setCreatedAtAttribute($value)
@@ -74,10 +75,20 @@ class Bitacora extends Model
     {
         return $this->hasMany(BitacoraBrigada::class);
     }
+    
 
     public function brigada()
     {
         return $this->belongsToMany(Brigada::class);
+    }
 
+    public function bitacora_atencion() 
+    {
+        return $this->hasMany(BitacoraAtencion::class)->whereNull('parent_id');
+    }
+
+    public function atencion()
+    {
+        return $this->belongsToMany(Atencion::class);
     }
 }

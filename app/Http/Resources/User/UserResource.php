@@ -31,9 +31,9 @@ class UserResource extends JsonResource
             "cel_per" => $this->resource->cel_per,
             "dni" => $this->resource->dni,
             "created_at" => $this->resource->created_at ? $this->resource->created_at->format("Y/m/d ") : NULL,
-            "role" => $this->resource->roles->first(),
-            "zona" => $this->resource->zona->first(),
-            "educacion" => $this->resource->educacion->first(),
+            "role" => $this->resource->roles ? $this->resource->roles->first(): NULL,
+            "zona" => $this->resource->zona ? $this->resource->zona->first(): NULL,
+            "educacion" => $this->resource->educacion ? $this->resource->educacion->first(): NULL,
             "avatar" => env("APP_URL")."storage/".$this->resource->avatar,  
             //"unidad_movil" => UnidadMovilUserResource::collection('unidad_movil_user')
         ];

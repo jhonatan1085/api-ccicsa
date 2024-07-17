@@ -1,20 +1,17 @@
 <?php
 
-namespace App\Models\Bitacora;
+namespace App\Models\User;
 
-use App\Models\Brigada\Brigada;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BitacoraBrigada extends Model
+class TipoPlanta extends Model
 {
     use HasFactory;
-    protected $table = "bitacora_brigada";
 
     protected $fillable = [
-        "brigada_id",
-        "bitacora_id"
+        "nombre"
     ];
 
     public function setCreatedAtAttribute($value)
@@ -28,14 +25,8 @@ class BitacoraBrigada extends Model
     	date_default_timezone_set("America/Lima");
         $this->attributes["updated_at"]= Carbon::now();
     }
-
-    public function bitacora() 
+    public function zona_user() 
     {
-        return $this->belongsTo(Bitacora::class);
-    }
-    
-    public function brigada() 
-    {
-        return $this->belongsTo(Brigada::class);
+        return $this->hasMany(ZonaUser::class);
     }
 }

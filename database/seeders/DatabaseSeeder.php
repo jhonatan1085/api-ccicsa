@@ -37,6 +37,8 @@ class DatabaseSeeder extends Seeder
      $this->call(Reds::class);
      $this->call(Servs::class);
      $this->call(TipoAverias::class);
+     $this->call(TipoPlantaSeeder::class);
+     $this->call(AtencionSeeder::class);
     Model::reguard();
         
         // \App\Models\User::factory(10)->create();

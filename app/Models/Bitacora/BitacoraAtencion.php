@@ -2,19 +2,22 @@
 
 namespace App\Models\Bitacora;
 
-use App\Models\Brigada\Brigada;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BitacoraBrigada extends Model
+class BitacoraAtencion extends Model
 {
     use HasFactory;
-    protected $table = "bitacora_brigada";
+    protected $table = "bitacora_atencion";
 
     protected $fillable = [
-        "brigada_id",
-        "bitacora_id"
+        "hora",
+        "descripcion",
+        "orden",
+        "bitacora_id",
+        "atencion_id",
+        "parent_id"
     ];
 
     public function setCreatedAtAttribute($value)
@@ -34,8 +37,22 @@ class BitacoraBrigada extends Model
         return $this->belongsTo(Bitacora::class);
     }
     
-    public function brigada() 
+    public function atencion() 
     {
-        return $this->belongsTo(Brigada::class);
+        return $this->belongsTo(Atencion::class);
     }
+
+    public function parent() 
+    {
+        return $this->belongsTo(BitacoraAtencion::class,'parent_id');
+    }
+
+    public function bitacora_atencion() 
+    {
+        return $this->hasMany(BitacoraAtencion::class,'parent_id');
+    }
+
+
+
+
 }

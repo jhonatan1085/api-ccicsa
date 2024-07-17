@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('bitacoras', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre',45);
+            $table->string('nombre',250);
             $table->timestamp('fecha_inicial')->nullable('NULL');
             $table->string('sot',45)->nullable('NULL');
             $table->string('insidencia',45)->nullable('NULL');
@@ -32,6 +32,7 @@ return new class extends Migration
             $table->foreign('resp_cicsa_id')->references('id')->on('users');
             $table->unsignedBigInteger('resp_claro_id');
             $table->foreign('resp_claro_id')->references('id')->on('users');
+            $table->char('estado',1)->default('0'); 
             $table->timestamps();
 
         });

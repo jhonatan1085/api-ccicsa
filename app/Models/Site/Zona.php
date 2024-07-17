@@ -42,4 +42,11 @@ class Zona extends Model
     {
         return $this->hasMany(Brigada::class);
     }
+
+    public function user_zona()
+    {
+        return $this->belongsToMany(User::class)
+                                    ->withPivot('estado')
+                                    ->where('estado','1');
+    }
 }

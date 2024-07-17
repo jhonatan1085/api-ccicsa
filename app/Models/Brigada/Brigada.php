@@ -91,4 +91,8 @@ class Brigada extends Model
         return $query->where("estado","1")
         ->with('contratista','zona','tipo_brigada', 'user.unidad_movil');
     }
+
+    public function scopeBrigadaBitacora($query)  {
+        return $query->with('user.unidad_movil','user')->where('');
+    }
 }

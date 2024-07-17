@@ -11,7 +11,9 @@ use App\Models\Site\Contratista;
 use App\Models\Site\Zona;
 use App\Models\User;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class BrigadasController extends Controller
 {
@@ -22,7 +24,7 @@ class BrigadasController extends Controller
     {
         $search = $request->search;
 
-        $brigadas = Brigada::BrigadaAll()->paginate(3);
+        $brigadas = Brigada::BrigadaAll()->paginate(10);
         return response()->json([
             "total" => $brigadas->total(),
             "brigadas" => BrigadaCollection::make($brigadas)
@@ -39,14 +41,14 @@ class BrigadasController extends Controller
             "zonas" => $zonas,
             "contratistas" => $contratistas,
             "tipobrigadas" => $tipobrigadas,
-            "users" =>$users
+            "users" => $users
         ]);
     }
 
     public function brigadaactiva()
     {
-        
-        $brigadas = Brigada::BrigadaAll()->where('estado','1')->get();
+
+        $brigadas = Brigada::BrigadaAll()->where('estado', '1')->get();
         return response()->json([
             "brigadas" => BrigadaCollection::make($brigadas)
         ]);
@@ -57,36 +59,55 @@ class BrigadasController extends Controller
      */
     public function store(Request $request)
     {
-        /* $site_is_valid = Site::where("codigo", $request->codigo)->first();
-        if ($site_is_valid) {
+        try {
+            $rules = [
+                'zona_id' => 'required',
+                'tipo_brigada_id' => 'required',
+                'contratista_id' => 'required',
+                'tecnicos' => 'required',
+            ];
+            $messages = [
+                'zona_id.required' => 'Debe ingresar zona',
+                'tipo_brigada_id.required' => 'Debe ingresar zona',
+                'contratista_id.required' => 'Debe ingresar zona',
+                'tecnicos.required' => 'No ingreso tecnicos',
+            ];
+
+            $validator = Validator::make($request->all(), $rules, $messages);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    "message" => 403,
+                    "error" => $validator->errors()
+                ]);
+            }
+
+            $tecnicos = json_decode($request->tecnicos, 1);
+            $request->request->add(["fecha_alta" => now()]);
+
+            $brigada = Brigada::create($request->all());
+
+            //agregar los tecnicos seleccionados
+            foreach ($tecnicos as $key => $tecnico) {
+
+                BrigadaUser::create([
+                    "user_id" => $tecnico["user_id"],
+                    "brigada_id" => $brigada->id,
+                    "unidad_movil_id" => $tecnico["movil_id"],
+                    "is_lider" => $tecnico["is_lider"],
+                ]);
+            }
+
+            return response()->json([
+
+                "message" => 200
+            ]);
+        } catch (Exception $e) {
             return response()->json([
                 "message" => 403,
-                "message_text" => "EL CODIGO DE SITE YA EXISTE"
+                "error" => $e
             ]);
-        } */
-
-        $tecnicos = json_decode($request->tecnicos, 1);
-       
-        $request->request->add(["fecha_alta" => now()]);
-
-
-        $brigada = Brigada::create($request->all());
-
-                //agregar los tecnicos seleccionados
-                foreach ($tecnicos as $key => $tecnico) {
-
-                            BrigadaUser::create([
-                                "user_id" => $tecnico["user_id"],
-                                "brigada_id" => $brigada->id,
-                                "unidad_movil_id" => $tecnico["movil_id"] ,
-                                "is_lider" => $tecnico["is_lider"] ,
-                            ]);
-                       
-                }
-
-        return response()->json([
-            "message" => 200
-        ]);
+        }
     }
 
     /**
@@ -110,6 +131,13 @@ class BrigadasController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $brigada = Brigada::findOrFail($id);
+
+        $brigada->estado = '0';
+        $brigada->save();
+
+        return response()->json([
+            "message" => 200
+        ]);
     }
 }

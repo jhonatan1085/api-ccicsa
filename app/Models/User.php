@@ -9,6 +9,7 @@ use App\Models\Brigada\BrigadaUser;
 use App\Models\Site\Zona;
 use App\Models\UnidadMovil\UnidadMovil;
 use App\Models\UnidadMovil\UnidadMovilUser;
+use App\Models\User\ZonaUser;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -79,6 +80,19 @@ class User extends Authenticatable implements JWTSubject
     public function unidad_movil_user()
     {
         return $this->hasMany(UnidadMovilUser::class)->where('estado','1');
+    }
+
+    public function zona_user()
+    {
+        return $this->hasMany(ZonaUser::class)->where('estado','1');
+    }
+
+    public function user_zona()
+    {
+        return $this->belongsToMany(Zona::class)
+                                    ->withPivot('estado')
+                                    ->where('estado','1')
+                                    ->where('is_user','1');
     }
 
     protected function setNameAttribute($value){

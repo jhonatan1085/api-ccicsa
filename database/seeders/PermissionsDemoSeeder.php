@@ -62,35 +62,12 @@ class PermissionsDemoSeeder extends Seeder
        Permission::create(['guard_name' => 'api','name' => 'settings']);
 
 
-       // create roles and assign existing permissions
-       // $role1 = Role::create(['guard_name' => 'api','name' => 'writer']);
-       // $role1->givePermissionTo('edit articles');
-       // $role1->givePermissionTo('delete articles');
-
-       // $role2 = Role::create(['guard_name' => 'api','name' => 'admin']);
-       // $role2->givePermissionTo('publish articles');
-       // $role2->givePermissionTo('unpublish articles');
-
        $role3 = Role::create(['guard_name' => 'api','name' => 'Admin']);
        Role::create(['guard_name' => 'api','name' => 'Held Desk']);
        $role4 = Role::create(['guard_name' => 'api','name' => 'Tecnico']);
-       Role::create(['guard_name' => 'api','name' => 'Lider']);
-       // gets all permissions via Gate::before rule; see AuthServiceProvider
+       $role5 = Role::create(['guard_name' => 'api','name' => 'Lider']);
 
-       // create demo users
-       // $user = \App\Models\User::factory()->create([
-       //     'name' => 'Example User',
-       //     'email' => 'test@example.com',
-       //     'password' => bcrypt('12345678')
-       // ]);
-       // $user->assignRole($role1);
 
-       // $user = \App\Models\User::factory()->create([
-       //     'name' => 'Example Admin User',
-       //     'email' => 'admin@example.com',
-       //     'password' => bcrypt('12345678')
-       // ]);
-       // $user->assignRole($role2);
 
        $user = \App\Models\User::factory()->create([
            'name' => 'Jhonatan ',
@@ -107,6 +84,240 @@ class PermissionsDemoSeeder extends Seeder
            'zona_id' => 1
        ]);
        $user->assignRole($role3);
+
+
+
+       $user = \App\Models\User::factory()->create([
+        'name' => 'MOISES JHONATAN',
+        'surname' => 'QUIROZ ROMERO',
+        'cel_corp' => '982559510',
+        'cel_per' => '982559510',
+        'dni' => '44183404',
+        'gender' => '1',
+        'password' => bcrypt('12345678'),
+        'zona_id' => 4
+    ]);
+    $user->assignRole($role4);
+
+    $user = \App\Models\User::factory()->create([
+        'name' => 'JEAN PAUL',
+        'surname' => 'CALLE MOGOLLON',
+        'cel_per' => '997506983',
+        'dni' => '42979476',
+        'gender' => '1',
+        'password' => bcrypt('12345678'),
+        'zona_id' => 4
+    ]);
+    $user->assignRole($role4);
+
+    $user = \App\Models\User::factory()->create([
+        'name' => 'NAHUN BENHUR',
+        'surname' => 'VILELA SEGUNDO',
+        'cel_corp' => '982559511',
+        'cel_per' => '930580288',
+        'dni' => '46460054',
+        'gender' => '1',
+        'password' => bcrypt('12345678'),
+        'zona_id' => 9
+    ]);
+    $user->assignRole($role4);
+
+    $user = \App\Models\User::factory()->create([
+        'name' => 'DAVI',
+        'surname' => 'LA ROSA GASPAR',
+        'cel_per' => '913697944',
+        'dni' => '32975836',
+        'gender' => '1',
+        'password' => bcrypt('12345678'),
+        'zona_id' => 9
+    ]);
+    $user->assignRole($role4);
+
+    $user = \App\Models\User::factory()->create([
+        'name' => 'JULIO MIGUEL',
+        'surname' => 'NAVARRO AGURTO',
+        'cel_corp' => '953236168',
+        'cel_per' => '906351116',
+        'dni' => '45859092',
+        'gender' => '1',
+        'password' => bcrypt('12345678'),
+        'zona_id' => 14
+    ]);
+    $user->assignRole($role4);
+
+    $user = \App\Models\User::factory()->create([
+        'name' => 'BORIS ANGEL',
+        'surname' => 'SANCHEZ INFANTE',
+        'cel_corp' => '989065793',
+        'cel_per' => '921582953',
+        'dni' => '71997626',
+        'gender' => '1',
+        'password' => bcrypt('12345678'),
+        'zona_id' => 14
+    ]);
+    $user->assignRole($role4);
+
+    $user = \App\Models\User::factory()->create([
+        'name' => 'EDWAR',
+        'surname' => 'ROJAS ROMERO',
+        'cel_corp' => '915066483',
+        'cel_per' => '987593229',
+        'dni' => '47212444',
+        'gender' => '1',
+        'password' => bcrypt('12345678'),
+        'zona_id' => 7
+    ]);
+    $user->assignRole($role4);
+
+    $user = \App\Models\User::factory()->create([
+        'name' => 'JAVIER',
+        'surname' => 'PEREZ GARAY',
+        'cel_per' => '945000110',
+        'dni' => '16801640',
+        'gender' => '1',
+        'password' => bcrypt('12345678'),
+        'zona_id' => 7
+    ]);
+    $user->assignRole($role4);
+
+    $user = \App\Models\User::factory()->create([
+        'name' => 'ANTHONY LUDWING',
+        'surname' => 'CASTRO LEON',
+        'cel_per' => '943509095',
+        'dni' => '45487113',
+        'gender' => '1',
+        'password' => bcrypt('12345678'),
+        'zona_id' => 9
+    ]);
+    $user->assignRole($role4);
+
+    $user = \App\Models\User::factory()->create([
+        'name' => 'Jesus emilio',
+        'surname' => 'Carmona cusquisiban',
+        'cel_per' => '986650357',
+        'dni' => '44735170',
+        'gender' => '1',
+        'password' => bcrypt('12345678'),
+        'zona_id' => 5
+    ]);
+    $user->assignRole($role4);
+
+    $user = \App\Models\User::factory()->create([
+        'name' => 'Emer octavio',
+        'surname' => 'Sangay martos',
+        'cel_per' => '989067522',
+        'dni' => '75716129',
+        'gender' => '1',
+        'password' => bcrypt('12345678'),
+        'zona_id' => 5
+    ]);
+    $user->assignRole($role4);
+
+    $user = \App\Models\User::factory()->create([
+        'name' => 'WILLIAM',
+        'surname' => 'SANCHEZ DIAZ',
+        'cel_corp' => '915066389',
+        'cel_per' => '948164597',
+        'dni' => '',
+        'gender' => '1',
+        'password' => bcrypt('12345678'),
+        'zona_id' => 6
+    ]);
+    $user->assignRole($role4);
+
+    $user = \App\Models\User::factory()->create([
+        'name' => 'YHONY ALEX',
+        'surname' => 'SANCHEZ DIAZ',
+        'cel_per' => '954283701',
+        'dni' => '46045241',
+        'gender' => '1',
+        'password' => bcrypt('12345678'),
+        'zona_id' => 6
+    ]);
+    $user->assignRole($role4);
+
+    $user = \App\Models\User::factory()->create([
+        'name' => 'JHON ',
+        'surname' => 'RAMIREZ ASIS',
+        'cel_corp' => '987632142',
+        'cel_per' => '944805671',
+        'dni' => '05859092',
+        'gender' => '1',
+        'password' => bcrypt('12345678'),
+        'zona_id' => 3
+    ]);
+    $user->assignRole($role4);
+
+    $user = \App\Models\User::factory()->create([
+        'name' => 'JHON ',
+        'surname' => 'COLLAZOS DURAN',
+        'cel_per' => '963262229',
+        'dni' => '71863190',
+        'gender' => '1',
+        'password' => bcrypt('12345678'),
+        'zona_id' => 3
+    ]);
+    $user->assignRole($role4);
+
+    $user = \App\Models\User::factory()->create([
+        'name' => 'JUBERTH',
+        'surname' => 'CCENCHI ONOFRE',
+        'cel_corp' => '915066496',
+        'cel_per' => '915066496',
+        'dni' => '44146650',
+        'gender' => '1',
+        'password' => bcrypt('12345678'),
+        'zona_id' => 1
+    ]);
+    $user->assignRole($role4);
+
+    $user = \App\Models\User::factory()->create([
+        'name' => 'JUVAL',
+        'surname' => 'ACHIC CESPEDES',
+        'cel_per' => '915066526',
+        'dni' => '44432688',
+        'gender' => '1',
+        'password' => bcrypt('12345678'),
+        'zona_id' => 1
+    ]);
+    $user->assignRole($role4);
+
+    $user = \App\Models\User::factory()->create([
+        'name' => 'JOSE',
+        'surname' => 'NEIRA ADRIANCEN',
+        'cel_corp' => '989595211',
+        'cel_per' => '935626174',
+        'dni' => '46320593',
+        'gender' => '1',
+        'password' => bcrypt('12345678'),
+        'zona_id' => 1
+    ]);
+    $user->assignRole($role4);
+
+    $user = \App\Models\User::factory()->create([
+        'name' => 'LENIN',
+        'surname' => 'RODRIGUEZ',
+        'cel_corp' => '123456',
+        'cel_per' => '123456',
+        'dni' => '12345678',
+        'gender' => '1',
+        'password' => bcrypt('12345678'),
+        'zona_id' => 1
+    ]);
+    $user->assignRole($role5);
+
+    $user = \App\Models\User::factory()->create([
+        'name' => 'ROBERTO',
+        'surname' => 'ZAPATA',
+        'cel_corp' => '123456',
+        'cel_per' => '123456',
+        'dni' => '87654321',
+        'gender' => '1',
+        'password' => bcrypt('12345678'),
+        'zona_id' => 1
+    ]);
+    $user->assignRole($role5);
+
 
    }
 }

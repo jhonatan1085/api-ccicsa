@@ -1,20 +1,26 @@
 <?php
 
-namespace App\Models\Bitacora;
+namespace App\Models\User;
 
-use App\Models\Brigada\Brigada;
+use App\Models\Site\Zona;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BitacoraBrigada extends Model
+class ZonaUser extends Model
 {
     use HasFactory;
-    protected $table = "bitacora_brigada";
 
+    protected $table = "zona_user";
     protected $fillable = [
-        "brigada_id",
-        "bitacora_id"
+        "is_user",
+        "user_id",
+        "zona_id",
+        "tipo_planta_id",
+        "fecha_alta",
+        "fecha_baja",
+        "estado",
     ];
 
     public function setCreatedAtAttribute($value)
@@ -29,13 +35,17 @@ class BitacoraBrigada extends Model
         $this->attributes["updated_at"]= Carbon::now();
     }
 
-    public function bitacora() 
+    public function user() 
     {
-        return $this->belongsTo(Bitacora::class);
+        return $this->belongsTo(User::class);
     }
-    
-    public function brigada() 
+
+    public function zona() 
     {
-        return $this->belongsTo(Brigada::class);
+        return $this->belongsTo(Zona::class);
+    }
+    public function tipo_planta() 
+    {
+        return $this->belongsTo(TipoPlanta::class);
     }
 }

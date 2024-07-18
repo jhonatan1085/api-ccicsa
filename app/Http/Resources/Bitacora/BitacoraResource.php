@@ -46,7 +46,7 @@ class BitacoraResource extends JsonResource
                 "telefono" => $this->resp_claro->cel_corp ? $this->resp_claro->cel_corp : $this->resp_claro->cel_per
             ]: NULL,
             "estado" => $this->estado,
-            "estadotext" =>  $this->estado == '0' ? "Asignada": "Aceptada", 
+            "estadotext" =>  $this->estado == '0' ? "Cerrada": "Abierta", 
             "latitud" =>  $this->latitud,
             "longitud" =>  $this->longitud,
             "distancia" =>  $this->distancia,
@@ -63,11 +63,24 @@ class BitacoraResource extends JsonResource
                     "nombre" => $this->site->distrito->provincia->departamento->nombre,
                 ]: NULL,
                 "tipo_site" => $this->site->tipo_site ? [
-                    "id" => $this->site->tipo_site ->id,
+                    "id" => $this->site->tipo_site->id,
                     "nombre" => $this->site->tipo_site->nombre == 'POP' ?  $this->site->tipo_site->nombre : 'SITE',
                 ]: NULL,
             ]: NULL,
-            "brigada" => BrigadaResource::collection($this->brigada), 
+            "brigada" => BrigadaResource::collection($this->brigada),
+            "herramientas" => $this->herramientas,
+            "causa_averia" => $this->causa_averia ? [
+                "id" => $this->causa_averia->id,
+                "nombre" => $this->causa_averia->nombre,
+            ]: NULL,
+            "consecuencia_averia" => $this->consecuencia_averia ? [
+                "id" => $this->consecuencia_averia->id,
+                "nombre" => $this->consecuencia_averia->nombre,
+            ]: NULL,
+            "tipo_reparacion" => $this->tipo_reparacion ? [
+                "id" => $this->tipo_reparacion->id,
+                "nombre" => $this->tipo_reparacion->nombre,
+            ]: NULL,
             "atenciones" => BitacoraAtencionResource::collection($this->bitacora_atencion->sortByDesc('orden'))
         ];
     }

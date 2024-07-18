@@ -10,9 +10,12 @@ use App\Models\Bitacora\Atencion;
 use App\Models\Bitacora\Bitacora;
 use App\Models\Bitacora\BitacoraAtencion;
 use App\Models\Bitacora\BitacoraBrigada;
+use App\Models\Bitacora\CausaAveria;
+use App\Models\Bitacora\ConsecuenciaAveria;
 use App\Models\Bitacora\Red;
 use App\Models\Bitacora\Serv;
 use App\Models\Bitacora\TipoAveria;
+use App\Models\Bitacora\TipoReparacion;
 use App\Models\Brigada\Brigada;
 use App\Models\Site\Site;
 use Carbon\Carbon;
@@ -61,11 +64,24 @@ class BitacorasController extends Controller
         ]);
     }
 
+    public function endConfig()
+    {
+        $causa = CausaAveria::select('id','nombre')->orderBy('nombre')->get();
+        $consecuencia = ConsecuenciaAveria::select('id','nombre')->orderBy('nombre')->get();
+        $tipoReparacion = TipoReparacion::select('id','nombre')->orderBy('nombre')->get();
+
+        return response()->json([
+            "causa" => $causa,
+            "consecuencia" => $consecuencia,
+            "tipoReparacion" => $tipoReparacion
+        ]);
+    }
+
     public function listAtencion(string $id)
     {
         $atencions = Atencion::with(['bitacora_atencion' => function ($q) use ($id) {
-            $q->select('id', 'hora', 'descripcion', 'orden', 'atencion_id', 'bitacora_id', 'parent_id')
-                ->with('bitacora_atencion:id,hora,descripcion,orden,atencion_id,bitacora_id,parent_id')
+            $q->select('id', 'hora', 'descripcion', 'orden','is_coment', 'atencion_id', 'bitacora_id', 'parent_id')
+                ->with('bitacora_atencion:id,hora,descripcion,orden,is_coment,atencion_id,bitacora_id,parent_id')
                 ->where('bitacora_id', $id)
                 ->orderBy('orden');
         }])
@@ -177,6 +193,7 @@ class BitacorasController extends Controller
                         [
                             "hora" => $bitAtencion["hora"],
                             "orden" => $bitAtencion["orden"],
+                            "is_coment" => $bitAtencion["is_coment"],
                             "descripcion" => $bitAtencion["descripcion"],
                             "bitacora_id" => $bitAtencion["bitacora_id"],
                             "atencion_id" => $bitAtencion["atencion_id"],
@@ -188,6 +205,7 @@ class BitacorasController extends Controller
                             [
                                 "hora" => $bitAtencionHijos["hora"],
                                 "orden" => $bitAtencionHijos["orden"],
+                                "is_coment" => $bitAtencionHijos["is_coment"],
                                 "descripcion" => $bitAtencionHijos["descripcion"],
                                 "bitacora_id" => $bitAtencionHijos["bitacora_id"],
                                 "atencion_id" => $bitAtencionHijos["atencion_id"],
@@ -196,7 +214,6 @@ class BitacorasController extends Controller
                         );
                     }
                 }
-
             }
 
             return response()->json([
@@ -211,6 +228,32 @@ class BitacorasController extends Controller
         }
     }
 
+    
+
+    public function endBitacora(Request $request)
+    {
+        try {
+
+            $bitacora = Bitacora::findOrFail($request->id);
+            
+            $bitacora->causa_averia_id = $request->causa;
+            $bitacora->consecuencia_averia_id = $request->consecuencia;
+            $bitacora->tipo_reparacion_id = $request->tipoReparacion;
+            $bitacora->herramientas = $request->herramientas;
+            $bitacora->estado = "0";
+
+            $bitacora->save();
+
+            return response()->json([
+                "message" => 200
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                "message" => 403,
+                "error" => $e
+            ]);
+        }
+    }
     /**
      * Display the specified resource.
      */

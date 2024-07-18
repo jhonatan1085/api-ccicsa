@@ -26,7 +26,12 @@ class Bitacora extends Model
         "site_id",
         "resp_cicsa_id",
         "resp_claro_id",
-        "estado"
+        "estado",
+        "causa_averia_id",
+        "consecuencia_averia_id",
+        "tipo_reparacion_id",
+        "herramientas",
+
     ];
 
     public function setCreatedAtAttribute($value)
@@ -90,5 +95,20 @@ class Bitacora extends Model
     public function atencion()
     {
         return $this->belongsToMany(Atencion::class);
+    }
+
+    public function causa_averia() 
+    {
+        return $this->belongsTo(CausaAveria::class);
+    }
+
+    public function consecuencia_averia() 
+    {
+        return $this->belongsTo(ConsecuenciaAveria::class);
+    }
+
+    public function tipo_reparacion() 
+    {
+        return $this->belongsTo(TipoReparacion::class);
     }
 }

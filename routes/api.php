@@ -82,7 +82,9 @@ Route::group([
     Route::get("bitacoras/viewBitacora/{id}",[BitacorasController::class,"viewBitacora"]);
     Route::get("bitacoras/atencion/{id}",[BitacorasController::class,"listAtencion"]);
     Route::get("bitacoras/config",[BitacorasController::class,"config"]);
+    Route::get("bitacoras/endConfig",[BitacorasController::class,"endConfig"]);
     Route::post("bitacoras/addAtencionBitacora",[BitacorasController::class,"addAtencionBitacora"]);
+    Route::post("bitacoras/endBitacora",[BitacorasController::class,"endBitacora"]);
     
     Route::resource("bitacoras",BitacorasController::class);
 

@@ -15,6 +15,7 @@ class BitacoraAtencion extends Model
         "hora",
         "descripcion",
         "orden",
+        "is_coment",
         "bitacora_id",
         "atencion_id",
         "parent_id"

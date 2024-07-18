@@ -32,7 +32,7 @@ return new class extends Migration
             $table->foreign('resp_cicsa_id')->references('id')->on('users');
             $table->unsignedBigInteger('resp_claro_id');
             $table->foreign('resp_claro_id')->references('id')->on('users');
-            $table->char('estado',1)->default('0'); 
+            $table->char('estado',1)->default('1'); 
             $table->timestamps();
 
         });

@@ -22,6 +22,7 @@ class BitacoraAtencionResource extends JsonResource
             "id" => $this->id,
             "hora" => $this->hora,
             "orden" => $this->orden,
+            "is_coment" => $this->is_coment,
             "descripcion" => $this->descripcion,
             "bitacora_atencion" =>BitacoraAtencionResource::collection($this->bitacora_atencion->sortByDesc('orden')), 
         ];

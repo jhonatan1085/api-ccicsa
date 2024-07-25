@@ -31,63 +31,63 @@ class Bitacora extends Model
         "consecuencia_averia_id",
         "tipo_reparacion_id",
         "herramientas",
-
+        "tiempo_solucion",
     ];
 
     public function setCreatedAtAttribute($value)
     {
-    	date_default_timezone_set('America/Lima');
-        $this->attributes["created_at"]= Carbon::now();
+        date_default_timezone_set('America/Lima');
+        $this->attributes["created_at"] = Carbon::now();
     }
 
     public function setUpdatedAtAttribute($value)
     {
-    	date_default_timezone_set("America/Lima");
-        $this->attributes["updated_at"]= Carbon::now();
+        date_default_timezone_set("America/Lima");
+        $this->attributes["updated_at"] = Carbon::now();
     }
 
-    public function resp_claro() 
+    public function resp_claro()
     {
-        return $this->belongsTo(User::class,"resp_claro_id");
+        return $this->belongsTo(User::class, "resp_claro_id");
     }
 
-    public function resp_cicsa() 
+    public function resp_cicsa()
     {
-        return $this->belongsTo(User::class,"resp_cicsa_id");
+        return $this->belongsTo(User::class, "resp_cicsa_id");
     }
 
-    public function site() 
+    public function site()
     {
         return $this->belongsTo(Site::class);
     }
 
-    public function serv() 
+    public function serv()
     {
         return $this->belongsTo(Serv::class);
     }
 
-    public function red() 
+    public function red()
     {
         return $this->belongsTo(Red::class);
     }
 
-    public function tipo_averia() 
+    public function tipo_averia()
     {
         return $this->belongsTo(TipoAveria::class);
     }
 
-    public function bitacora_brigada() 
+    public function bitacora_brigada()
     {
         return $this->hasMany(BitacoraBrigada::class);
     }
-    
+
 
     public function brigada()
     {
         return $this->belongsToMany(Brigada::class);
     }
 
-    public function bitacora_atencion() 
+    public function bitacora_atencion()
     {
         return $this->hasMany(BitacoraAtencion::class)->whereNull('parent_id');
     }
@@ -97,17 +97,17 @@ class Bitacora extends Model
         return $this->belongsToMany(Atencion::class);
     }
 
-    public function causa_averia() 
+    public function causa_averia()
     {
         return $this->belongsTo(CausaAveria::class);
     }
 
-    public function consecuencia_averia() 
+    public function consecuencia_averia()
     {
         return $this->belongsTo(ConsecuenciaAveria::class);
     }
 
-    public function tipo_reparacion() 
+    public function tipo_reparacion()
     {
         return $this->belongsTo(TipoReparacion::class);
     }

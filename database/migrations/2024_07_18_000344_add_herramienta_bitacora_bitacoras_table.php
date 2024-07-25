@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('bitacoras', function (Blueprint $table) {
             $table->text('herramientas')->nullable()->after('tipo_reparacion_id');
+            $table->string('tiempo_solucion',50)->nullable()->after('herramientas');
         });
     }
 
@@ -23,6 +24,7 @@ return new class extends Migration
     {
         Schema::table('bitacoras', function (Blueprint $table) {
             $table->dropColumn('herramientas');
+            $table->dropColumn('tiempo_solucion');
         });
     }
 };

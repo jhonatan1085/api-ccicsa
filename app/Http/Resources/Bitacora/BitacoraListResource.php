@@ -33,9 +33,8 @@ class BitacoraListResource extends JsonResource
                 "id" => $this->serv->id,
                 "nombre" => $this->serv->nombre,
             ]: NULL,
-            
             "estado" => $this->estado,
-            "estadotext" =>  $this->estado == '0' ? "Asignada": "Aceptada"
+            "estadotext" =>  $this->estado == '0' ? "Cerrada": "Abierta", 
         ];
     }
 }

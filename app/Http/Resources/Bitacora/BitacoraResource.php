@@ -68,6 +68,7 @@ class BitacoraResource extends JsonResource
                 ]: NULL,
             ]: NULL,
             "brigada" => BrigadaResource::collection($this->brigada),
+            "tiempo_solucion" => $this->tiempo_solucion,
             "herramientas" => $this->herramientas,
             "causa_averia" => $this->causa_averia ? [
                 "id" => $this->causa_averia->id,

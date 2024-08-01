@@ -18,9 +18,9 @@ class BitacoraListResource extends JsonResource
         return [
             "id" => $this->resource->id,
             "nombre" => $this->resource->nombre,
-            "fecha_inicial" => $this->resource->fecha_inicial  ? Carbon::parse($this->resource->fecha_inicial)->format("d/m/Y ") : NULL, 
-            "sot" => $this->resource->sot , 
-            "insidencia" => $this->resource->insidencia, 
+            "fecha_inicial" => $this->resource->fecha_inicial  ? Carbon::parse($this->resource->fecha_inicial)->format("d/m/Y ") : NULL,
+            "sot" => $this->resource->sot ,
+            "incidencia" => $this->resource->insidencia,
              "tipo_averia" => $this->tipo_averia ? [
                 "id" => $this->tipo_averia->id,
                 "nombre" => $this->tipo_averia->nombre,
@@ -34,7 +34,7 @@ class BitacoraListResource extends JsonResource
                 "nombre" => $this->serv->nombre,
             ]: NULL,
             "estado" => $this->estado,
-            "estadotext" =>  $this->estado == '0' ? "Cerrada": "Abierta", 
+            "estadotext" =>  $this->estado == '0' ? "Cerrada": "Abierta",
         ];
     }
 }

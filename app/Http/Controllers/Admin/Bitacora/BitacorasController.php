@@ -39,7 +39,7 @@ class BitacorasController extends Controller
             ->orWhereHas("red", function ($q) use ($search) {
                 $q->where("nombre", "like", "%" . $search . "%");
             })
-            ->orWhere("insidencia", "like", "%" . $search . "%")
+            ->orWhere("incidencia", "like", "%" . $search . "%")
             ->orWhere("sot", "like", "%" . $search . "%")
             ->orderBy("fecha_inicial", "desc")
             ->paginate(100);

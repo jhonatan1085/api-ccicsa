@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Staff;
+namespace App\Http\Controllers\Admin\Usuarios;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\User\UserCollection;
@@ -15,7 +15,7 @@ use Spatie\Permission\Models\Role;
 
 use function Laravel\Prompts\search;
 
-class StaffsController extends Controller
+class UsuariosController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -29,22 +29,13 @@ class StaffsController extends Controller
                 ->orderBy("id","desc")
                 ->get();
 
-                
+
                 return response()->json([
-                    "users" => UserCollection::make($users) 
+                    "total" => $users->count(),
+                    "data" => UserCollection::make($users)
                 ]);
     }
 
-    public function config(){
-        $roles = Role::orderBy('name')->get();
-        $educacions = Educacion::orderBy('nombre')->get();
-        $zonas = Zona::orderBy('nombre')->get();
-        return response()->json([
-            "roles" => $roles,
-            "educacions" => $educacions,
-            "zonas" => $zonas
-        ]);
-    }
     /**
      * Store a newly created resource in storage.
      */
@@ -64,13 +55,13 @@ class StaffsController extends Controller
         }
 
         if($request->password){
-            $request->request->add(["password",bcrypt($request->password)]);   
+            $request->request->add(["password",bcrypt($request->password)]);
         }
 
        // $request->request->add(["birth_date" => Carbon::parse($request->birth_date, 'GMT-0500')->format("Y-m-d h:i:s")]);
-        
+
         $date_clean = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $request->birth_date);
- 
+
         $request->request->add(["birth_date" => Carbon::parse($date_clean)->format("Y-m-d h:i:s")]);
 
 
@@ -79,22 +70,20 @@ class StaffsController extends Controller
         $role = Role::findOrFail($request->role_id);
 
         $user->assignRole($role);
-        
+
         return response()->json([
-            "message" => 200
+            "message" => 200, "message_text" =>"ok"
         ]);
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified resource. (read)
      */
     public function show(string $id)
     {
         $user = User::findOrFail($id);
-        
-        return response()->json([
-            "user" => UserResource::make($user)  
-        ]);
+
+        return response()->json(UserResource::make($user));
     }
 
     /**
@@ -122,11 +111,11 @@ class StaffsController extends Controller
         }
 
         if($request->password){
-            $request->request->add(["password",bcrypt($request->password)]);   
+            $request->request->add(["password",bcrypt($request->password)]);
         }
-        
+
         $date_clean = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $request->birth_date);
- 
+
         $request->request->add(["birth_date" => Carbon::parse($date_clean)->format("Y-m-d h:i:s")]);
 
         $user->update($request->all());
@@ -134,13 +123,13 @@ class StaffsController extends Controller
         if($request->role_id != $user->roles()->first()->id){
             $role_old = Role::findOrFail($user->roles()->first()->id);
             $user->removeRole($role_old);
-    
+
             $role_new = Role::findOrFail($request->role_id);
             $user->assignRole($role_new);
         }
 
         return response()->json([
-            "message" => 200
+            "message" => 200, "message_text" =>"ok"
         ]);
     }
 
@@ -153,66 +142,55 @@ class StaffsController extends Controller
         if($user->avatar){
             Storage::delete($user->avatar);
         }
-
         $user->delete();
 
         return response()->json([
-            "message" => 200
+            "message" => 200, "message_text" =>"ok"
         ]);
     }
 
-    public function usuariozonatecnico(string $id)
+    ////////////////////////////////////////
+
+    public function config(){
+        $roles = Role::orderBy('name')->get();
+        $educacions = Educacion::orderBy('nombre')->get();
+        $zonas = Zona::orderBy('nombre')->get();
+        return response()->json([
+            "roles" => $roles,
+            "educacions" => $educacions,
+            "zonas" => $zonas
+        ]);
+    }
+
+    public function usuariosTecnicosPorZona(string $zona_id)
     {
-        $usuarios = User::with('unidad_movil:id,placa')
+        $usuarios = User::with('unidad_movil:id, placa')
             ->select('name','surname','id')
-            ->where("zona_id", $id)
+            ->where("zona_id", $zona_id)
             ->whereHas("roles", function ($q) {
                 $q->where("name", "like", "%Tecnico%");
             })
             ->orderBy("name", "asc")
             ->get();
-        return response()->json([
-            "usuarios" =>  $usuarios
-        ]);
+        return response()->json([ $usuarios]);
     }
 
-    
-    public function usuariozonalider(string $id)
-    {
-        $usuarios = User::select('name','surname','id')
-            ->whereHas("zona_user", function ($q) use($id) {
-                $q->where("zona_id", $id)
-                ->where('is_user','1');
-            })
-            ->get();
-
-            return $usuarios;
-/*         return response()->json([
-            "usuarios" =>  $usuarios
-        ]); */
-    }
-
-    public function usuariozonaclaro(string $id)
-    {
-        $usuarios = User::select('name','surname','id')
-            ->whereHas("zona_user", function ($q) use($id) {
-                $q->where("zona_id", $id)
-                ->where('is_user','0');
-            })
-            ->get();
-            return $usuarios;
-/*         return response()->json([
-            "usuarios" =>  $usuarios
-        ]); */
-    }
-
-    public function  usuariozonaresponsables(string $id)
+    public function usuariosResponsablesPorZona(string $zona_id)
     {
         return response()->json([
-            "lidercicsa" =>  $this->usuariozonalider($id),
-            "liderclaro" =>  $this->usuariozonaclaro($id),
+            "cicsa" =>  $this->usuariosPorZonaYTipo($zona_id,"1"),
+            "claro" =>  $this->usuariosPorZonaYTipo($zona_id,"0"),
         ]);
     }
+    ////////////////////////////////////////////////////////////////
 
-    
+    private function usuariosPorZonaYTipo(string $zona_id, string $tipo)
+    {
+        return User::select('name','surname','id')
+            ->whereHas("zona_user", function ($q) use($id) {
+                $q->where("zona_id", $zona_id)
+                ->where('is_user', $tipo);
+            })
+            ->get();
+    }
 }

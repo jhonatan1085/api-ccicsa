@@ -19,7 +19,8 @@ class SpecialityController extends Controller
         $specialities = Specialitie::where("name","like","%".$name."%")->orderBy("id","desc")->get();
 
         return response()->json([
-            "specialities" => $specialities->map(function($rol) {
+            "total"=>$specialities->count(),
+            "data" => $specialities->map(function($rol) {
                 return [
                     "id" => $rol->id,
                     "name" => $rol->name,
@@ -47,7 +48,7 @@ class SpecialityController extends Controller
         $specialitie = Specialitie::create($request->all());
 
         return response()->json([
-            "message" => 200,
+            "message" => 200,"message_text" =>"ok"
         ]);
     }
 
@@ -81,7 +82,7 @@ class SpecialityController extends Controller
         $specialitie = Specialitie::findOrFail($id);
         $specialitie->update($request->all());
         return response()->json([
-            "message" => 200,
+            "message" => 200,"message_text" =>"ok"
         ]);
     }
 
@@ -93,7 +94,7 @@ class SpecialityController extends Controller
         $specialitie = Specialitie::findOrFail($id);
         $specialitie->delete();
         return response()->json([
-            "message" => 200,
+            "message" => 200,"message_text" =>"ok"
         ]);
     }
 }

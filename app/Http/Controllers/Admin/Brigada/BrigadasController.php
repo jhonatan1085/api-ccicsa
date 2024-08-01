@@ -26,31 +26,18 @@ class BrigadasController extends Controller
 
         $brigadas = Brigada::BrigadaAll()->paginate(10);
         return response()->json([
-            "total" => $brigadas->total(),
-            "brigadas" => BrigadaCollection::make($brigadas)
+            "total" => $brigadas->count(),
+            "data" => BrigadaCollection::make($brigadas)
         ]);
     }
 
-    public function config()
-    {
-        $zonas = Zona::orderBy('nombre')->get();
-        $contratistas = Contratista::orderBy('nombre')->get();
-        $tipobrigadas = TipoBrigada::orderBy('nombre')->get();
-        $users = User::all();
-        return response()->json([
-            "zonas" => $zonas,
-            "contratistas" => $contratistas,
-            "tipobrigadas" => $tipobrigadas,
-            "users" => $users
-        ]);
-    }
 
-    public function brigadaactiva()
+    public function activas()
     {
-
         $brigadas = Brigada::BrigadaAll()->where('estado', '1')->get();
         return response()->json([
-            "brigadas" => BrigadaCollection::make($brigadas)
+            "total" => $brigadas->count(),
+            "data" => BrigadaCollection::make($brigadas)
         ]);
     }
 
@@ -99,8 +86,7 @@ class BrigadasController extends Controller
             }
 
             return response()->json([
-
-                "message" => 200
+                "message" => 200, "message_text"=>"ok",
             ]);
         } catch (Exception $e) {
             return response()->json([
@@ -137,7 +123,22 @@ class BrigadasController extends Controller
         $brigada->save();
 
         return response()->json([
-            "message" => 200
+            "message" => 200, "message_text"=>"ok"
         ]);
     }
+
+     public function config()
+    {
+        $zonas = Zona::orderBy('nombre')->get();
+        $contratistas = Contratista::orderBy('nombre')->get();
+        $tipobrigadas = TipoBrigada::orderBy('nombre')->get();
+        $users = User::all();
+        return response()->json([
+            "zonas" => $zonas,
+            "contratistas" => $contratistas,
+            "tipobrigadas" => $tipobrigadas,
+            "users" => $users
+        ]);
+    }
+
 }

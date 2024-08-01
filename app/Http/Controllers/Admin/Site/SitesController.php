@@ -42,11 +42,115 @@ class SitesController extends Controller
             ->paginate(100);
         return response()->json([
             "total" => $sites->total(),
-            "sites" => SiteCollection::make($sites)
+            "data" => SiteCollection::make($sites)
         ]);
     }
 
-    public function config()
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $site_is_valid = Site::where("codigo", $request->codigo)->first();
+        if ($site_is_valid) {
+            return response()->json([
+                "message" => 403,
+                "message_text" => "EL CODIGO DE SITE YA EXISTE"
+            ]);
+        }
+
+        $site = Site::create($request->all());
+
+        return response()->json([
+            "message" => 200,
+            "message_text" => "ok"
+        ]);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        $site = Site::findOrFail($id);
+
+        return response()->json(
+            SiteResource::make($site)
+        );
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+
+       // $users_is_valid = User::where("id","<>",$id)->where("email",$request->email)->first();
+
+        $site_is_valid = Site::where("id","<>",$id)->where("codigo", $request->codigo)->first();
+        if ($site_is_valid) {
+            return response()->json([
+                "message" => 403,
+                "message_text" => "EL CODIGO DE SITE YA EXISTE"
+            ]);
+        }
+        $site = Site::findOrFail($id);
+        $site->update($request->all());
+
+        return response()->json([
+            "message" => 200
+        ]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
+    }
+
+    ////////////////////////////////
+    // EXTRAS
+    ////////////////////////////////
+
+    public function provinciasPorDepto(string $id)
+    {
+        $provincias = Provincia::where("departamento_id", $id)
+            ->orderBy("nombre", "asc")
+            ->get();
+        return response()->json([
+            "total" => $provincias->count(),
+            "data" => $provincias
+        ]);
+    }
+
+    public function distritosPorProvincia(string $provincia_id)
+    {
+        $distritos = Distrito::where("provincia_id", $provincia_id)
+            ->orderBy("nombre", "asc")
+            ->get();
+        return response()->json([
+            "total" => $distritos->count(),
+            "data" => $distritos
+        ]);
+    }
+
+    public function autocomplete(Request $request)
+    {
+        $search = $request->search;
+        $sites = Site::with('region:id,nombre','distrito:id,nombre,provincia_id','distrito.provincia:id,nombre,departamento_id','distrito.provincia.departamento:id,nombre','zona:id,nombre' )
+        ->select('id','nombre','codigo','latitud','longitud','region_id','distrito_id','zona_id')
+            ->orderBy("nombre", "asc")
+            ->take(10)
+            ->get();
+        return response()->json([
+            "total" => $sites->count(),
+            "data" =>  $sites
+        ]);
+    }
+
+     public function config()
     {
         $municipalidades = Municipalidade::orderBy('nombre')->get();
         $tiposites = TipoSite::all();
@@ -78,105 +182,6 @@ class SitesController extends Controller
             "departamentos" => $departamentos,
             "provincias" =>$provincias,
             "distritos" => $distritos,
-
-        ]);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $site_is_valid = Site::where("codigo", $request->codigo)->first();
-        if ($site_is_valid) {
-            return response()->json([
-                "message" => 403,
-                "message_text" => "EL CODIGO DE SITE YA EXISTE"
-            ]);
-        }
-
-        $site = Site::create($request->all());
-
-        return response()->json([
-            "message" => 200
-        ]);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        $site = Site::findOrFail($id);
-        
-        return response()->json([
-            "site" => SiteResource::make($site)  
-        ]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-
-       // $users_is_valid = User::where("id","<>",$id)->where("email",$request->email)->first();
-
-        $site_is_valid = Site::where("id","<>",$id)->where("codigo", $request->codigo)->first();
-        if ($site_is_valid) {
-            return response()->json([
-                "message" => 403,
-                "message_text" => "EL CODIGO DE SITE YA EXISTE"
-            ]);
-        }
-        $site = Site::findOrFail($id);
-        $site->update($request->all());
-        
-        return response()->json([
-            "message" => 200
-        ]);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
-
-    public function provinciadep(string $id)
-    {
-        $provincias = Provincia::where("departamento_id", $id)
-            ->orderBy("nombre", "asc")
-            ->get();
-        return response()->json([
-            "provincias" => $provincias
-        ]);
-    }
-
-    public function distritoprov(string $id)
-    {
-        $distritos = Distrito::where("provincia_id", $id)
-            ->orderBy("nombre", "asc")
-            ->get();
-        return response()->json([
-            "distritos" => $distritos
-        ]);
-    }
-
-    public function sitesautocomplete(Request $request)
-    {
-        $search = $request->search;
- 
-        $sites = Site::with('region:id,nombre','distrito:id,nombre,provincia_id','distrito.provincia:id,nombre,departamento_id','distrito.provincia.departamento:id,nombre','zona:id,nombre' )
-        ->select('id','nombre','codigo','latitud','longitud','region_id','distrito_id','zona_id')
-           // ->where("nombre", "like", "%". $search."%")
-            ->orderBy("nombre", "asc")
-            //->take(10)
-            ->get();
-        return response()->json([
-            "sites" =>  $sites
         ]);
     }
 }

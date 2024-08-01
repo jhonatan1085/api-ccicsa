@@ -14,8 +14,6 @@ class BitacoraAtencionCollection extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
-        return [
-            "data" => BitacoraAtencionResource::collection($this->collection),
-        ];
+        return  BitacoraAtencionResource::collection($this->collection)->resolve();
     }
 }

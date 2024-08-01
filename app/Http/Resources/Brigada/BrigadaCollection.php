@@ -14,8 +14,6 @@ class BrigadaCollection extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
-        return [
-            "data" => BrigadaResource::collection($this->collection),
-        ];
+        return  BrigadaResource::collection($this->collection)->resolve();
     }
 }

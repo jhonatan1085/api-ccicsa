@@ -46,23 +46,12 @@ class BitacorasController extends Controller
 
         return response()->json([
             "total" => $bitacoras->total(),
-            "bitacoras" => BitacoraListCollection::make($bitacoras)
+            "data" => BitacoraListCollection::make($bitacoras)
         ]);
     }
 
 
-    public function config()
-    {
-        $tipoaveria = TipoAveria::orderBy('nombre')->get();
-        $red = Red::orderBy('nombre')->get();
-        $serv = Serv::orderBy('nombre')->get();
 
-        return response()->json([
-            "tipoaveria" => $tipoaveria,
-            "red" => $red,
-            "serv" => $serv
-        ]);
-    }
 
     public function endConfig()
     {
@@ -77,9 +66,9 @@ class BitacorasController extends Controller
         ]);
     }
 
-    public function listAtencion(string $id)
+    public function listarAtenciones(string $id)
     {
-        $atencions = Atencion::with(['bitacora_atencion' => function ($q) use ($id) {
+        $atenciones = Atencion::with(['bitacora_atencion' => function ($q) use ($id) {
             $q->select('id', 'hora', 'descripcion', 'orden','is_coment', 'atencion_id', 'bitacora_id', 'parent_id')
                 ->with('bitacora_atencion:id,hora,descripcion,orden,is_coment,atencion_id,bitacora_id,parent_id')
                 ->where('bitacora_id', $id)
@@ -88,20 +77,10 @@ class BitacorasController extends Controller
             ->select('id', 'descripcion', 'orden')
             ->orderBy('orden')->get();
 
-       // return $atencions;
-         return $atencions;
-         
-    }
-
-    public function viewBitacora(string $id)
-    {
-        $bitacora = Bitacora::findOrFail($id);
-        return  BitacoraResource::make($bitacora);
-    }
-
-    public function boot(): void
-    {
-        JsonResource::withoutWrapping();
+         return response()->json( [
+            "total" => $atenciones->count(),
+            "data" => $atenciones,
+        ]);
     }
 
     /**
@@ -175,93 +154,59 @@ class BitacorasController extends Controller
 
 
 
-    public function addAtencionBitacora(Request $request)
+    public function addAtencion(Request $request)
     {
-        try {
+        $atenciones = json_decode($request->atenciones, 1);
 
+        $bitacora = Bitacora::findOrFail($request->id);
 
-            $atenciones = json_decode($request->atenciones, 1);
+        foreach ($bitacora->bitacora_atencion as $key => $atencion) {
+            $atencion->delete();
+        }
 
-            $bitacora = Bitacora::findOrFail($request->id);
-            foreach ($bitacora->bitacora_atencion as $key => $atencion) {
-                $atencion->delete();
-            }
-
-            foreach ($atenciones as $atencion) {
-                foreach ($atencion["bitacora_atencion"] as $bitAtencion) {
-                    $atencion = BitacoraAtencion::create(
+        foreach ($atenciones as $atencion) {
+            foreach ($atencion["bitacora_atencion"] as $bitAtencion) {
+                $atencion = BitacoraAtencion::create(
+                    [
+                        "hora" => $bitAtencion["hora"],
+                        "orden" => $bitAtencion["orden"],
+                        "is_coment" => $bitAtencion["is_coment"],
+                        "descripcion" => $bitAtencion["descripcion"],
+                        "bitacora_id" => $bitAtencion["bitacora_id"],
+                        "atencion_id" => $bitAtencion["atencion_id"],
+                        "parent_id" =>  null,
+                    ]
+                );
+                foreach ($bitAtencion["bitacora_atencion"] as $bitAtencionHijos) {
+                    BitacoraAtencion::create(
                         [
-                            "hora" => $bitAtencion["hora"],
-                            "orden" => $bitAtencion["orden"],
-                            "is_coment" => $bitAtencion["is_coment"],
-                            "descripcion" => $bitAtencion["descripcion"],
-                            "bitacora_id" => $bitAtencion["bitacora_id"],
-                            "atencion_id" => $bitAtencion["atencion_id"],
-                            "parent_id" =>  null,
+                            "hora" => $bitAtencionHijos["hora"],
+                            "orden" => $bitAtencionHijos["orden"],
+                            "is_coment" => $bitAtencionHijos["is_coment"],
+                            "descripcion" => $bitAtencionHijos["descripcion"],
+                            "bitacora_id" => $bitAtencionHijos["bitacora_id"],
+                            "atencion_id" => $bitAtencionHijos["atencion_id"],
+                            "parent_id" => $atencion->id,
                         ]
                     );
-                    foreach ($bitAtencion["bitacora_atencion"] as $bitAtencionHijos) {
-                        BitacoraAtencion::create(
-                            [
-                                "hora" => $bitAtencionHijos["hora"],
-                                "orden" => $bitAtencionHijos["orden"],
-                                "is_coment" => $bitAtencionHijos["is_coment"],
-                                "descripcion" => $bitAtencionHijos["descripcion"],
-                                "bitacora_id" => $bitAtencionHijos["bitacora_id"],
-                                "atencion_id" => $bitAtencionHijos["atencion_id"],
-                                "parent_id" => $atencion->id,
-                            ]
-                        );
-                    }
                 }
             }
-
-            return response()->json([
-                "message" => $atenciones,
-                // "retorno" => $cuadrillas
-            ]);
-        } catch (Exception $e) {
-            return response()->json([
-                "message" => 403,
-                "error" => $e
-            ]);
         }
+
+        return response()->json([
+            "message" => 200,
+            "message_text" => "ok",
+            "data" => $atenciones
+        ]);
     }
 
-    
-
-    public function endBitacora(Request $request)
-    {
-        try {
-
-            $bitacora = Bitacora::findOrFail($request->id);
-            
-            $bitacora->causa_averia_id = $request->causa;
-            $bitacora->consecuencia_averia_id = $request->consecuencia;
-            $bitacora->tipo_reparacion_id = $request->tipoReparacion;
-            $bitacora->herramientas = $request->herramientas;
-            $bitacora->tiempo_solucion = $request->tiempo;
-            $bitacora->estado = "0";
-
-            
-            $bitacora->save();
-
-            return response()->json([
-                "message" => 200
-            ]);
-        } catch (Exception $e) {
-            return response()->json([
-                "message" => 403,
-                "error" => $e
-            ]);
-        }
-    }
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        //
+        $bitacora = Bitacora::findOrFail($id);
+        return  BitacoraResource::make($bitacora);
     }
 
     /**
@@ -269,7 +214,79 @@ class BitacorasController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+            $bitacora = Bitacora::findOrFail($id);
+            $bitacora->update($request->all());
+
+            return response()->json([
+            "message" => 200,
+            "message_text" =>"ok"
+        ]);
+    }
+
+    public function updateLocation(Request $request, string $id)
+    {
+        // Validar solo los campos presentes en la solicitud
+        $rules = [];
+        if ($request->has('latitud')) {
+            $rules['latitud'] = 'required|numeric|between:-90,90';
+        }
+        if ($request->has('longitud')) {
+            $rules['longitud'] = 'required|numeric|between:-180,180';
+        }
+        if ($request->has('distancia')) {
+            $rules['distancia'] = 'required|numeric|min:0';
+        }
+
+        // Verificar que al menos uno de los campos latitud, longitud, o distancia esté presente
+        if (!$request->has('latitud') || !$request->has('longitud') || !$request->has('distancia')) {
+            return response()->json([
+                "message" => 400,
+                'message_text' => 'All latitud, longitud, or distancia must be provided.'
+            ], 400);
+        }
+
+        $request->validate($rules);
+
+        // Encontrar la bitacora por id
+        $bitacora = Bitacora::findOrFail($id);
+
+        // Actualizar solo los campos proporcionados en la solicitud
+        $bitacora->update($request->only(array_keys($rules)));
+
+        // Devolver una respuesta exitosa
+        return response()->json([
+            'message_text' => "ok",
+            'message' => 200,
+            'data' => $bitacora
+        ]);
+    }
+
+    public function updateFinal(Request $request)
+    {
+        $request->validate([
+            'causa' => 'required|integer|exists:causas_averia,id',
+            'consecuencia' => 'required|integer|exists:consecuencias_averia,id',
+            'tipoReparacion' => 'required|integer|exists:tipos_reparacion,id',
+            'herramientas' => 'required|string|max:255',
+            'tiempo' => 'required|integer|min:0',
+        ]);
+
+        $bitacora = Bitacora::findOrFail($request->id);
+
+        $bitacora->causa_averia_id = $request->causa;
+        $bitacora->consecuencia_averia_id = $request->consecuencia;
+        $bitacora->tipo_reparacion_id = $request->tipoReparacion;
+        $bitacora->herramientas = $request->herramientas;
+        $bitacora->tiempo_solucion = $request->tiempo;
+        $bitacora->estado = "0";
+
+        $bitacora->save();
+
+        return response()->json([
+            "message" => 200,
+            "message_text" =>"ok",
+            "data" => $bitacora
+        ]);
     }
 
     /**
@@ -278,5 +295,17 @@ class BitacorasController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+     public function config()
+    {
+        $tipoaveria = TipoAveria::orderBy('nombre')->get();
+        $red = Red::orderBy('nombre')->get();
+        $serv = Serv::orderBy('nombre')->get();
+
+        return response()->json([
+            "tipoaveria" => $tipoaveria,
+            "red" => $red,
+            "serv" => $serv
+        ]);
     }
 }

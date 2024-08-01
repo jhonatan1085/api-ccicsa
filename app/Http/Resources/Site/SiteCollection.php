@@ -14,8 +14,6 @@ class SiteCollection extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
-        return [
-            "data" => SiteResource::collection($this->collection),
-        ];
+        return SiteResource::collection($this->collection)->resolve();
     }
 }

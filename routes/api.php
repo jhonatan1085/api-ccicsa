@@ -6,7 +6,7 @@ use App\Http\Controllers\Admin\Doctor\DoctorsController;
 use App\Http\Controllers\Admin\Doctor\SpecialityController;
 use App\Http\Controllers\Admin\Rol\RolesController;
 use App\Http\Controllers\Admin\Site\SitesController;
-use App\Http\Controllers\Admin\Staff\StaffsController;
+use App\Http\Controllers\Admin\Usuarios\UsuariosController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,7 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::group([
- 
+
     //'middleware' => 'auth:api', no son necesarias par acceso publico
     'prefix' => 'auth',
     //'middleware' =>['auth:api','role:Super-Admin'],
@@ -47,45 +47,76 @@ Route::group([
     'middleware' => 'auth:api',
 ], function ($router) {
     Route::resource("roles",RolesController::class);
+    ///////////////
+    // Usuarios //
+    /////////////
+    // CRUD controllers
+    $endpoint = "usuarios";
+    // Route::post($endpoint, [UsuariosController::class,"store"]);
+    Route::resource($endpoint,UsuariosController::class);//all
+    // Route::get($endpoint."/{id}",[UsuariosController::class,"show"]);//one
+    // Route::post($endpoint."/{id}",[UsuariosController::class,"update"]);
+    // Route::get($endpoint."/{id}",[UsuariosController::class,"destroy"]);
+    // EXTRAS
+    Route::get($endpoint."/responsables/zona/{zona_id}",[UsuariosController::class,"usuariosResponsablesPorZona"]);
+    Route::get($endpoint."/tecnicos/zona/{zona_id}",[UsuariosController::class,"usuariosTecnicosPorZona"]);
 
-    
-    Route::get("usuariozonaclaro/{id}",[StaffsController::class,"usuariozonaclaro"]);
-    Route::get("usuariozonaresponsables/{id}",[StaffsController::class,"usuariozonaresponsables"]);
-    Route::get("usuariozonatecnico/{id}",[StaffsController::class,"usuariozonatecnico"]);
-    Route::get("staffs/config",[StaffsController::class,"config"]);
-    Route::post("staffs/{id}",[StaffsController::class,"update"]);
-    Route::resource("staffs",StaffsController::class);
+    ///////////////
+    // Sites    //
+    /////////////
+    // CRUD controllers
+    $endpoint = "sites";
+    // Route::post($endpoint, [SitesController::class,"store"]);
+    Route::resource($endpoint,SitesController::class);//all
+    // Route::get($endpoint."/{id}",[SitesController::class,"show"]);//one
+    // Route::post($endpoint."/{id}",[SitesController::class,"update"]);
+    // Route::get($endpoint."/{id}",[SitesController::class,"destroy"]);
+    // EXTRAS
+    Route::get($endpoint."/autocomplete",[SitesController::class,"autocomplete"]);
+    Route::get($endpoint."/distritos/provincia/{provincia_id}",[SitesController::class,"distritosPorProvincia"]);
+    Route::get($endpoint."/provincias/depto/{depto_id}",[SitesController::class,"provinciasPorDepto"]);
+
+    /////////////////
+    //  brigadas  //
+    ///////////////
+    // CRUD controllers
+    $endpoint = "brigadas";
+    // Route::post($endpoint, [BrigadasController::class,"store"]);
+    Route::resource($endpoint,BrigadasController::class);//all
+    // Route::get($endpoint."/{id}",[BrigadasController::class,"show"]);//one
+    // Route::post($endpoint."/{id}",[BrigadasController::class,"update"]);
+    // Route::get($endpoint."/{id}",[BrigadasController::class,"destroy"]);
+    // extras
+    Route::get($endpoint."/activas",[BrigadasController::class,"activas"]);
+
+    ////////////////
+    // bitacoras //
+    //////////////
+    // CRUD controllers
+    $endpoint = "bitacoras";
+    // Route::post($endpoint, [BitacorasController::class,"store"]);
+    Route::resource($endpoint,BitacorasController::class);//all
+    // Route::get($endpoint."/{id}",[BitacorasController::class,"show"]);//one
+    // Route::post($endpoint."/{id}",[BitacorasController::class,"update"]);
+    // update or patch
+    // update es completa
+    // patch es parcial
+    // Route::get($endpoint."/{id}",[BitacorasController::class,"destroy"]);
+    // extras
+    Route::get($endpoint."/atenciones/bitacora/{bitacora_id}",[BitacorasController::class,"listarAtenciones"]);
+    Route::post($endpoint."/atenciones/bitacora",[BitacorasController::class,"addAtencion"]);
+    Route::post($endpoint."/finalizar",[BitacorasController::class,"updateFinal"]);
+    Route::post($endpoint."/localizacion",[BitacorasController::class,"updateLocation"]);
     //
-    Route::resource("specialities",SpecialityController::class);
-    //
-    Route::get("doctors/config",[DoctorsController::class,"config"]);
-    Route::post("doctors/{id}",[DoctorsController::class,"update"]);
-    Route::resource("doctors",DoctorsController::class);
 
 
-    //
-
-    Route::get("sitesautocomplete",[SitesController::class,"sitesautocomplete"]);
-    Route::get("distritoprov/{id}",[SitesController::class,"distritoprov"]);
-    Route::get("provinciasdep/{id}",[SitesController::class,"provinciadep"]);
-    Route::get("sites/config",[SitesController::class,"config"]);
-    Route::post("sites/{id}",[SitesController::class,"update"]);
-    Route::resource("sites",SitesController::class);
-    
-    //brigadas
-    
-    Route::get("brigadas/brigadaactiva",[BrigadasController::class,"brigadaactiva"]);
-    Route::get("brigadas/config",[BrigadasController::class,"config"]);
-    Route::resource("brigadas",BrigadasController::class);
-
-    
-    Route::get("bitacoras/viewBitacora/{id}",[BitacorasController::class,"viewBitacora"]);
-    Route::get("bitacoras/atencion/{id}",[BitacorasController::class,"listAtencion"]);
-    Route::get("bitacoras/config",[BitacorasController::class,"config"]);
-    Route::get("bitacoras/endConfig",[BitacorasController::class,"endConfig"]);
-    Route::post("bitacoras/addAtencionBitacora",[BitacorasController::class,"addAtencionBitacora"]);
-    Route::post("bitacoras/endBitacora",[BitacorasController::class,"endBitacora"]);
-    
-    Route::resource("bitacoras",BitacorasController::class);
-
+    ////////////////
+    // configs   //
+    //////////////
+    $endpoint = "config";
+    Route::get($endpoint."/usuarios",[UsuariosController::class,"config"]);
+    Route::get($endpoint."/sites",[SitesController::class,"config"]);
+    Route::get($endpoint."/brigadas",[BrigadasController::class,"config"]);
+    Route::get($endpoint."/bitacoras/start",[BitacorasController::class,"config"]);
+    Route::get($endpoint."/bitacoras/end",[BitacorasController::class,"endConfig"]);
 });

@@ -14,8 +14,6 @@ class BitacoraCollection extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
-        return [
-           "data" => BitacoraResource::collection($this->collection),
-        ];
+        return BitacoraResource::collection($this->collection)->resolve();
     }
 }

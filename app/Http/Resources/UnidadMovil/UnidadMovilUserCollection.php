@@ -14,8 +14,6 @@ class UnidadMovilUserCollection extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
-        return [
-            "data" => UnidadMovilUserResource::collection($this->collection),
-        ];
+        return  UnidadMovilUserResource::collection($this->collection)->resolve();
     }
 }

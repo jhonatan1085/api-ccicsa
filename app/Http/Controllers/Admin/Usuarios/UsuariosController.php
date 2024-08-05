@@ -101,35 +101,38 @@ class UsuariosController extends Controller
 
         $user = User::findOrFail($id);
 
-        if($request->hasFile("imagen")){
+        if($request->hasFile("avatar")){
             if($user->avatar){
                 Storage::delete($user->avatar);
             }
 
-            $path = Storage::putFile("staffs",$request->file("imagen"));
-            $request->request->add(["avatar" => $path]);
+            $path = Storage::putFile("usuarios",$request->file("avatar"));
+            $request->avatar = $path;
         }
 
         if($request->password){
-            $request->request->add(["password",bcrypt($request->password)]);
+            $request->password=bcrypt($request->password);
         }
 
         $date_clean = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $request->birth_date);
 
-        $request->request->add(["birth_date" => Carbon::parse($date_clean)->format("Y-m-d h:i:s")]);
+        $request->birth_date = Carbon::parse($date_clean)->format("Y-m-d h:i:s");
 
         $user->update($request->all());
 
-        if($request->role_id != $user->roles()->first()->id){
+        if($user->roles()->first() && $request->role_id != $user->roles()->first()->id){
             $role_old = Role::findOrFail($user->roles()->first()->id);
             $user->removeRole($role_old);
 
             $role_new = Role::findOrFail($request->role_id);
             $user->assignRole($role_new);
+        }else if(!$user->roles()->first()){
+            $role_new = Role::findOrFail($request->role_id);
+            $user->assignRole($role_new);
         }
 
         return response()->json([
-            "message" => 200, "message_text" =>"ok"
+            "message" => 200, "message_text" =>"ok", "data" => $user
         ]);
     }
 

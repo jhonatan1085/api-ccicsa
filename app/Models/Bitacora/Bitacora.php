@@ -16,7 +16,7 @@ class Bitacora extends Model
         "nombre",
         "fecha_inicial",
         "sot",
-        "insidencia",
+        "incidencia",
         "tipo_averia_id",
         "latitud",
         "longitud",

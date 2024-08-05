@@ -187,7 +187,7 @@ class UsuariosController extends Controller
     private function usuariosPorZonaYTipo(string $zona_id, string $tipo)
     {
         return User::select('name','surname','id')
-            ->whereHas("zona_user", function ($q) use($id) {
+            ->whereHas("zona_user", function ($q) use($zona_id, $tipo) {
                 $q->where("zona_id", $zona_id)
                 ->where('is_user', $tipo);
             })

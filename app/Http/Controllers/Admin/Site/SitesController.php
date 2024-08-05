@@ -35,7 +35,7 @@ class SitesController extends Controller
 
         $sites = Site::where("codigo", "like", "%" . $search . "%")
             ->orWhere("nombre", "like", "%" . $search . "%")
-            ->orWhereHas("zona",function($q) use($search){
+            ->orWhereHas("zona", function ($q) use ($search) {
                 $q->where("nombre", "like", "%" . $search . "%");
             })
             ->orderBy("nombre", "asc")
@@ -63,7 +63,8 @@ class SitesController extends Controller
 
         return response()->json([
             "message" => 200,
-            "message_text" => "ok"
+            "message_text" => "ok",
+            "data" =>  $site
         ]);
     }
 
@@ -85,9 +86,9 @@ class SitesController extends Controller
     public function update(Request $request, string $id)
     {
 
-       // $users_is_valid = User::where("id","<>",$id)->where("email",$request->email)->first();
+        // $users_is_valid = User::where("id","<>",$id)->where("email",$request->email)->first();
 
-        $site_is_valid = Site::where("id","<>",$id)->where("codigo", $request->codigo)->first();
+        $site_is_valid = Site::where("id", "<>", $id)->where("codigo", $request->codigo)->first();
         if ($site_is_valid) {
             return response()->json([
                 "message" => 403,
@@ -139,18 +140,20 @@ class SitesController extends Controller
     public function autocomplete(Request $request)
     {
         $search = $request->search;
-        $sites = Site::with('region:id,nombre','distrito:id,nombre,provincia_id','distrito.provincia:id,nombre,departamento_id','distrito.provincia.departamento:id,nombre','zona:id,nombre' )
-        ->select('id','nombre','codigo','latitud','longitud','region_id','distrito_id','zona_id')
+        $sites = Site::with('region:id,nombre', 'distrito:id,nombre,provincia_id', 'distrito.provincia:id,nombre,departamento_id', 'distrito.provincia.departamento:id,nombre', 'zona:id,nombre')
+            ->select('id', 'nombre', 'codigo', 'latitud', 'longitud', 'region_id', 'distrito_id', 'zona_id')
             ->orderBy("nombre", "asc")
-            ->take(10)
+            // ->take(10)
             ->get();
+
+        // $sites = Site::get();
         return response()->json([
             "total" => $sites->count(),
             "data" =>  $sites
         ]);
     }
 
-     public function config()
+    public function config()
     {
         $municipalidades = Municipalidade::orderBy('nombre')->get();
         $tiposites = TipoSite::all();
@@ -180,7 +183,7 @@ class SitesController extends Controller
             "prioridad" => $prioridad,
             "tipoEnergia" => $tipoEnergia,
             "departamentos" => $departamentos,
-            "provincias" =>$provincias,
+            "provincias" => $provincias,
             "distritos" => $distritos,
         ]);
     }

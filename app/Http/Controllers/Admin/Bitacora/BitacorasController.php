@@ -23,6 +23,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Resources\Json\JsonResource;
+
 class BitacorasController extends Controller
 {
     /**
@@ -42,11 +43,11 @@ class BitacorasController extends Controller
             ->orWhere("incidencia", "like", "%" . $search . "%")
             ->orWhere("sot", "like", "%" . $search . "%")
             ->orderBy("fecha_inicial", "desc")
-            ->paginate(100);
+            ->paginate(3);
 
         return response()->json([
             "total" => $bitacoras->total(),
-            "data" => BitacoraListCollection::make($bitacoras)
+            "data" => BitacoraCollection::make($bitacoras)
         ]);
     }
 
@@ -55,9 +56,9 @@ class BitacorasController extends Controller
 
     public function endConfig()
     {
-        $causa = CausaAveria::select('id','nombre')->orderBy('nombre')->get();
-        $consecuencia = ConsecuenciaAveria::select('id','nombre')->orderBy('nombre')->get();
-        $tipoReparacion = TipoReparacion::select('id','nombre')->orderBy('nombre')->get();
+        $causa = CausaAveria::select('id', 'nombre')->orderBy('nombre')->get();
+        $consecuencia = ConsecuenciaAveria::select('id', 'nombre')->orderBy('nombre')->get();
+        $tipoReparacion = TipoReparacion::select('id', 'nombre')->orderBy('nombre')->get();
 
         return response()->json([
             "causa" => $causa,
@@ -69,7 +70,7 @@ class BitacorasController extends Controller
     public function listarAtenciones(string $id)
     {
         $atenciones = Atencion::with(['bitacora_atencion' => function ($q) use ($id) {
-            $q->select('id', 'hora', 'descripcion', 'orden','is_coment', 'atencion_id', 'bitacora_id', 'parent_id')
+            $q->select('id', 'hora', 'descripcion', 'orden', 'is_coment', 'atencion_id', 'bitacora_id', 'parent_id')
                 ->with('bitacora_atencion:id,hora,descripcion,orden,is_coment,atencion_id,bitacora_id,parent_id')
                 ->where('bitacora_id', $id)
                 ->orderBy('orden');
@@ -77,7 +78,7 @@ class BitacorasController extends Controller
             ->select('id', 'descripcion', 'orden')
             ->orderBy('orden')->get();
 
-         return response()->json( [
+        return response()->json([
             "total" => $atenciones->count(),
             "data" => $atenciones,
         ]);
@@ -115,7 +116,7 @@ class BitacorasController extends Controller
             if ($validator->fails()) {
                 return response()->json([
                     "message" => 403,
-                    "error" => $validator->errors()
+                    'message_text' => $validator->errors()
                 ]);
             }
 
@@ -142,7 +143,9 @@ class BitacorasController extends Controller
             }
 
             return response()->json([
-                "message" => 200
+                "message" => 200,
+                "message_text" => "ok",
+                "data" =>  $bitacora
             ]);
         } catch (Exception $e) {
             return response()->json([
@@ -214,44 +217,45 @@ class BitacorasController extends Controller
      */
     public function update(Request $request, string $id)
     {
-            $bitacora = Bitacora::findOrFail($id);
-            $bitacora->update($request->all());
+        $bitacora = Bitacora::findOrFail($id);
+        $bitacora->update($request->all());
 
-            return response()->json([
+        return response()->json([
             "message" => 200,
-            "message_text" =>"ok"
+            "message_text" => "ok"
         ]);
     }
 
-    public function updateLocation(Request $request, string $id)
+    public function updateLocation(Request $request)
     {
-        // Validar solo los campos presentes en la solicitud
-        $rules = [];
-        if ($request->has('latitud')) {
-            $rules['latitud'] = 'required|numeric|between:-90,90';
-        }
-        if ($request->has('longitud')) {
-            $rules['longitud'] = 'required|numeric|between:-180,180';
-        }
-        if ($request->has('distancia')) {
-            $rules['distancia'] = 'required|numeric|min:0';
-        }
 
-        // Verificar que al menos uno de los campos latitud, longitud, o distancia esté presente
-        if (!$request->has('latitud') || !$request->has('longitud') || !$request->has('distancia')) {
+        $rules = [
+            'latitud' => 'required|numeric|between:-90,90',
+            'longitud' => 'required|numeric|between:-180,180',
+            'distancia' => 'required|numeric|min:0'
+        ];
+        $messages = [
+            'latitud.required' => 'Causa es requerida',
+            'longitud.required' => 'Consecuencia es requerida',
+            'distancia.required' => 'Tipo de Reparacion es requerida'
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
             return response()->json([
-                "message" => 400,
-                'message_text' => 'All latitud, longitud, or distancia must be provided.'
-            ], 400);
+                "message" => 403,
+                'message_text' => $validator->errors()
+            ]);
         }
 
-        $request->validate($rules);
+        $bitacora = Bitacora::findOrFail($request->id);
 
-        // Encontrar la bitacora por id
-        $bitacora = Bitacora::findOrFail($id);
+        $bitacora->latitud = $request->latitud;
+        $bitacora->longitud = $request->longitud;
+        $bitacora->distancia = $request->distancia;
 
-        // Actualizar solo los campos proporcionados en la solicitud
-        $bitacora->update($request->only(array_keys($rules)));
+        $bitacora->save();
 
         // Devolver una respuesta exitosa
         return response()->json([
@@ -263,13 +267,28 @@ class BitacorasController extends Controller
 
     public function updateFinal(Request $request)
     {
-        $request->validate([
-            'causa' => 'required|integer|exists:causas_averia,id',
-            'consecuencia' => 'required|integer|exists:consecuencias_averia,id',
-            'tipoReparacion' => 'required|integer|exists:tipos_reparacion,id',
-            'herramientas' => 'required|string|max:255',
-            'tiempo' => 'required|integer|min:0',
-        ]);
+
+        $rules = [
+            'causa' => 'required|exists:causa_averias,id',
+            'consecuencia' => 'required|exists:consecuencia_averias,id',
+            'tipoReparacion' => 'required|exists:tipo_reparacions,id',
+            'tiempo' => 'required',
+        ];
+        $messages = [
+            'causa.required' => 'Causa es requerida',
+            'consecuencia.required' => 'Consecuencia es requerida',
+            'tipoReparacion.required' => 'Tipo de Reparacion es requerida',
+            'tiempo.required' => 'Tiempo es requerido',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "message" => 403,
+                'message_text' => $validator->errors()
+            ]);
+        }
 
         $bitacora = Bitacora::findOrFail($request->id);
 
@@ -284,7 +303,7 @@ class BitacorasController extends Controller
 
         return response()->json([
             "message" => 200,
-            "message_text" =>"ok",
+            "message_text" => "ok",
             "data" => $bitacora
         ]);
     }
@@ -296,7 +315,7 @@ class BitacorasController extends Controller
     {
         //
     }
-     public function config()
+    public function config()
     {
         $tipoaveria = TipoAveria::orderBy('nombre')->get();
         $red = Red::orderBy('nombre')->get();

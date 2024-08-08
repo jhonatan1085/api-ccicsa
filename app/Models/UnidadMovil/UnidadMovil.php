@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 class UnidadMovil extends Model
 {
     use HasFactory;
+ 
     protected $fillable = [
         "placa"
     ];

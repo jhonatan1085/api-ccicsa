@@ -23,17 +23,17 @@ class UsuariosController extends Controller
     public function index(Request $request)
     {
         $search = $request->search;
-        $users = User::where("name","like","%". $search ."%")
-                ->orWhere("surname","like","%". $search ."%")
-                ->orWhere("email","like","%". $search ."%")
-                ->orderBy("id","desc")
-                ->get();
+        $users = User::where("name", "like", "%" . $search . "%")
+            ->orWhere("surname", "like", "%" . $search . "%")
+            ->orWhere("email", "like", "%" . $search . "%")
+            ->orderBy("id", "desc")
+            ->get();
 
 
-                return response()->json([
-                    "total" => $users->count(),
-                    "data" => UserCollection::make($users)
-                ]);
+        return response()->json([
+            "total" => $users->count(),
+            "data" => UserCollection::make($users)
+        ]);
     }
 
     /**
@@ -41,24 +41,24 @@ class UsuariosController extends Controller
      */
     public function store(Request $request)
     {
-        $users_is_valid = User::where("email",$request->email)->first();
-        if( $users_is_valid){
+        $users_is_valid = User::where("email", $request->email)->first();
+        if ($users_is_valid) {
             return response()->json([
                 "message" => 403,
                 "message_text" => "EL USUARIO CON ESTE MAIL YA EXISTE"
             ]);
         }
 
-        if($request->hasFile("imagen")){
-            $path = Storage::putFile("staffs",$request->file("imagen"));
+        if ($request->hasFile("imagen")) {
+            $path = Storage::putFile("staffs", $request->file("imagen"));
             $request->request->add(["avatar" => $path]);
         }
 
-        if($request->password){
-            $request->request->add(["password",bcrypt($request->password)]);
+        if ($request->password) {
+            $request->request->add(["password", bcrypt($request->password)]);
         }
 
-       // $request->request->add(["birth_date" => Carbon::parse($request->birth_date, 'GMT-0500')->format("Y-m-d h:i:s")]);
+        // $request->request->add(["birth_date" => Carbon::parse($request->birth_date, 'GMT-0500')->format("Y-m-d h:i:s")]);
 
         $date_clean = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $request->birth_date);
 
@@ -72,7 +72,7 @@ class UsuariosController extends Controller
         $user->assignRole($role);
 
         return response()->json([
-            "message" => 200, "message_text" =>"ok"
+            "message" => 200, "message_text" => "ok"
         ]);
     }
 
@@ -91,8 +91,8 @@ class UsuariosController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $users_is_valid = User::where("id","<>",$id)->where("email",$request->email)->first();
-        if( $users_is_valid){
+        $users_is_valid = User::where("id", "<>", $id)->where("email", $request->email)->first();
+        if ($users_is_valid) {
             return response()->json([
                 "message" => 403,
                 "message_text" => "EL USUARIO CON ESTE MAIL YA EXISTE"
@@ -101,17 +101,17 @@ class UsuariosController extends Controller
 
         $user = User::findOrFail($id);
 
-        if($request->hasFile("avatar")){
-            if($user->avatar){
+        if ($request->hasFile("avatar")) {
+            if ($user->avatar) {
                 Storage::delete($user->avatar);
             }
 
-            $path = Storage::putFile("usuarios",$request->file("avatar"));
+            $path = Storage::putFile("usuarios", $request->file("avatar"));
             $request->avatar = $path;
         }
 
-        if($request->password){
-            $request->password=bcrypt($request->password);
+        if ($request->password) {
+            $request->password = bcrypt($request->password);
         }
 
         $date_clean = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $request->birth_date);
@@ -120,19 +120,19 @@ class UsuariosController extends Controller
 
         $user->update($request->all());
 
-        if($user->roles()->first() && $request->role_id != $user->roles()->first()->id){
+        if ($user->roles()->first() && $request->role_id != $user->roles()->first()->id) {
             $role_old = Role::findOrFail($user->roles()->first()->id);
             $user->removeRole($role_old);
 
             $role_new = Role::findOrFail($request->role_id);
             $user->assignRole($role_new);
-        }else if(!$user->roles()->first()){
+        } else if (!$user->roles()->first()) {
             $role_new = Role::findOrFail($request->role_id);
             $user->assignRole($role_new);
         }
 
         return response()->json([
-            "message" => 200, "message_text" =>"ok", "data" => $user
+            "message" => 200, "message_text" => "ok", "data" => $user
         ]);
     }
 
@@ -142,19 +142,20 @@ class UsuariosController extends Controller
     public function destroy(string $id)
     {
         $user = User::findOrFail($id);
-        if($user->avatar){
+        if ($user->avatar) {
             Storage::delete($user->avatar);
         }
         $user->delete();
 
         return response()->json([
-            "message" => 200, "message_text" =>"ok"
+            "message" => 200, "message_text" => "ok"
         ]);
     }
 
     ////////////////////////////////////////
 
-    public function config(){
+    public function config()
+    {
         $roles = Role::orderBy('name')->get();
         $educacions = Educacion::orderBy('nombre')->get();
         $zonas = Zona::orderBy('nombre')->get();
@@ -167,32 +168,35 @@ class UsuariosController extends Controller
 
     public function usuariosTecnicosPorZona(string $zona_id)
     {
-        $usuarios = User::with('unidad_movil:id, placa')
-            ->select('name','surname','id')
+        $usuarios = User::with('unidad_movil:id,placa')
+            ->select('name', 'surname', 'id')
             ->where("zona_id", $zona_id)
             ->whereHas("roles", function ($q) {
                 $q->where("name", "like", "%Tecnico%");
             })
             ->orderBy("name", "asc")
             ->get();
-        return response()->json([ $usuarios]);
+        return response()->json([
+            'total' => $usuarios->count(),
+            'data' => $usuarios
+        ]);
     }
 
     public function usuariosResponsablesPorZona(string $zona_id)
     {
         return response()->json([
-            "cicsa" =>  $this->usuariosPorZonaYTipo($zona_id,"1"),
-            "claro" =>  $this->usuariosPorZonaYTipo($zona_id,"0"),
+            "cicsa" =>  $this->usuariosPorZonaYTipo($zona_id, "1"),
+            "claro" =>  $this->usuariosPorZonaYTipo($zona_id, "0"),
         ]);
     }
     ////////////////////////////////////////////////////////////////
 
     private function usuariosPorZonaYTipo(string $zona_id, string $tipo)
     {
-        return User::select('name','surname','id')
-            ->whereHas("zona_user", function ($q) use($zona_id, $tipo) {
+        return User::select('name', 'surname', 'id')
+            ->whereHas("zona_user", function ($q) use ($zona_id, $tipo) {
                 $q->where("zona_id", $zona_id)
-                ->where('is_user', $tipo);
+                    ->where('is_user', $tipo);
             })
             ->get();
     }

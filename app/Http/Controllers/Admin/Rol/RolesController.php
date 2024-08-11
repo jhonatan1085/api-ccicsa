@@ -20,7 +20,8 @@ class RolesController extends Controller
         $roles = Role::where("name","like","%". $name . "%")->orderBy("id","desc")->get();
 
         return response()->json([
-            "roles" => $roles->map(function($rol){
+            "total" => $roles->count(),
+            "data" => $roles->map(function($rol){
                 return [
                     "id" => $rol->id,
                     "name" => $rol->name,
@@ -58,7 +59,7 @@ class RolesController extends Controller
         return response()->json([
             "message" => 200,
         ]);
-        
+
     }
 
     /**

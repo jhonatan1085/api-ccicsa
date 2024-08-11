@@ -1518,9 +1518,13 @@ VALLE ALTO PIURA"',348,368,33,9,1,2,'	','','','','','','18450668',3,1,1,2,1,8,''
      */
     public function run(): void
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS = 0;'); // Desactivamos la revisión de claves foráneas
+        //DB::statement('SET FOREIGN_KEY_CHECKS = 0;'); // Desactivamos la revisión de claves foráneas
+        // DB::table('sites')->truncate();
+        //DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
+        DB::getSchemaBuilder()->disableForeignKeyConstraints();
         DB::table('sites')->truncate();
-        DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
+        DB::getSchemaBuilder()->enableForeignKeyConstraints();
+
 
         foreach (self::$sites as $site) {
             DB::table('sites')->insert([

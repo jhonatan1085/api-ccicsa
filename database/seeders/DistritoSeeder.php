@@ -396,9 +396,14 @@ class DistritoSeeder extends Seeder
     public function run(): void
     {
 
-        DB::statement('SET FOREIGN_KEY_CHECKS = 0;'); // Desactivamos la revisión de claves foráneas
+        DB::getSchemaBuilder()->disableForeignKeyConstraints();
         DB::table('distritos')->truncate();
-        DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
+        DB::getSchemaBuilder()->enableForeignKeyConstraints();
+        //DB::statement('SET FOREIGN_KEY_CHECKS = 0;'); // Desactivamos la revisión de claves foráneas
+        // DB::statement('ALTER TABLE distritos NOCHECK CONSTRAINT ALL;');
+        // DB::table('distritos')->truncate();
+        // DB::statement('ALTER TABLE distritos CHECK CONSTRAINT ALL;');
+        //DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
 
         foreach (self::$distritos as $distrito) {
             DB::table('distritos')->insert([

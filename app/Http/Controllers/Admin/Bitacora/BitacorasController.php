@@ -270,7 +270,12 @@ class BitacorasController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $bitacora = Bitacora::findOrFail($id);
+        $bitacora->delete();
+        return response()->json([
+            "message" => 200,
+            "message_text" => "ok"
+        ]);
     }
 
     public function config()

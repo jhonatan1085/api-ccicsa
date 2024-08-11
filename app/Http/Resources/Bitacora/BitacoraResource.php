@@ -67,7 +67,7 @@ class BitacoraResource extends JsonResource
                     "nombre" => $this->site->tipo_site->nombre == 'POP' ?  $this->site->tipo_site->nombre : 'SITE',
                 ] : NULL,
             ] : NULL,
-            "brigadas" => BrigadaResource::collection($this->brigada),
+            "brigadas" => BrigadaResource::collection($this->brigadas),
             "tiempo_solucion" => $this->tiempo_solucion,
             "herramientas" => $this->herramientas,
             "causa_averia" => $this->causa_averia ? [

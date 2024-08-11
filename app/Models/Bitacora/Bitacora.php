@@ -82,7 +82,7 @@ class Bitacora extends Model
     }
 
 
-    public function brigada()
+    public function brigadas()
     {
         return $this->belongsToMany(Brigada::class);
     }

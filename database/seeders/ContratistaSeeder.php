@@ -10,8 +10,9 @@ class ContratistaSeeder extends Seeder
 {
     static $contratistas = [
         'CICSA',
-        'ADECCO',
-        'CLARO',
+        'ECYTEL',
+        'SAFESA',
+        'VARVELA',
         'N/D'
     ];
     /**

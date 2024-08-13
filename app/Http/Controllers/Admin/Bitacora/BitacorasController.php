@@ -28,7 +28,12 @@ class BitacorasController extends Controller
     public function index(Request $request)
     {
         $search = $request->search;
-        $bitacoras = Bitacora::where('nombre', "like", "%" . $search . "%")
+
+        $roles = auth('api')->user()->getRoleNames();
+        $id = auth('api')->user()->id;
+
+        if ($roles[0] == "Admin"){
+            $bitacoras = Bitacora::where('nombre', "like", "%" . $search . "%")
             ->orWhereHas("red", function ($q) use ($search) {
                 $q->where("nombre", "like", "%" . $search . "%");
             })
@@ -39,6 +44,24 @@ class BitacorasController extends Controller
             ->orWhere("sot", "like", "%" . $search . "%")
             ->orderBy("fecha_inicial", "desc")
             ->paginate(10);
+        } else {
+            $bitacoras = Bitacora::where('nombre', "like", "%" . $search . "%")
+            ->whereHas('brigadas.user', function($q) use($id){
+                $q->where('users.id',  $id);
+            })
+            ->orWhereHas("red", function ($q) use ($search) {
+                $q->where("nombre", "like", "%" . $search . "%");
+            })
+            ->orWhereHas("red", function ($q) use ($search) {
+                $q->where("nombre", "like", "%" . $search . "%");
+            })
+            ->orWhere("incidencia", "like", "%" . $search . "%")
+            ->orWhere("sot", "like", "%" . $search . "%")
+            ->orderBy("fecha_inicial", "desc")
+            ->paginate(10);
+        }
+
+        
 
         return response()->json([
             "total" => $bitacoras->total(),
@@ -302,13 +325,17 @@ class BitacorasController extends Controller
 
     public function config()
     {
-        $tipoaveria = TipoAveria::orderBy('nombre')->get();
-        $red = Red::orderBy('nombre')->get();
-        $serv = Serv::orderBy('nombre')->get();
-        return response()->json([
-            "tipoaveria" => $tipoaveria,
-            "red" => $red,
-            "serv" => $serv
-        ]);
+
+    $tipoaveria = TipoAveria::orderBy('nombre')->get();
+    $red = Red::orderBy('nombre')->get();
+    $serv = Serv::orderBy('nombre')->get();
+    return response()->json([
+        "tipoaveria" => $tipoaveria,
+        "red" => $red,
+        "serv" => $serv
+    ]);
+
+
+        
     }
 }

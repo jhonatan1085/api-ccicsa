@@ -23,51 +23,30 @@ class PermissionsDemoSeeder extends Seeder
        Permission::create(['guard_name' => 'api','name' => 'edit_rol']);
        Permission::create(['guard_name' => 'api','name' => 'delete_rol']);
 
-       Permission::create(['guard_name' => 'api','name' => 'register_doctor']);
-       Permission::create(['guard_name' => 'api','name' => 'list_doctor']);
-       Permission::create(['guard_name' => 'api','name' => 'edit_doctor']);
-       Permission::create(['guard_name' => 'api','name' => 'delete_doctor']);
-       Permission::create(['guard_name' => 'api','name' => 'profile_doctor']);
+       Permission::create(['guard_name' => 'api','name' => 'register_user']);
+       Permission::create(['guard_name' => 'api','name' => 'list_user']);
+       Permission::create(['guard_name' => 'api','name' => 'edit_user']);
+       Permission::create(['guard_name' => 'api','name' => 'delete_user']);
 
-       Permission::create(['guard_name' => 'api','name' => 'register_patient']);
-       Permission::create(['guard_name' => 'api','name' => 'list_patient']);
-       Permission::create(['guard_name' => 'api','name' => 'edit_patient']);
-       Permission::create(['guard_name' => 'api','name' => 'delete_patient']);
-       Permission::create(['guard_name' => 'api','name' => 'profile_patient']);
+       Permission::create(['guard_name' => 'api','name' => 'register_site']);
+       Permission::create(['guard_name' => 'api','name' => 'list_site']);
+       Permission::create(['guard_name' => 'api','name' => 'edit_site']);
+       Permission::create(['guard_name' => 'api','name' => 'delete_site']);
 
-       Permission::create(['guard_name' => 'api','name' => 'register_staff']);
-       Permission::create(['guard_name' => 'api','name' => 'list_staff']);
-       Permission::create(['guard_name' => 'api','name' => 'edit_staff']);
-       Permission::create(['guard_name' => 'api','name' => 'delete_staff']);
+       Permission::create(['guard_name' => 'api','name' => 'list_bitacora']);
+       Permission::create(['guard_name' => 'api','name' => 'register_bitacora']);
+       Permission::create(['guard_name' => 'api','name' => 'list_cuadrilla']);
 
-       Permission::create(['guard_name' => 'api','name' => 'register_appointment']);
-       Permission::create(['guard_name' => 'api','name' => 'list_appointment']);
-       Permission::create(['guard_name' => 'api','name' => 'edit_appointment']);
-       Permission::create(['guard_name' => 'api','name' => 'delete_appointment']);
-
-       Permission::create(['guard_name' => 'api','name' => 'register_specialty']);
-       Permission::create(['guard_name' => 'api','name' => 'list_specialty']);
-       Permission::create(['guard_name' => 'api','name' => 'edit_specialty']);
-       Permission::create(['guard_name' => 'api','name' => 'delete_specialty']);
-
-       Permission::create(['guard_name' => 'api','name' => 'show_payment']);
-       Permission::create(['guard_name' => 'api','name' => 'edit_payment']);
-
-       Permission::create(['guard_name' => 'api','name' => 'activitie']);
-       Permission::create(['guard_name' => 'api','name' => 'calendar']);
-
-       Permission::create(['guard_name' => 'api','name' => 'expense_report']);
-       Permission::create(['guard_name' => 'api','name' => 'invoice_report']);
 
        Permission::create(['guard_name' => 'api','name' => 'settings']);
 
 
        $role3 = Role::create(['guard_name' => 'api','name' => 'Admin']);
-       Role::create(['guard_name' => 'api','name' => 'Held Desk']);
+       
        $role4 = Role::create(['guard_name' => 'api','name' => 'Tecnico']);
        $role5 = Role::create(['guard_name' => 'api','name' => 'Lider']);
-
-
+       $role6 = Role::create(['guard_name' => 'api','name' => 'Claro']);
+       $role7 = Role::create(['guard_name' => 'api','name' => 'Held Desk']);
 
        $user = \App\Models\User::factory()->create([
            'name' => 'Jhonatan ',
@@ -84,7 +63,6 @@ class PermissionsDemoSeeder extends Seeder
            'zona_id' => 1
        ]);
        $user->assignRole($role3);
-
 
 
        $user = \App\Models\User::factory()->create([

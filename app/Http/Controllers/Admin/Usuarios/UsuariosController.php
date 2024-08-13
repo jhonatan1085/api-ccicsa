@@ -116,8 +116,7 @@ class UsuariosController extends Controller
 
         $date_clean = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $request->birth_date);
 
-        $request->birth_date = Carbon::parse($date_clean)->format("Y-m-d h:i:s");
-
+        $request->request->add(["birth_date" => Carbon::parse($date_clean)->format("Y-m-d h:i:s")]);
         $user->update($request->all());
 
         if ($user->roles()->first() && $request->role_id != $user->roles()->first()->id) {

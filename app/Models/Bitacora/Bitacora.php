@@ -24,6 +24,7 @@ class Bitacora extends Model
         "red_id",
         "serv_id",
         "site_id",
+        "cliente",
         "resp_cicsa_id",
         "resp_claro_id",
         "estado",

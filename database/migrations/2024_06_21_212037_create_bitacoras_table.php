@@ -28,6 +28,7 @@ return new class extends Migration
             $table->foreign('serv_id')->references('id')->on('servs');
             $table->unsignedBigInteger('site_id');
             $table->foreign('site_id')->references('id')->on('sites');
+            $table->string('cliente',50)->nullable('NULL');
             $table->unsignedBigInteger('resp_cicsa_id');
             $table->foreign('resp_cicsa_id')->references('id')->on('users');
             $table->unsignedBigInteger('resp_claro_id');

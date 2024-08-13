@@ -38,7 +38,7 @@ class BitacorasController extends Controller
             ->orWhere("incidencia", "like", "%" . $search . "%")
             ->orWhere("sot", "like", "%" . $search . "%")
             ->orderBy("fecha_inicial", "desc")
-            ->paginate(3);
+            ->paginate(10);
 
         return response()->json([
             "total" => $bitacoras->total(),
@@ -89,7 +89,7 @@ class BitacorasController extends Controller
                 'site_id' => 'required',
                 'resp_cicsa_id' => 'required',
                 'resp_claro_id' => 'required',
-                'cuadrillas' => 'required',
+                'brigadas' => 'required',
             ];
             $messages = [
                 'nombre.required' => 'Nombre es requerido',
@@ -100,7 +100,7 @@ class BitacorasController extends Controller
                 'site_id.required' => 'No ingreso Site',
                 'resp_cicsa_id.required' => 'No selecciono responsable Ccicsa',
                 'resp_claro_id.required' => 'No selecciono responsable Claro',
-                "cuadrillas.required" => 'No selecciono cuadrilla'
+                "brigadas.required" => 'No selecciono cuadrilla'
             ];
             $validator = Validator::make($request->all(), $rules, $messages);
             if ($validator->fails()) {
@@ -190,7 +190,29 @@ class BitacorasController extends Controller
     public function update(Request $request, string $id)
     {
         $bitacora = Bitacora::findOrFail($id);
+
+        $date_clean = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $request->fecha_inicial);
+        $request["fecha_inicial"] = Carbon::parse($date_clean)->format("Y-m-d h:i:s");
+
+       /*  $date_clean = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $request->fecha_inicial);
+
+        $request->fecha_inicial = Carbon::parse($date_clean)->format("Y-m-d h:i:s"); */
+
+
         $bitacora->update($request->all());
+
+
+        foreach ($bitacora->bitacora_brigada as $key => $brigada) {
+            $brigada->delete();
+        }
+
+        foreach ($request->brigadas as $brigada) {
+            BitacoraBrigada::create([
+                "brigada_id" => $brigada["id"],
+                "bitacora_id" => $bitacora->id
+            ]);
+        }
+
         return response()->json([
             "message" => 200,
             "message_text" => "ok"

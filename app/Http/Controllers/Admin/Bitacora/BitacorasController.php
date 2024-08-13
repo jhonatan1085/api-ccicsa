@@ -247,12 +247,10 @@ class BitacorasController extends Controller
         $rules = [
             'latitud' => 'required|numeric|between:-90,90',
             'longitud' => 'required|numeric|between:-180,180',
-            'distancia' => 'required|numeric|min:0'
         ];
         $messages = [
             'latitud.required' => 'Causa es requerida',
             'longitud.required' => 'Consecuencia es requerida',
-            'distancia.required' => 'Tipo de Reparacion es requerida'
         ];
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {

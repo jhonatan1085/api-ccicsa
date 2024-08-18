@@ -1,7 +1,7 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/juanbosc/public_html/ # Reemplaza con tu ruta de despliegue
+    - export DEPLOYPATH=/home/juanbosc/cicsa.pe/ # Reemplaza con tu ruta de despliegue
     - /bin/cp -R * $DEPLOYPATH
     - cd $DEPLOYPATH
     - /usr/local/bin/composer install --no-dev --optimize-autoloader

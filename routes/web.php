@@ -14,5 +14,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/{any}', function () {
-    return view('angular');
+    return file_get_contents(public_path('index.html'));
 })->where('any', '.*');

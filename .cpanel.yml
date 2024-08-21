@@ -1,7 +1,7 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/juanbosc/cicsa.pe/ # Reemplaza con tu ruta de despliegue
+    - export DEPLOYPATH=/home/juanbosc/cicsa-app.pe/ # Reemplaza con tu ruta de despliegue
     - /bin/cp -R .cpanel.yml $DEPLOYPATH
     - /bin/cp -R .editorconfig $DEPLOYPATH
     - /bin/cp -R .env $DEPLOYPATH

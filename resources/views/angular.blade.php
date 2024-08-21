@@ -480,18 +480,19 @@
             height: 100%
         }
     </style>
-    <link rel="stylesheet" href="{{ asset('styles.df5b157af1b2089d.css') }}" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="{{ asset('public/styles.df5b157af1b2089d.css') }}" media="print"
+        onload="this.media='all'">
     <noscript>
-        <link rel="stylesheet" href="{{ asset('styles.df5b157af1b2089d.css') }}">
+        <link rel="stylesheet" href="{{ asset('public/styles.df5b157af1b2089d.css') }}">
     </noscript>
 </head>
 
 <body>
     <app-root></app-root>
-    <script src="{{ asset('runtime.36dc4e2017b4e380.js') }}" type="module"></script>
-    <script src="{{ asset('polyfills.e3550c73c66b1b00.js') }}" type="module"></script>
-    <script src="{{ asset('scripts.5082b8320b33a294.js') }}" defer></script>
-    <script src="{{ asset('main.209eb04a11dcddc7.js') }}" type="module"></script>
+    <script src="{{ asset('public/runtime.36dc4e2017b4e380.js') }}" type="module"></script>
+    <script src="{{ asset('public/polyfills.e3550c73c66b1b00.js') }}" type="module"></script>
+    <script src="{{ asset('public/scripts.5082b8320b33a294.js') }}" defer></script>
+    <script src="{{ asset('public/main.209eb04a11dcddc7.js') }}" type="module"></script>
 </body>
 
 </html>

@@ -26,7 +26,7 @@ deployment:
     - /bin/cp -R vendor $DEPLOYPATH
     - /bin/cp -R vite.config.js $DEPLOYPATH
     - cd $DEPLOYPATH $DEPLOYPATH
-    - /usr/local/bin/composer install --no-dev --optimize-autoloader
+    # - /usr/local/bin/composer install --no-dev --optimize-autoloader
     # - /usr/local/bin/php artisan migrate --force
     # - /usr/local/bin/php artisan config:cache
     # - /usr/local/bin/php artisan route:cache

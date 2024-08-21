@@ -26,8 +26,9 @@ deployment:
     - /bin/cp -R vendor $DEPLOYPATH
     - /bin/cp -R vite.config.js $DEPLOYPATH
     - cd $DEPLOYPATH $DEPLOYPATH
-    # - /usr/local/bin/composer install --no-dev --optimize-autoloader
-    # - /usr/local/bin/php artisan migrate --force
-    # - /usr/local/bin/php artisan config:cache
-    # - /usr/local/bin/php artisan route:cache
-    # - /usr/local/bin/php artisan view:cache
+    - ea-php81 /opt/cpanel/composer/bin/composer install --optimize-autoloader
+    # - ea-php81 /opt/cpanel/composer/bin/composer install --no-dev --optimize-autoloader
+    # - ea-php81 artisan migrate --force
+    # - ea-php81 artisan config:cache
+    # - ea-php81 artisan route:cache
+    # - ea-php81 artisan view:cache

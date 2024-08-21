@@ -31,7 +31,15 @@
 # </IfModule>
 
 <IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
     RewriteEngine On
+
+     # Allow direct access to files and folders
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
 
     ##
     ## You may need to uncomment (remove #) the following line for some hosting environments,
@@ -46,8 +54,8 @@
     # RewriteCond %{HTTPS} off
     # RewriteRule (.*) https://%{SERVER_NAME}/$1 [R,L]
 
-    RewriteCond %{REQUEST_URI}::$1 ^(/.+)/(.*)::\2$
-    RewriteRule ^(.*) - [E=BASE:%1]
+    # RewriteCond %{REQUEST_URI}::$1 ^(/.+)/(.*)::\2$
+    # RewriteRule ^(.*) - [E=BASE:%1]
 
     RewriteCond %{REQUEST_URI} !^public
     RewriteRule ^(.*)$ public/$1 [L]

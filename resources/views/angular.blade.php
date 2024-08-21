@@ -488,10 +488,11 @@
 
 <body>
     <app-root></app-root>
-    <script src="{{ asset('runtime.36dc4e2017b4e380.js') }}" type="module"></script>
+    <script src="{{ asset('runtime.1f27e0503434be72.js') }}" type="module"></script>
     <script src="{{ asset('polyfills.e3550c73c66b1b00.js') }}" type="module"></script>
     <script src="{{ asset('scripts.5082b8320b33a294.js') }}" defer></script>
     <script src="{{ asset('main.209eb04a11dcddc7.js') }}" type="module"></script>
+</body>
 </body>
 
 </html>

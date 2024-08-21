@@ -2,30 +2,11 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/juanbosc/cicsa.pe/ # Reemplaza con tu ruta de despliegue
+    - /bin/cp -R * $DEPLOYPATH
     - /bin/cp -R .cpanel.yml $DEPLOYPATH
-    - /bin/cp -R .editorconfig $DEPLOYPATH
     - /bin/cp -R .env $DEPLOYPATH
     - /bin/cp -R .htaccess $DEPLOYPATH
-    - /bin/cp -R app $DEPLOYPATH
-    - /bin/cp -R artisan $DEPLOYPATH
-    - /bin/cp -R bdccicsa $DEPLOYPATH
-    - /bin/cp -R bootstrap $DEPLOYPATH
-    - /bin/cp -R composer.json $DEPLOYPATH
-    - /bin/cp -R composer.lock $DEPLOYPATH
-    - /bin/cp -R config $DEPLOYPATH
-    - /bin/cp -R database $DEPLOYPATH
-    - /bin/cp -R package.json $DEPLOYPATH
-    - /bin/cp -R phpunit.xml $DEPLOYPATH
-    - /bin/cp -R public $DEPLOYPATH
-    - /bin/cp -R README.md $DEPLOYPATH
-    - /bin/cp -R resources $DEPLOYPATH
-    - /bin/cp -R routes $DEPLOYPATH
-    - /bin/cp -R SQLCCICSA-1.sql $DEPLOYPATH
-    - /bin/cp -R storage $DEPLOYPATH
-    - /bin/cp -R tests $DEPLOYPATH
-    - /bin/cp -R vendor $DEPLOYPATH
-    - /bin/cp -R vite.config.js $DEPLOYPATH
-    - cd $DEPLOYPATH $DEPLOYPATH
+    - cd $DEPLOYPATH
     - ea-php81 /opt/cpanel/composer/bin/composer install --optimize-autoloader
     # - ea-php81 /opt/cpanel/composer/bin/composer install --no-dev --optimize-autoloader
     # - ea-php81 artisan migrate --force

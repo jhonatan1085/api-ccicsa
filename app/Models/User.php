@@ -70,13 +70,9 @@ class User extends Authenticatable implements JWTSubject
 
     public function unidad_movil()
     {
-        return $this->belongsToMany(UnidadMovil::class)
-                                    ->withPivot('estado')
-                                    ->where('estado','1');
+        return $this->belongsToMany(UnidadMovil::class);
     }
-
-
-
+    
     public function unidad_movil_user()
     {
         return $this->hasMany(UnidadMovilUser::class)->where('estado','1');

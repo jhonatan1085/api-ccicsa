@@ -10,7 +10,8 @@ deployment:
     - ea-php81 /opt/cpanel/composer/bin/composer update
     - ea-php81 /opt/cpanel/composer/bin/composer install --optimize-autoloader
     # - ea-php81 /opt/cpanel/composer/bin/composer install --no-dev --optimize-autoloader
+     - ea-php81 artisan db:seed
      - ea-php81 artisan migrate --force
     # - ea-php81 artisan config:cache
-    # - ea-php81 artisan route:cache
+    - ea-php81 artisan route:cache
     # - ea-php81 artisan view:cache

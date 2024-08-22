@@ -33,6 +33,7 @@ class UnidadMovilController extends Controller
             "data" => UnidadMovilCollection::make($unidadesMoviles)
         ]);
     }
+    
 
     /**
      * Store a newly created resource in storage.

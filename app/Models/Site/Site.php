@@ -100,7 +100,4 @@ class Site extends Model
     {
         return $this->belongsTo(Distrito::class);
     }
-
-
-
 }

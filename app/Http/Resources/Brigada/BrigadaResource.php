@@ -16,16 +16,7 @@ class BrigadaResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-/*          $usuarios = collect([]);
-        $unidadmovil = collect([]);
-        foreach ($this->resource->user as $users) {
-            $usuarios->push([
-                "id" => $users->id,
-                "nombres" => $users->name . " " . $users->surname,
-                "unidad_movil" => $users->unidad_movil->first(),
-            ]);
-        }
- */
+
         return [
             "id" => $this->id,
             "estado" => $this->estado,

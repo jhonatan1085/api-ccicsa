@@ -39,7 +39,9 @@ class UnidadMovil extends Model
 
     public function user()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class)
+        ->withPivot('estado')
+        ->where('estado','1');
     }
 
     public function brigada_user() 
@@ -50,6 +52,11 @@ class UnidadMovil extends Model
     public function modelo() 
     {
         return $this->belongsTo(Modelo::class);
+    }
+
+    public function color() 
+    {
+        return $this->belongsTo(Color::class);
     }
 
 }

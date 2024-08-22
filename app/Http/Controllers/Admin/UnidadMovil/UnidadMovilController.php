@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\UnidadMovil;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UnidadMovil\UnidadMovilCollection;
 use App\Models\UnidadMovil\Color;
 use App\Models\UnidadMovil\Marca;
 use App\Models\UnidadMovil\Modelo;
@@ -29,7 +30,7 @@ class UnidadMovilController extends Controller
         
         return response()->json([
             "total" => $unidadesMoviles->total(),
-            "data" => $unidadesMoviles//BitacoraCollection::make($bitacoras)
+            "data" => UnidadMovilCollection::make($unidadesMoviles)
         ]);
     }
 

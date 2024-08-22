@@ -31,6 +31,6 @@ class Modelo extends Model
     }
     public function marca() 
     {
-        return $this->belongsTo(UnidadMovil::class);
+        return $this->belongsTo(Marca::class);
     }
 }

@@ -7,8 +7,8 @@ deployment:
     - /bin/cp -R .env $DEPLOYPATH
     - /bin/cp -R .htaccess $DEPLOYPATH
     - cd $DEPLOYPATH
-    # - ea-php81 /opt/cpanel/composer/bin/composer update
-    # - ea-php81 /opt/cpanel/composer/bin/composer install --optimize-autoloader
+    - ea-php81 /opt/cpanel/composer/bin/composer update
+    - ea-php81 /opt/cpanel/composer/bin/composer install --optimize-autoloader
     # - ea-php81 /opt/cpanel/composer/bin/composer install --no-dev --optimize-autoloader
      - ea-php81 artisan migrate --force
     # - ea-php81 artisan config:cache

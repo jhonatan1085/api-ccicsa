@@ -20,10 +20,17 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
+
 class BitacorasController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/bitacoras",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *          response="200",
+     *          description="Muestra una lista de bitacoras.")
+     * )
      */
     public function index(Request $request)
     {
@@ -197,7 +204,21 @@ class BitacorasController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *     path="/api/bitacoras/{id}",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          required=true,
+     *          description="ID de la bitácora",
+     *          @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *          response="200",
+     *          description="Muestra una bitácora específica."
+     *     )
+     * )
      */
     public function show(string $id)
     {
@@ -206,7 +227,21 @@ class BitacorasController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Post(
+     *     path="/api/bitacoras/{id}",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          required=true,
+     *          description="ID de la bitácora",
+     *          @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *          response="200",
+     *          description="Actualiza una bitácora."
+     *     )
+     * )
      */
     public function update(Request $request, string $id)
     {

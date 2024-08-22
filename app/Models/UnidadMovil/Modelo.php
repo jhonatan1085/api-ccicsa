@@ -2,22 +2,16 @@
 
 namespace App\Models\UnidadMovil;
 
-use App\Models\Brigada\BrigadaUser;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UnidadMovil extends Model
+class Modelo extends Model
 {
     use HasFactory;
- 
     protected $fillable = [
-        "placa",
-        "kilometraje",
-        "modelo_id",
-        "color_id",
-        "estado",
+        "nombre",
+        "marca_id"
     ];
 
     public function setCreatedAtAttribute($value)
@@ -31,25 +25,12 @@ class UnidadMovil extends Model
     	date_default_timezone_set("America/Lima");
         $this->attributes["updated_at"]= Carbon::now();
     }
-
-    public function unidad_movil_user() 
+    public function unidad_movil() 
     {
-        return $this->hasMany(UnidadMovilUser::class);
+        return $this->hasMany(UnidadMovil::class);
     }
-
-    public function user()
+    public function marca() 
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsTo(UnidadMovil::class);
     }
-
-    public function brigada_user() 
-    {
-        return $this->hasMany(BrigadaUser::class);
-    }
-
-    public function modelo() 
-    {
-        return $this->belongsTo(Modelo::class);
-    }
-
 }

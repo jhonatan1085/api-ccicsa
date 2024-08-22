@@ -24,7 +24,7 @@ class BrigadasController extends Controller
     {
         $search = $request->search;
 
-        $brigadas = Brigada::BrigadaAll()->paginate(10);
+        $brigadas = Brigada::BrigadaAll()->orderBy('fecha_alta','desc')->get();
         return response()->json([
             "total" => $brigadas->count(),
             "data" => BrigadaCollection::make($brigadas)
@@ -118,8 +118,8 @@ class BrigadasController extends Controller
     public function destroy(string $id)
     {
         $brigada = Brigada::findOrFail($id);
-
         $brigada->estado = '0';
+        $brigada->fecha_baja =  now();
         $brigada->save();
 
         return response()->json([

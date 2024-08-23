@@ -17,7 +17,7 @@ use Illuminate\Routing\Controller as BaseController;
  *          description="Servidor Local"
  * )
  * @OA\Server(
- *          url="http://cicsa.situaweb.com/public/api",
+ *          url="https://cicsa.situaweb.com/public/api",
  *          description="Servidor de Producción"
  * )
  * @OA\SecurityScheme(

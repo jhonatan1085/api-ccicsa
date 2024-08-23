@@ -25,7 +25,7 @@ class BitacorasController extends Controller
 {
     /**
      * @OA\Get(
-     *     path="/api/bitacoras",
+     *     path="/bitacoras",
      *     security={{"bearerAuth":{}}},
      *     @OA\Response(
      *          response="200",
@@ -205,7 +205,7 @@ class BitacorasController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/bitacoras/{id}",
+     *     path="/bitacoras/{id}",
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *          name="id",
@@ -228,7 +228,7 @@ class BitacorasController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/bitacoras/{id}",
+     *     path="/bitacoras/{id}",
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *          name="id",

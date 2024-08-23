@@ -16,9 +16,9 @@
         }
     ],
     "paths": {
-        "/api/bitacoras": {
+        "/bitacoras": {
             "get": {
-                "operationId": "c08ec686f0bb978291e1453510020270",
+                "operationId": "aeee6fb0d8777dfc92b964f0370ac287",
                 "responses": {
                     "200": {
                         "description": "Muestra una lista de bitacoras."
@@ -31,9 +31,9 @@
                 ]
             }
         },
-        "/api/bitacoras/{id}": {
+        "/bitacoras/{id}": {
             "get": {
-                "operationId": "f192ed65689f0c76db178c033173ff07",
+                "operationId": "2e440d89da7ea805867eb11c71b78f4d",
                 "parameters": [
                     {
                         "name": "id",
@@ -57,7 +57,7 @@
                 ]
             },
             "post": {
-                "operationId": "4ee01ccb80a47369dc60482f5351f974",
+                "operationId": "47d272875829788f17c65727ca946cc1",
                 "parameters": [
                     {
                         "name": "id",

@@ -18,6 +18,9 @@
     "paths": {
         "/bitacoras": {
             "get": {
+                "tags": [
+                    "Bitácoras"
+                ],
                 "operationId": "aeee6fb0d8777dfc92b964f0370ac287",
                 "responses": {
                     "200": {
@@ -33,6 +36,9 @@
         },
         "/bitacoras/{id}": {
             "get": {
+                "tags": [
+                    "Bitácoras"
+                ],
                 "operationId": "2e440d89da7ea805867eb11c71b78f4d",
                 "parameters": [
                     {
@@ -57,6 +63,9 @@
                 ]
             },
             "post": {
+                "tags": [
+                    "Bitácoras"
+                ],
                 "operationId": "47d272875829788f17c65727ca946cc1",
                 "parameters": [
                     {
@@ -92,5 +101,11 @@
                 "scheme": "bearer"
             }
         }
-    }
+    },
+    "tags": [
+        {
+            "name": "Bitácoras",
+            "description": "Endpoints relacionados con la gestión de bitácoras"
+        }
+    ]
 }

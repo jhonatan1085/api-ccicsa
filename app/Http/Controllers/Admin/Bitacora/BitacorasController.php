@@ -20,13 +20,19 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-
+/**
+ * @OA\Tag(
+ *     name="Bitácoras",
+ *     description="Endpoints relacionados con la gestión de bitácoras"
+ * )
+ */
 class BitacorasController extends Controller
 {
     /**
      * @OA\Get(
      *     path="/bitacoras",
      *     security={{"bearerAuth":{}}},
+     *     tags={"Bitácoras"},
      *     @OA\Response(
      *          response="200",
      *          description="Muestra una lista de bitacoras.")
@@ -207,6 +213,7 @@ class BitacorasController extends Controller
      * @OA\Get(
      *     path="/bitacoras/{id}",
      *     security={{"bearerAuth":{}}},
+     *     tags={"Bitácoras"},
      *     @OA\Parameter(
      *          name="id",
      *          in="path",
@@ -230,6 +237,7 @@ class BitacorasController extends Controller
      * @OA\Post(
      *     path="/bitacoras/{id}",
      *     security={{"bearerAuth":{}}},
+     *     tags={"Bitácoras"},
      *     @OA\Parameter(
      *          name="id",
      *          in="path",

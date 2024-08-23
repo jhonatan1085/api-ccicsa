@@ -312,7 +312,6 @@ class BitacorasController extends Controller
         $request["fecha_inicial"] = Carbon::parse($date_clean)->format("Y-m-d h:i:s");
 
         /*  $date_clean = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $request->fecha_inicial);
-
         $request->fecha_inicial = Carbon::parse($date_clean)->format("Y-m-d h:i:s"); */
 
 

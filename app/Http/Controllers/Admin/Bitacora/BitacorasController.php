@@ -212,6 +212,7 @@ class BitacorasController extends Controller
     /**
      * @OA\Get(
      *     path="/bitacoras/{id}",
+     *     description="Muestra una bitácora por su ID.",
      *     security={{"bearerAuth":{}}},
      *     tags={"Bitácoras"},
      *     @OA\Parameter(

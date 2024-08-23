@@ -2,6 +2,7 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/juanbosc/cicsa.pe/ # Reemplaza con tu ruta de despliegue
+    - echo Starting>> $DEPLOYPATH/deploy.log 2>&1
     - /bin/cp -R * $DEPLOYPATH >> $DEPLOYPATH/deploy.log 2>&1
     - rm -rf $DEPLOYPATH/.git >> $DEPLOYPATH/deploy.log 2>&1 # Eliminar la carpeta .git
     - /bin/cp -R .cpanel.yml $DEPLOYPATH >> $DEPLOYPATH/deploy.log 2>&1
@@ -9,7 +10,7 @@ deployment:
     - /bin/cp -R .htaccess $DEPLOYPATH >> $DEPLOYPATH/deploy.log 2>&1
     - cd $DEPLOYPATH >> $DEPLOYPATH/deploy.log 2>&1
     - ea-php81 artisan l5-swagger:generate >> $DEPLOYPATH/deploy.log 2>&1
-    - ea-php81 /opt/cpanel/composer/bin/composer update
+    - ea-php81 /opt/cpanel/composer/bin/composer update >> $DEPLOYPATH/deploy.log 2>&1
     # - ea-php81 /opt/cpanel/composer/bin/composer install --optimize-autoloader
     # - ea-php81 /opt/cpanel/composer/bin/composer install --no-dev --optimize-autoloader
     # - ea-php81 artisan migrate --force

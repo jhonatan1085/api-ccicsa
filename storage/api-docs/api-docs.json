@@ -5,6 +5,16 @@
         "description": "Cicsa Controller",
         "version": "1"
     },
+    "servers": [
+        {
+            "url": "http://localhost:8080/api",
+            "description": "Servidor Local"
+        },
+        {
+            "url": "http://cicsa.situaweb.com/public/api",
+            "description": "Servidor de Producción"
+        }
+    ],
     "paths": {
         "/api/bitacoras": {
             "get": {

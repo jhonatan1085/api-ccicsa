@@ -350,7 +350,37 @@ class BitacorasController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/bitacoras/{id}",
+     *     summary="Eliminar una bitácora",
+     *     description="Elimina una bitácora por su ID.",
+     *     operationId="destroyBitacora",
+     *     tags={"Bitacoras"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID de la bitácora a eliminar",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Bitácora eliminada exitosamente",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="integer", example=200),
+     *             @OA\Property(property="message_text", type="string", example="ok")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Bitácora no encontrada",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="integer", example=404),
+     *             @OA\Property(property="message_text", type="string", example="Bitácora no encontrada")
+     *         )
+     *     )
+     * )
      */
     public function destroy(string $id)
     {

@@ -355,7 +355,7 @@ class BitacorasController extends Controller
      *     summary="Eliminar una bitácora",
      *     description="Elimina una bitácora por su ID.",
      *     operationId="destroyBitacora",
-     *     tags={"Bitacoras"},
+     *     tags={"Bitácoras"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",

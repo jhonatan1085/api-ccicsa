@@ -71,7 +71,7 @@ class BitacorasController extends Controller
                 ->orWhere("incidencia", "like", "%" . $search . "%")
                 ->orWhere("sot", "like", "%" . $search . "%")
                 ->orderBy("fecha_inicial", "desc")
-                ->get(10);
+                ->paginate(10);
         }
 
         return response()->json([

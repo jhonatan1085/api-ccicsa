@@ -173,9 +173,7 @@ class UsuariosController extends Controller
             ->whereHas("roles", function ($q) {
                 $q->where("name", "like", "%Tecnico%");
             })
-            ->whereHas("brigada", function ($q) {
-                $q->where("estado", "0");
-            })
+            
             ->orderBy("name", "asc")
             ->get();
             

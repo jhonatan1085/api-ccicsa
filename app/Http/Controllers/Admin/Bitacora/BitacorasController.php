@@ -109,7 +109,48 @@ class BitacorasController extends Controller
   }
 
   /**
-   * Store a newly created resource in storage.
+   * @OA\Post(
+   *     path="/bitacoras",
+   *     summary="Crear una nueva bitácora",
+   *     description="Crea una nueva bitácora con los datos proporcionados en la solicitud.",
+   *     operationId="storeBitacora",
+   *     tags={"Bitacoras"},
+   *     security={{"bearerAuth":{}}},
+   *     @OA\RequestBody(
+   *         required=true,
+   *         @OA\JsonContent(
+   *             required={"nombre", "fecha_inicial", "tipo_averia_id", "red_id", "serv_id", "site_id", "resp_cicsa_id", "resp_claro_id", "brigadas"},
+   *             @OA\Property(property="nombre", type="string", example="Bitácora 1"),
+   *             @OA\Property(property="fecha_inicial", type="string", format="date-time", example="2024-08-22 15:00:00"),
+   *             @OA\Property(property="tipo_averia_id", type="integer", example=1),
+   *             @OA\Property(property="red_id", type="integer", example=2),
+   *             @OA\Property(property="serv_id", type="integer", example=3),
+   *             @OA\Property(property="site_id", type="integer", example=4),
+   *             @OA\Property(property="resp_cicsa_id", type="integer", example=5),
+   *             @OA\Property(property="resp_claro_id", type="integer", example=6),
+   *             @OA\Property(property="brigadas", type="array", @OA\Items(
+   *                 @OA\Property(property="id", type="integer", example=1)
+   *             ))
+   *         )
+   *     ),
+   *     @OA\Response(
+   *         response=200,
+   *         description="Bitácora creada con éxito",
+   *         @OA\JsonContent(
+   *             @OA\Property(property="message", type="integer", example=200),
+   *             @OA\Property(property="message_text", type="string", example="ok"),
+   *             @OA\Property(property="data", ref="#/components/schemas/Bitacora")
+   *         )
+   *     ),
+   *     @OA\Response(
+   *         response=403,
+   *         description="Error de validación o excepción",
+   *         @OA\JsonContent(
+   *             @OA\Property(property="message", type="integer", example=403),
+   *             @OA\Property(property="message_text", type="object")
+   *         )
+   *     )
+   * )
    */
   public function store(Request $request)
   {

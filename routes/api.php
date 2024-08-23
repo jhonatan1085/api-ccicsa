@@ -55,6 +55,8 @@ Route::group([
 
     $endpoint = "usuarios";
     // EXTRAS
+    
+    Route::post($endpoint."/asignar-zona",[UsuariosController::class,"asignarZona"]);
     Route::get($endpoint."/responsables/zona/{zona_id}",[UsuariosController::class,"usuariosResponsablesPorZona"]);
     Route::get($endpoint."/tecnicos/zona/{zona_id}",[UsuariosController::class,"usuariosTecnicosPorZona"]);
     Route::resource($endpoint,UsuariosController::class);//all
@@ -82,8 +84,8 @@ Route::group([
 
     $endpoint = "unidades-moviles";
     // extras
-    //Route::get($endpoint."/atencion/{bitacora_id}",[BitacorasController::class,"listarAtenciones"]);
 
+    Route::post($endpoint."/asignar",[UnidadMovilController::class,"asignar"]);
     Route::resource($endpoint,UnidadMovilController::class);//all
     
     $endpoint = "marcas";

@@ -8,6 +8,8 @@ use App\Models\UnidadMovil\Color;
 use App\Models\UnidadMovil\Marca;
 use App\Models\UnidadMovil\Modelo;
 use App\Models\UnidadMovil\UnidadMovil;
+use App\Models\UnidadMovil\UnidadMovilUser;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class UnidadMovilController extends Controller
@@ -43,10 +45,26 @@ class UnidadMovilController extends Controller
         $unidadmovil = UnidadMovil::create($request->all());
 
         return response()->json([
-            "message" => 200, "message_text" => "ok"
+            "message" => 200, 
+            "message_text" => "ok",
+            "data" =>  $unidadmovil
         ]);
     }
 
+
+    //Asignacion de unidades moviles
+    public function asignar(Request $request)
+    {
+        $date_clean = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $request->fecha_inicial);
+        $request["fecha_alta"] = Carbon::parse($date_clean)->format("Y-m-d h:i:s");
+        $unidadmovilUser = UnidadMovilUser::create($request->all());
+
+        return response()->json([
+            "message" => 200, 
+            "message_text" => "ok",
+            "data" =>  $unidadmovilUser
+        ]);
+    }
     /**
      * Display the specified resource.
      */

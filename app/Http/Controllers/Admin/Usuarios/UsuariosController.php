@@ -8,6 +8,7 @@ use App\Http\Resources\User\UserResource;
 use App\Models\Educacion;
 use App\Models\Site\Zona;
 use App\Models\User;
+use App\Models\User\ZonaUser;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -153,6 +154,19 @@ class UsuariosController extends Controller
 
     ////////////////////////////////////////
 
+    public function asignarZona(Request $request)
+    {
+        $date_clean = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $request->fecha_inicial);
+        $request["fecha_alta"] = Carbon::parse($date_clean)->format("Y-m-d h:i:s");
+        $zonaUser = ZonaUser::create($request->all());
+
+        return response()->json([
+            "message" => 200, 
+            "message_text" => "ok",
+            "data" =>  $zonaUser
+        ]);
+    }
+
     public function config()
     {
         $roles = Role::orderBy('name')->get();
@@ -173,7 +187,6 @@ class UsuariosController extends Controller
             ->whereHas("roles", function ($q) {
                 $q->where("name", "like", "%Tecnico%");
             })
-            
             ->orderBy("name", "asc")
             ->get();
             

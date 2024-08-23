@@ -9,7 +9,7 @@ deployment:
     - /bin/cp -R .htaccess $DEPLOYPATH >> $DEPLOYPATH/deploy.log 2>&1
     - cd $DEPLOYPATH >> $DEPLOYPATH/deploy.log 2>&1
     - ea-php81 artisan l5-swagger:generate >> $DEPLOYPATH/deploy.log 2>&1
-    # - ea-php81 /opt/cpanel/composer/bin/composer update
+    - ea-php81 /opt/cpanel/composer/bin/composer update
     # - ea-php81 /opt/cpanel/composer/bin/composer install --optimize-autoloader
     # - ea-php81 /opt/cpanel/composer/bin/composer install --no-dev --optimize-autoloader
     # - ea-php81 artisan migrate --force

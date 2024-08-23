@@ -9,6 +9,33 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @OA\Schema(
+ *     schema="Bitacora",
+ *     description="Bitacora model",
+ *     @OA\Property(property="id", type="integer", example=1),
+ *     @OA\Property(property="nombre", type="string", example="Nombre de la bitacora"),
+ *     @OA\Property(property="fecha_inicial", type="string", format="date-time", example="2024-08-22 14:00:00"),
+ *     @OA\Property(property="tipo_averia_id", type="integer", example=1),
+ *     @OA\Property(property="latitud", type="string", example="-12.046374"),
+ *     @OA\Property(property="longitud", type="string", example="-77.042793"),
+ *     @OA\Property(property="distancia", type="string", example="10km"),
+ *     @OA\Property(property="red_id", type="integer", example=1),
+ *     @OA\Property(property="serv_id", type="integer", example=1),
+ *     @OA\Property(property="site_id", type="integer", example=1),
+ *     @OA\Property(property="cliente", type="string", example="Nombre del cliente"),
+ *     @OA\Property(property="resp_cicsa_id", type="integer", example=1),
+ *     @OA\Property(property="resp_claro_id", type="integer", example=1),
+ *     @OA\Property(property="estado", type="string", example="Pendiente"),
+ *     @OA\Property(property="causa_averia_id", type="integer", example=1),
+ *     @OA\Property(property="consecuencia_averia_id", type="integer", example=1),
+ *     @OA\Property(property="tipo_reparacion_id", type="integer", example=1),
+ *     @OA\Property(property="herramientas", type="string", example="Llave inglesa, destornillador"),
+ *     @OA\Property(property="tiempo_solucion", type="string", example="3 horas"),
+ *     @OA\Property(property="created_at", type="string", format="date-time", example="2024-08-22 14:00:00"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time", example="2024-08-22 14:30:00"),
+ * )
+ */
 class Bitacora extends Model
 {
     use HasFactory;

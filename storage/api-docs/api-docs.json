@@ -11,7 +11,7 @@
             "description": "Servidor Local"
         },
         {
-            "url": "http://cicsa.situaweb.com/public/api",
+            "url": "https://cicsa.situaweb.com/public/api",
             "description": "Servidor de Producción"
         }
     ],

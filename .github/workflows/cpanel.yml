@@ -15,5 +15,6 @@ jobs:
           repository_root: '/home/juanbosc/cicsa.pe.repository'
           branch: main
           cpanel_token: '${{ secrets.CPANEL_TOKEN }}'
+          cpanel_username: 'juanbosc'
       - name: echo deploy-duration
         run: echo "Deployment took ${{ steps.deploy.outputs.duration }} milliseconds"

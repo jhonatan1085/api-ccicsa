@@ -11,6 +11,8 @@ use App\Models\UnidadMovil\UnidadMovil;
 use App\Models\UnidadMovil\UnidadMovilUser;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Exception;
+use Illuminate\Support\Facades\Validator;
 
 class UnidadMovilController extends Controller
 {
@@ -28,10 +30,12 @@ class UnidadMovilController extends Controller
                 ->orWhereHas("modelo", function ($q) use ($search) {
                     $q->where("nombre", "like", "%" . $search . "%");
                 })
-                ->paginate(10);
+                ->orderBy('placa','asc')
+                ->orderBy('estado','desc')
+                ->get();
         
         return response()->json([
-            "total" => $unidadesMoviles->total(),
+            "total" => $unidadesMoviles->count(),
             "data" => UnidadMovilCollection::make($unidadesMoviles)
         ]);
     }
@@ -42,13 +46,42 @@ class UnidadMovilController extends Controller
      */
     public function store(Request $request)
     {
-        $unidadmovil = UnidadMovil::create($request->all());
+        try {
+            $rules = [
+                'placa' => 'required',
+                'kilometraje' => 'required',
+                'modelo_id' => 'required',
+                'color_id' => 'required'
+            ];
+            $messages = [
+                'placa.required' => 'placa es requerida',
+                'kilometraje.required' => 'Debe ingresar kilometraje',
+                'modelo_id.required' => 'No selecciono modelo',
+                'color_id.required' => 'No selecciono color'
+            ];
+            $validator = Validator::make($request->all(), $rules, $messages);
+            if ($validator->fails()) {
+                return response()->json([
+                    "message" => 403,
+                    'message_text' => $validator->errors()
+                ]);
+            }
+            $unidadmovil = UnidadMovil::create($request->all());
 
         return response()->json([
             "message" => 200, 
             "message_text" => "ok",
             "data" =>  $unidadmovil
         ]);
+        } catch (Exception $e) {
+            return response()->json([
+                "message" => 403,
+                "message_text" => $e
+            ]);
+        }
+
+
+        
     }
 
 

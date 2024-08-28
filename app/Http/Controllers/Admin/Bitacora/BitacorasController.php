@@ -57,21 +57,25 @@ class BitacorasController extends Controller
                 ->orWhere("sot", "like", "%" . $search . "%")
                 ->orderBy("fecha_inicial", "desc")
                 ->paginate(10);
+            // dd($id );
         } else {
-            $bitacoras = Bitacora::where('nombre', "like", "%" . $search . "%")
-                ->whereHas('brigadas.user', function ($q) use ($id) {
-                    $q->where('users.id',  $id);
+            $bitacoras = Bitacora::whereHas('brigadas.user', function ($q) use ($id) {
+                $q->where('users.id',  $id);
+            })
+                ->where(function ($query) use ($search) {
+                    $query->where('nombre', "like", "%" . $search . "%")
+                        ->orWhere("incidencia", "like", "%" . $search . "%")
+                        ->orWhere("sot", "like", "%" . $search . "%")
+                        ->orWhereHas("red", function ($q) use ($search) {
+                            $q->where("nombre", "like", "%" . $search . "%");
+                        })
+                        ->orWhereHas("red", function ($q) use ($search) {
+                            $q->where("nombre", "like", "%" . $search . "%");
+                        });
                 })
-                ->orWhereHas("red", function ($q) use ($search) {
-                    $q->where("nombre", "like", "%" . $search . "%");
-                })
-                ->orWhereHas("red", function ($q) use ($search) {
-                    $q->where("nombre", "like", "%" . $search . "%");
-                })
-                ->orWhere("incidencia", "like", "%" . $search . "%")
-                ->orWhere("sot", "like", "%" . $search . "%")
                 ->orderBy("fecha_inicial", "desc")
                 ->paginate(10);
+            //dd($id );
         }
 
         return response()->json([
@@ -202,7 +206,7 @@ class BitacorasController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 "message" => 403,
-                "error" => $e
+                "message_text" => $e
             ]);
         }
     }

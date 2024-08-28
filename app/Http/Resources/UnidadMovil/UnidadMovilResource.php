@@ -31,7 +31,8 @@ class UnidadMovilResource extends JsonResource
                 "nombre" => $this->color->nombre,
             ]: NULL,
             "estado" => $this->estado,
-            "estadotext" => $this->estado == '1' ? "Activo": "Inactivo"
+            "estadotext" => $this->estado == '1' ? "Activo": "Inactivo",
+            "user" => $this->user->count() //? $this->user : NULL
         ];
     }
 }

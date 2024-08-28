@@ -24,13 +24,16 @@ class UsuariosController extends Controller
     public function index(Request $request)
     {
         $search = $request->search;
-        $users = User::where("name", "like", "%" . $search . "%")
-            ->orWhere("surname", "like", "%" . $search . "%")
-            ->orWhere("email", "like", "%" . $search . "%")
+        $users = User::whereHas("roles", function ($q) {
+            $q->where("name", "like", "%Tecnico%");
+        })
+            ->where(function ($query) use ($search) {
+                $query->where("name", "like", "%" . $search . "%")
+                ->orWhere("surname", "like", "%" . $search . "%")
+                ->orWhere("email", "like", "%" . $search . "%");
+            })
             ->orderBy("id", "desc")
             ->get();
-
-
         return response()->json([
             "total" => $users->count(),
             "data" => UserCollection::make($users)
@@ -47,6 +50,14 @@ class UsuariosController extends Controller
             return response()->json([
                 "message" => 403,
                 "message_text" => "EL USUARIO CON ESTE MAIL YA EXISTE"
+            ]);
+        }
+
+        $users_is_valid = User::where("dni", $request->dni)->first();
+        if ($users_is_valid) {
+            return response()->json([
+                "message" => 403,
+                "message_text" => "EL USUARIO CON ESTE DNI YA EXISTE"
             ]);
         }
 
@@ -73,7 +84,8 @@ class UsuariosController extends Controller
         $user->assignRole($role);
 
         return response()->json([
-            "message" => 200, "message_text" => "ok"
+            "message" => 200,
+            "message_text" => "ok"
         ]);
     }
 
@@ -99,7 +111,13 @@ class UsuariosController extends Controller
                 "message_text" => "EL USUARIO CON ESTE MAIL YA EXISTE"
             ]);
         }
-
+        $users_is_valid = User::where("id", "<>", $id)->where("dni", $request->dni)->first();
+        if ($users_is_valid) {
+            return response()->json([
+                "message" => 403,
+                "message_text" => "EL USUARIO CON ESTE DNI YA EXISTE"
+            ]);
+        }
         $user = User::findOrFail($id);
 
         if ($request->hasFile("avatar")) {
@@ -130,9 +148,10 @@ class UsuariosController extends Controller
             $role_new = Role::findOrFail($request->role_id);
             $user->assignRole($role_new);
         }
-
         return response()->json([
-            "message" => 200, "message_text" => "ok", "data" => $user
+            "message" => 200,
+            "message_text" => "ok",
+            "data" => $user
         ]);
     }
 
@@ -148,7 +167,8 @@ class UsuariosController extends Controller
         $user->delete();
 
         return response()->json([
-            "message" => 200, "message_text" => "ok"
+            "message" => 200,
+            "message_text" => "ok"
         ]);
     }
 
@@ -161,7 +181,7 @@ class UsuariosController extends Controller
         $zonaUser = ZonaUser::create($request->all());
 
         return response()->json([
-            "message" => 200, 
+            "message" => 200,
             "message_text" => "ok",
             "data" =>  $zonaUser
         ]);
@@ -169,7 +189,7 @@ class UsuariosController extends Controller
 
     public function config()
     {
-        $roles = Role::orderBy('name')->get();
+        $roles = Role::orderBy('name')->where("name", "like", "%Tecnico%")->get();
         $educacions = Educacion::orderBy('nombre')->get();
         $zonas = Zona::orderBy('nombre')->get();
         return response()->json([
@@ -189,7 +209,7 @@ class UsuariosController extends Controller
             })
             ->orderBy("name", "asc")
             ->get();
-            
+
         return response()->json([
             'total' => $usuarios->count(),
             'data' => $usuarios

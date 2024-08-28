@@ -15,7 +15,7 @@ class ModeloController extends Controller
     {
         $search = $request->search;
 
-            $modelo = Modelo::paginate(10);
+            $modelo = Modelo::paginate() ;
         
         return response()->json([
             "total" => $modelo->total(),
@@ -31,7 +31,9 @@ class ModeloController extends Controller
         $modelo = Modelo::create($request->all());
 
         return response()->json([
-            "message" => 200, "message_text" => "ok"
+            "message" => 200, 
+            "message_text" => "ok",
+            "data" =>  $modelo
         ]);
     }
 

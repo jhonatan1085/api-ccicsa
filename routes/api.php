@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\Bitacora\BitacorasController;
 use App\Http\Controllers\Admin\Brigada\BrigadasController;
 use App\Http\Controllers\Admin\Doctor\DoctorsController;
 use App\Http\Controllers\Admin\Doctor\SpecialityController;
+use App\Http\Controllers\Admin\Lideres\LideresController;
 use App\Http\Controllers\Admin\Rol\RolesController;
 use App\Http\Controllers\Admin\Site\SitesController;
 use App\Http\Controllers\Admin\UnidadMovil\ColorController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Admin\UnidadMovil\MarcaController;
 use App\Http\Controllers\Admin\UnidadMovil\ModeloController;
 use App\Http\Controllers\Admin\UnidadMovil\UnidadMovilController;
 use App\Http\Controllers\Admin\Usuarios\UsuariosController;
+use App\Http\Controllers\Admin\Zona\ZonasController;
 use App\Http\Controllers\AuthController;
 use App\Models\UnidadMovil\Modelo;
 use Illuminate\Http\Request;
@@ -61,6 +63,11 @@ Route::group([
     Route::get($endpoint."/tecnicos/zona/{zona_id}",[UsuariosController::class,"usuariosTecnicosPorZona"]);
     Route::resource($endpoint,UsuariosController::class);//all
 
+    $endpoint = "lideres";
+    // EXTRAS
+    
+    Route::resource($endpoint,LideresController::class);//all
+
     $endpoint = "sites";
     // EXTRAS
     Route::get($endpoint."/autocomplete",[SitesController::class,"autocomplete"]);
@@ -103,11 +110,17 @@ Route::group([
     //Route::get($endpoint."/atencion/{bitacora_id}",[BitacorasController::class,"listarAtenciones"]);
     Route::resource($endpoint,ColorController::class);//all
 
+    $endpoint = "zonas";
+    // extras
+    //Route::get($endpoint."/atencion/{bitacora_id}",[BitacorasController::class,"listarAtenciones"]);
+    Route::resource($endpoint,ZonasController::class);//all
+
     ////////////////
     // configs   //
     //////////////
     $endpoint = "config";
     Route::get($endpoint."/usuarios",[UsuariosController::class,"config"]);
+    Route::get($endpoint."/lideres",[LideresController::class,"config"]);
     Route::get($endpoint."/sites",[SitesController::class,"config"]);
     Route::get($endpoint."/brigadas",[BrigadasController::class,"config"]);
     Route::get($endpoint."/bitacoras/start",[BitacorasController::class,"config"]);

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Admin\UnidadMovil;
+namespace App\Http\Controllers\Admin\Zona;
 
 use App\Http\Controllers\Controller;
-use App\Models\UnidadMovil\Marca;
+use App\Models\Site\Zona;
 use Illuminate\Http\Request;
 
-class MarcaController extends Controller
+class ZonasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,28 +15,25 @@ class MarcaController extends Controller
     {
         $search = $request->search;
 
-            $marcas = Marca::paginate();
-        
+        $zonas = Zona::paginate(10);
+
         return response()->json([
-            "total" => $marcas->total(),
-            "data" => $marcas//BitacoraCollection::make($bitacoras)
+            "total" => $zonas->total(),
+            "data" => $zonas //BitacoraCollection::make($bitacoras)
         ]);
     }
-        
-    
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        
-        $marca = Marca::create($request->all());
+        $zona = Zona::create($request->all());
 
         return response()->json([
             "message" => 200, 
             "message_text" => "ok",
-            "data" =>  $marca
+            "data" =>  $zona
         ]);
     }
 
@@ -53,7 +50,7 @@ class MarcaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        
     }
 
     /**

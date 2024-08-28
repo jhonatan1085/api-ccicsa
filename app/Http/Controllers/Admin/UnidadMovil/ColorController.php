@@ -15,12 +15,12 @@ class ColorController extends Controller
     {
         $search = $request->search;
 
-        $colores = Color::paginate(10);
-    
-    return response()->json([
-        "total" => $colores->total(),
-        "data" => $colores//BitacoraCollection::make($bitacoras)
-    ]);
+        $colores = Color::paginate() ;
+
+        return response()->json([
+            "total" => $colores->total(),
+            "data" => $colores //BitacoraCollection::make($bitacoras)
+        ]);
     }
 
     /**
@@ -31,7 +31,9 @@ class ColorController extends Controller
         $color = Color::create($request->all());
 
         return response()->json([
-            "message" => 200, "message_text" => "ok"
+            "message" => 200,
+            "message_text" => "ok",
+            "data" =>  $color
         ]);
     }
 

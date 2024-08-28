@@ -38,7 +38,6 @@ class User extends Authenticatable implements JWTSubject
         'cel_corp',
         'cel_per',
         'dni',
-
         'birth_date',
         'gender',
         'address',

@@ -79,9 +79,7 @@ class UnidadMovilController extends Controller
                 "message_text" => $e
             ]);
         }
-
-
-        
+ 
     }
 
 

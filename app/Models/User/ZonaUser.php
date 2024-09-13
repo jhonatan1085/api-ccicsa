@@ -34,12 +34,10 @@ class ZonaUser extends Model
     	date_default_timezone_set("America/Lima");
         $this->attributes["updated_at"]= Carbon::now();
     }
-
     public function user() 
     {
         return $this->belongsTo(User::class);
     }
-
     public function zona() 
     {
         return $this->belongsTo(Zona::class);

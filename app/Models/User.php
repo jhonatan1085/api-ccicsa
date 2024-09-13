@@ -82,12 +82,12 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(ZonaUser::class)->where('estado','1');
     }
 
-    public function user_zona()
+    public function zonas()
     {
         return $this->belongsToMany(Zona::class)
                                     ->withPivot('estado')
-                                    ->where('estado','1')
-                                    ->where('is_user','1');
+                                    ->where('estado','1');
+                                    //->where('is_user','1');
     }
 
     protected function setNameAttribute($value){

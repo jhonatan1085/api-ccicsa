@@ -4,6 +4,7 @@ namespace App\Models\Site;
 
 use App\Models\Brigada\Brigada;
 use App\Models\User;
+use App\Models\User\ZonaUser;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -42,11 +43,17 @@ class Zona extends Model
     {
         return $this->hasMany(Brigada::class);
     }
+    public function zona_user()
+    {
+        return $this->hasMany(ZonaUser::class)->where('estado','1');
+    }
 
-    public function user_zona()
+    public function users()
     {
         return $this->belongsToMany(User::class)
                                     ->withPivot('estado')
                                     ->where('estado','1');
     }
+
+
 }

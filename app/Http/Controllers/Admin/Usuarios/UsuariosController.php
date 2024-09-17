@@ -23,9 +23,12 @@ class UsuariosController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', User::class);
+
         $search = $request->search;
         $users = User::whereHas("roles", function ($q) {
-            $q->where("name", "like", "%Tecnico%");
+            $q->where("name", "like", "%Tecnico%")
+            ->orWhere("name", "like", "%Held Desk%");
         })
             ->where(function ($query) use ($search) {
                 $query->where("name", "like", "%" . $search . "%")
@@ -189,7 +192,7 @@ class UsuariosController extends Controller
 
     public function config()
     {
-        $roles = Role::orderBy('name')->where("name", "like", "%Tecnico%")->get();
+        $roles = Role::orderBy('name')->where("name", "like", "%Tecnico%")->orWhere("name", "like", "%Held Desk%")->get();
         $educacions = Educacion::orderBy('nombre')->get();
         $zonas = Zona::orderBy('nombre')->get();
         return response()->json([

@@ -23,6 +23,10 @@ class ZonaSeeder extends Seeder
         ['IQUITOS',1],
         [ 'N/D',1],
         ['TALARA',1],
+        ['HUANCABAMBA',1],
+        ['PEDRO RUIZ',1],
+        ['HUAMACHUCO',1],
+        ['ARAGOSTAY',1],
     ];
     /**
      * Run the database seeds.

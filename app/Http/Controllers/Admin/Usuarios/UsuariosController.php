@@ -23,7 +23,7 @@ class UsuariosController extends Controller
      */
     public function index(Request $request)
     {
-        $this->authorize('viewAny', User::class);
+       // $this->authorize('viewAny', User::class);
 
         $search = $request->search;
         $users = User::whereHas("roles", function ($q) {

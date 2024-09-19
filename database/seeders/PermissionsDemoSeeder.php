@@ -470,7 +470,7 @@ class PermissionsDemoSeeder extends Seeder
             'surname' => 'RODRIGUEZ',
             'cel_corp' => '123456',
             'cel_per' => '123456',
-            'dni' => '12345678',
+            'dni' => '23568594',
             'gender' => '1',
             'password' => bcrypt('12345678'),
             'zona_id' => 1
@@ -482,7 +482,7 @@ class PermissionsDemoSeeder extends Seeder
             'surname' => 'ZAPATA',
             'cel_corp' => '123456',
             'cel_per' => '123456',
-            'dni' => '12345678',
+            'dni' => '23568974',
             'gender' => '1',
             'password' => bcrypt('12345678'),
             'zona_id' => 1

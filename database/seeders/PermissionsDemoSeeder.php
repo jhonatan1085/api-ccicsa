@@ -52,6 +52,11 @@ class PermissionsDemoSeeder extends Seeder
         Permission::create(['guard_name' => 'api', 'name' => 'edit_cuadrilla']);
         Permission::create(['guard_name' => 'api', 'name' => 'delete_cuadrilla']);
 
+        Permission::create(['guard_name' => 'api', 'name' => 'register_und_movil']);       
+        Permission::create(['guard_name' => 'api', 'name' => 'list_und_movil']);       
+        Permission::create(['guard_name' => 'api', 'name' => 'edit_und_movil']);       
+        Permission::create(['guard_name' => 'api', 'name' => 'delete_und_movil']);       
+
         Permission::create(['guard_name' => 'api', 'name' => 'settings']);
 
 
@@ -90,7 +95,7 @@ class PermissionsDemoSeeder extends Seeder
             'dni' => '46801171',
             'zona_id' =>  16,
             'educacion_id' => 6,
-            'password' => bcrypt('12345678')
+            'password' => bcrypt('46801171')
         ]);
         $user->assignRole($role4);
 
@@ -105,7 +110,7 @@ class PermissionsDemoSeeder extends Seeder
             'dni'=> '73128120',
             'zona_id'=> 18,
             'educacion_id'=> 6,
-            'password' => bcrypt('12345678')
+            'password' => bcrypt('73128120')
         ]);
         $user->assignRole($role4);
         $user = \App\Models\User::factory()->create([
@@ -119,7 +124,7 @@ class PermissionsDemoSeeder extends Seeder
             'dni'=> '72356995',
             'zona_id'=> 1,
             'educacion_id'=>5,
-            'password' => bcrypt('12345678')
+            'password' => bcrypt('72356995')
         ]);
         $user->assignRole($role4);
         $user = \App\Models\User::factory()->create([
@@ -133,7 +138,7 @@ class PermissionsDemoSeeder extends Seeder
             'dni'=> '40896093',
             'zona_id'=> 15,
             'educacion_id'=>6,
-            'password' => bcrypt('12345678')
+            'password' => bcrypt('40896093')
         ]);
         $user->assignRole($role4);
         $user = \App\Models\User::factory()->create([
@@ -147,7 +152,7 @@ class PermissionsDemoSeeder extends Seeder
             'dni'=> '77145437',
             'zona_id'=> 15,
             'educacion_id'=> 6,
-            'password' => bcrypt('12345678')
+            'password' => bcrypt('77145437')
         ]);
         $user->assignRole($role4);
         $user = \App\Models\User::factory()->create([
@@ -161,7 +166,7 @@ class PermissionsDemoSeeder extends Seeder
             'dni'=> '76326754',
             'zona_id'=> 10,
             'educacion_id'=> 6,
-            'password' => bcrypt('12345678')
+            'password' => bcrypt('76326754')
         ]);
         $user->assignRole($role4);
         $user = \App\Models\User::factory()->create([
@@ -175,7 +180,7 @@ class PermissionsDemoSeeder extends Seeder
             'dni'=> '46648269',
             'zona_id'=> 10,
             'educacion_id'=> 6,
-            'password' => bcrypt('12345678')
+            'password' => bcrypt('46648269')
         ]);
         $user->assignRole($role4);
         $user = \App\Models\User::factory()->create([
@@ -189,7 +194,7 @@ class PermissionsDemoSeeder extends Seeder
             'dni'=> '70522670',
             'zona_id'=> 2,
             'educacion_id'=> 6,
-            'password' => bcrypt('12345678')
+            'password' => bcrypt('70522670')
         ]);
         $user->assignRole($role4);
         $user = \App\Models\User::factory()->create([
@@ -203,7 +208,7 @@ class PermissionsDemoSeeder extends Seeder
             'dni'=> '40051228',
             'zona_id'=> 2,
             'educacion_id'=> 6,
-            'password' => bcrypt('12345678')
+            'password' => bcrypt('40051228')
         ]);
         $user->assignRole($role4);
         $user = \App\Models\User::factory()->create([
@@ -217,7 +222,7 @@ class PermissionsDemoSeeder extends Seeder
             'dni'=> '46320593',
             'zona_id'=> 1,
             'educacion_id'=> 6,
-            'password' => bcrypt('12345678')
+            'password' => bcrypt('46320593')
         ]);
         $user->assignRole($role4);
         $user = \App\Models\User::factory()->create([
@@ -231,7 +236,7 @@ class PermissionsDemoSeeder extends Seeder
             'dni'=> '44432688',
             'zona_id'=> 1,
             'educacion_id'=> 6,
-            'password' => bcrypt('12345678')
+            'password' => bcrypt('44432688')
         ]);
         $user->assignRole($role4);
         $user = \App\Models\User::factory()->create([
@@ -245,7 +250,7 @@ class PermissionsDemoSeeder extends Seeder
             'dni'=> '44146650',
             'zona_id'=> 1,
             'educacion_id'=> 6,
-            'password' => bcrypt('12345678')
+            'password' => bcrypt('44146650')
         ]);
         $user->assignRole($role4);
         $user = \App\Models\User::factory()->create([
@@ -259,7 +264,7 @@ class PermissionsDemoSeeder extends Seeder
             'dni'=> '71863190',
             'zona_id'=> 3,
             'educacion_id'=> 6,
-            'password' => bcrypt('12345678')
+            'password' => bcrypt('71863190')
         ]);
         $user->assignRole($role4);
         $user = \App\Models\User::factory()->create([
@@ -273,7 +278,7 @@ class PermissionsDemoSeeder extends Seeder
             'dni'=> '05859092',
             'zona_id'=> 3,
             'educacion_id'=> 6,
-            'password' => bcrypt('12345678')
+            'password' => bcrypt('05859092')
         ]);
         $user->assignRole($role4);
         $user = \App\Models\User::factory()->create([
@@ -287,7 +292,7 @@ class PermissionsDemoSeeder extends Seeder
             'dni'=> '46045241',
             'zona_id'=> 6,
             'educacion_id'=> 6,
-            'password' => bcrypt('12345678')
+            'password' => bcrypt('46045241')
         ]);
         $user->assignRole($role4);
         $user = \App\Models\User::factory()->create([
@@ -315,7 +320,7 @@ class PermissionsDemoSeeder extends Seeder
             'dni'=> '75716129',
             'zona_id'=> 5,
             'educacion_id'=> 6,
-            'password' => bcrypt('12345678')
+            'password' => bcrypt('75716129')
         ]);
         $user->assignRole($role4);
         $user = \App\Models\User::factory()->create([
@@ -329,7 +334,7 @@ class PermissionsDemoSeeder extends Seeder
             'dni'=> '44735170',
             'zona_id'=> 5,
             'educacion_id'=> 6,
-            'password' => bcrypt('12345678')
+            'password' => bcrypt('44735170')
         ]);
         $user->assignRole($role4);
         $user = \App\Models\User::factory()->create([
@@ -343,7 +348,7 @@ class PermissionsDemoSeeder extends Seeder
             'dni'=> '45487113',
             'zona_id'=> 9,
             'educacion_id'=> 6,
-            'password' => bcrypt('12345678')
+            'password' => bcrypt('45487113')
         ]);
         $user->assignRole($role4);
         $user = \App\Models\User::factory()->create([
@@ -357,7 +362,7 @@ class PermissionsDemoSeeder extends Seeder
             'dni'=> '16801640',
             'zona_id'=> 7,
             'educacion_id'=>6,
-            'password' => bcrypt('12345678')
+            'password' => bcrypt('16801640')
         ]);
         $user->assignRole($role4);
         $user = \App\Models\User::factory()->create([
@@ -371,7 +376,7 @@ class PermissionsDemoSeeder extends Seeder
             'dni'=> '47212444',
             'zona_id'=> 7,
             'educacion_id'=> 6,
-            'password' => bcrypt('12345678')
+            'password' => bcrypt('47212444')
         ]);
         $user->assignRole($role4);
         $user = \App\Models\User::factory()->create([
@@ -385,7 +390,7 @@ class PermissionsDemoSeeder extends Seeder
             'dni'=> '71997626',
             'zona_id'=> 14,
             'educacion_id'=> 6,
-            'password' => bcrypt('12345678')
+            'password' => bcrypt('71997626')
         ]);
         $user->assignRole($role4);
         $user = \App\Models\User::factory()->create([
@@ -399,7 +404,7 @@ class PermissionsDemoSeeder extends Seeder
             'dni'=> '45859092',
             'zona_id'=> 14,
             'educacion_id'=> 6,
-            'password' => bcrypt('12345678')
+            'password' => bcrypt('45859092')
         ]);
         $user->assignRole($role4);
         $user = \App\Models\User::factory()->create([
@@ -413,7 +418,7 @@ class PermissionsDemoSeeder extends Seeder
             'dni'=> '32975836',
             'zona_id'=> 9,
             'educacion_id'=> 6,
-            'password' => bcrypt('12345678')
+            'password' => bcrypt('32975836')
         ]);
         $user->assignRole($role4);
         $user = \App\Models\User::factory()->create([
@@ -427,7 +432,7 @@ class PermissionsDemoSeeder extends Seeder
             'dni'=> '46460054',
             'zona_id'=> 9,
             'educacion_id'=>6,
-            'password' => bcrypt('12345678')
+            'password' => bcrypt('46460054')
         ]);
         $user->assignRole($role4);
         $user = \App\Models\User::factory()->create([
@@ -441,7 +446,7 @@ class PermissionsDemoSeeder extends Seeder
             'dni'=> '42979476',
             'zona_id'=> 4,
             'educacion_id'=> 6,
-            'password' => bcrypt('12345678')
+            'password' => bcrypt('42979476')
         ]);
         $user->assignRole($role4);
         $user = \App\Models\User::factory()->create([
@@ -455,7 +460,7 @@ class PermissionsDemoSeeder extends Seeder
             'dni'=> '44183404',
             'zona_id'=> 4,
             'educacion_id'=> 6,
-            'password' => bcrypt('12345678')
+            'password' => bcrypt('44183404')
         ]);
         $user->assignRole($role4);
 
@@ -477,11 +482,27 @@ class PermissionsDemoSeeder extends Seeder
             'surname' => 'ZAPATA',
             'cel_corp' => '123456',
             'cel_per' => '123456',
-            'dni' => '87654321',
+            'dni' => '12345678',
             'gender' => '1',
             'password' => bcrypt('12345678'),
             'zona_id' => 1
         ]);
         $user->assignRole($role5);
+
+
+        $user = \App\Models\User::factory()->create([
+            'name'=> 'Alexandra',
+            'surname'=> 'Cornejo bardales',
+            'email'=> 'alexandracornejobardales@gmail.com',
+            'gender'=> '0',
+            'address'=> '',
+            'cel_corp'=> '997740176',
+            'dni'=> '72889115',
+            'zona_id'=> 1,
+            'educacion_id'=> 8,
+            'password' => bcrypt('72889115')
+        ]);
+        $user->assignRole($role7);
+
     }
 }

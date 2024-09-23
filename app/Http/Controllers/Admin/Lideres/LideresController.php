@@ -158,13 +158,18 @@ class LideresController extends Controller
             if ($role_new->name == "Claro") {
                 $is_user = "0";
             }
-        } else if (!$user->roles()->first()) {
+
+           // dd("hola1");
+        } else {
             $role_new = Role::findOrFail($request->role_id);
             $user->assignRole($role_new);
             if ($role_new->name == "Claro") {
                 $is_user = "0";
             }
+           // dd("hola2");
         }
+
+       // dd($is_user);  if (!$user->roles()->first()) 
         
         $zonas = ZonaUser::where("user_id", $id)->where("estado","1")->get();
             $zonas->each->update([

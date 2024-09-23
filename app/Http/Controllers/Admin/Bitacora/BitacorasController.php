@@ -45,7 +45,7 @@ class BitacorasController extends Controller
         $roles = auth('api')->user()->getRoleNames();
         $id = auth('api')->user()->id;
 
-        if ($roles[0] == "Admin") {
+        if ($roles[0] == "Admin" || $roles[0] == "Held Desk") {
             $bitacoras = Bitacora::where('nombre', "like", "%" . $search . "%")
                 ->orWhereHas("red", function ($q) use ($search) {
                     $q->where("nombre", "like", "%" . $search . "%");

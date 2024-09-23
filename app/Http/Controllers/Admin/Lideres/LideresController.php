@@ -22,6 +22,8 @@ class LideresController extends Controller
      */
     public function index(Request $request)
     {
+      //  $this->authorize('viewAnyLider', Lider::class);
+
         $search = $request->search;
         $lideres = User::whereHas("roles", function ($q) {
             $q->where("name", "like", "%Lider%")
@@ -46,6 +48,7 @@ class LideresController extends Controller
      */
     public function store(Request $request)
     {
+       // $this->authorize('createLider', Lider::class);
         $users_is_valid = User::where("email", $request->email)->first();
         if ($users_is_valid) {
             return response()->json([
@@ -105,6 +108,7 @@ class LideresController extends Controller
      */
     public function show(string $id)
     {
+       // $this->authorize('viewLider', Lider::class);
         $user = User::findOrFail($id);
 
         return response()->json(LiderResource::make($user));
@@ -115,6 +119,7 @@ class LideresController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $this->authorize('updateLider', User::class);
         $users_is_valid = User::where("id", "<>", $id)->where("email", $request->email)->first();
         if ($users_is_valid) {
             return response()->json([
@@ -193,6 +198,7 @@ class LideresController extends Controller
      */
     public function destroy(string $id)
     {
+       // $this->authorize('deleteLider', Lider::class);
         $user = User::findOrFail($id);
         if ($user->avatar) {
             Storage::delete($user->avatar);

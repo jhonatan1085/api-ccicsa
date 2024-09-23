@@ -23,7 +23,7 @@ class UsuariosController extends Controller
      */
     public function index(Request $request)
     {
-       // $this->authorize('viewAny', User::class);
+        //$this->authorize('viewAny', User::class);
 
         $search = $request->search;
         $users = User::whereHas("roles", function ($q) {
@@ -48,6 +48,8 @@ class UsuariosController extends Controller
      */
     public function store(Request $request)
     {
+       // $this->authorize('create', User::class);
+
         $users_is_valid = User::where("email", $request->email)->first();
         if ($users_is_valid) {
             return response()->json([
@@ -97,6 +99,8 @@ class UsuariosController extends Controller
      */
     public function show(string $id)
     {
+       // $this->authorize('view', User::class);
+
         $user = User::findOrFail($id);
 
         return response()->json(UserResource::make($user));
@@ -107,6 +111,7 @@ class UsuariosController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        //$this->authorize('update', User::class);
         $users_is_valid = User::where("id", "<>", $id)->where("email", $request->email)->first();
         if ($users_is_valid) {
             return response()->json([
@@ -163,6 +168,8 @@ class UsuariosController extends Controller
      */
     public function destroy(string $id)
     {
+      //  $this->authorize('delete', User::class);
+
         $user = User::findOrFail($id);
         if ($user->avatar) {
             Storage::delete($user->avatar);

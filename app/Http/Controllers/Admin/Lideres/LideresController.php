@@ -119,7 +119,7 @@ class LideresController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $this->authorize('updateLider', User::class);
+       // $this->authorize('updateLider', User::class);
         $users_is_valid = User::where("id", "<>", $id)->where("email", $request->email)->first();
         if ($users_is_valid) {
             return response()->json([

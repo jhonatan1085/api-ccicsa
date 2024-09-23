@@ -59,7 +59,7 @@ Route::group([
     // EXTRAS
     
     Route::post($endpoint."/asignar-zona",[UsuariosController::class,"asignarZona"]);
-    Route::get($endpoint."/responsables/zona/{zona_id}",[UsuariosController::class,"usuariosResponsablesPorZona"]);
+    Route::get($endpoint."/responsables/zona",[UsuariosController::class,"usuariosResponsablesPorZona"]);
     Route::get($endpoint."/tecnicos/zona/{zona_id}",[UsuariosController::class,"usuariosTecnicosPorZona"]);
     Route::resource($endpoint,UsuariosController::class);//all
 

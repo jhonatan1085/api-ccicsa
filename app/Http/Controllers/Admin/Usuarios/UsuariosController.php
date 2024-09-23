@@ -226,20 +226,20 @@ class UsuariosController extends Controller
         ]);
     }
 
-    public function usuariosResponsablesPorZona(string $zona_id)
+    public function usuariosResponsablesPorZona()
     {
         return response()->json([
-            "cicsa" =>  $this->usuariosPorZonaYTipo($zona_id, "1"),
-            "claro" =>  $this->usuariosPorZonaYTipo($zona_id, "0"),
+            "cicsa" =>  $this->usuariosPorZonaYTipo( "1"),
+            "claro" =>  $this->usuariosPorZonaYTipo( "0"),
         ]);
     }
     ////////////////////////////////////////////////////////////////
 
-    private function usuariosPorZonaYTipo(string $zona_id, string $tipo)
+    private function usuariosPorZonaYTipo(string $tipo)
     {
 
         return User::select('name', 'surname', 'id')
-            ->whereHas("zona_user", function ($q) use ($zona_id, $tipo) {
+            ->whereHas("zona_user", function ($q) use ( $tipo) {
                 $q->where('is_user', $tipo)
                 //->where("zona_id", $zona_id)
                     ;

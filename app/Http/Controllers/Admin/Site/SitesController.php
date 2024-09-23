@@ -96,10 +96,11 @@ class SitesController extends Controller
             ]);
         }
         $site = Site::findOrFail($id);
+
         $site->update($request->all());
 
         return response()->json([
-            "message" => 200
+            "message" => 200 . "holaaa"
         ]);
     }
 

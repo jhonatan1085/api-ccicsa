@@ -40,6 +40,7 @@ class DatabaseSeeder extends Seeder
      $this->call(TipoPlantaSeeder::class);
      $this->call(AtencionSeeder::class);
      $this->call(CausaAveriaSeeder::class);
+     $this->call(TipoReparacionSeeder::class);
      $this->call(ConsecuenciaAveriaSeeder::class);
      $this->call(ColorSeeder::class);
      $this->call(MarcaSeeder::class);

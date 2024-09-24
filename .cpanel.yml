@@ -18,5 +18,5 @@ deployment:
     # - ea-php81 artisan route:cache
     # - ea-php81 artisan view:cache
     # - ea-php81 artisan migrate:fresh --seed
-    - ea-php81 artisan db:seed --class=TipoReparacionSeeder
+    # - ea-php81 artisan db:seed --class=TipoReparacionSeeder
 

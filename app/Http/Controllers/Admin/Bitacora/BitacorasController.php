@@ -216,6 +216,7 @@ class BitacorasController extends Controller
         $atenciones = json_decode($request->atenciones, 1);
         $bitacora = Bitacora::findOrFail($request->id);
         foreach ($bitacora->bitacora_atencion as $key => $atencion) {
+            BitacoraAtencion::where('parent_id',$atencion->id)->delete();
             $atencion->delete();
         }
         foreach ($atenciones as $atencion) {
@@ -323,6 +324,7 @@ class BitacorasController extends Controller
 
 
         foreach ($bitacora->bitacora_brigada as $key => $brigada) {
+
             $brigada->delete();
         }
 

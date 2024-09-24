@@ -11,8 +11,8 @@ class ModeloSeeder extends Seeder
     static $modelos = [
 
         ['Hilux',1],
-        ['L200',2],
-        ['NP300',3],
+        ['L200',3],
+        ['NP300',2],
         ['NP400',4],
         ['FRISON T8',5],
     ];  

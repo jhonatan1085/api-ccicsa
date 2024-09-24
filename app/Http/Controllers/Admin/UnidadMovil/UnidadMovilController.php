@@ -86,8 +86,15 @@ class UnidadMovilController extends Controller
     //Asignacion de unidades moviles
     public function asignar(Request $request)
     {
-        $date_clean = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $request->fecha_inicial);
+
+        $date_clean = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', now());
         $request["fecha_alta"] = Carbon::parse($date_clean)->format("Y-m-d h:i:s");
+
+      //  dd($request->km_inicial);
+      //
+        UnidadMovilUser::where("unidad_movil_id", $request->unidad_movil_id)->update(["fecha_baja" => $request->fecha_alta, "km_final" => $request->km_inicial, "estado" =>"0"]);
+        UnidadMovilUser::where("user_id", $request->user_id)->update([ "fecha_baja" => $request->fecha_alta, "estado" =>"0"]);
+
         $unidadmovilUser = UnidadMovilUser::create($request->all());
 
         return response()->json([
@@ -109,7 +116,43 @@ class UnidadMovilController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+             $rules = [
+                'placa' => 'required',
+                'kilometraje' => 'required',
+                'modelo_id' => 'required',
+                'color_id' => 'required'
+            ];
+            $messages = [
+                'placa.required' => 'placa es requerida',
+                'kilometraje.required' => 'Debe ingresar kilometraje',
+                'modelo_id.required' => 'No selecciono modelo',
+                'color_id.required' => 'No selecciono color'
+            ];
+            $validator = Validator::make($request->all(), $rules, $messages);
+            if ($validator->fails()) {
+                return response()->json([
+                    "message" => 403,
+                    'message_text' => $validator->errors()
+                ]);
+            } 
+            $unidadmovil = UnidadMovil::findOrFail($id);
+           
+            //dd($request->placa);
+           // $unidadmovil = UnidadMovil::create($request->all());
+           $unidadmovil->update($request->all());
+
+        return response()->json([
+            "message" => 200, 
+            "message_text" => "ok",
+            "data" =>  $unidadmovil
+        ]);
+        } catch (Exception $e) {
+            return response()->json([
+                "message" => 403,
+                "message_text" => $e
+            ]);
+        }
     }
 
     /**

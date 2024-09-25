@@ -55,7 +55,7 @@ class BitacorasController extends Controller
                 })
                 ->orWhere("incidencia", "like", "%" . $search . "%")
                 ->orWhere("sot", "like", "%" . $search . "%")
-                ->orderBy("fecha_inicial", "desc")
+                //->orderBy("fecha_inicial", "desc")
                 ->orderBy("id", "desc")
                 ->paginate(10);
             // dd($id );
@@ -74,7 +74,7 @@ class BitacorasController extends Controller
                             $q->where("nombre", "like", "%" . $search . "%");
                         });
                 })
-                ->orderBy("fecha_inicial", "desc")
+                //->orderBy("fecha_inicial", "desc")
                 ->orderBy("id", "desc")
                 ->paginate(10);
             //dd($id );

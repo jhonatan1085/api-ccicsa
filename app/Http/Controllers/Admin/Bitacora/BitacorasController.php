@@ -344,12 +344,12 @@ class BitacorasController extends Controller
     public function updateLocation(Request $request)
     {
         $rules = [
-            'latitud' => 'required|numeric|between:-90,90',
-            'longitud' => 'required|numeric|between:-180,180',
+            'latitud' => 'required',
+            'longitud' => 'required',
         ];
         $messages = [
-            'latitud.required' => 'Causa es requerida',
-            'longitud.required' => 'Consecuencia es requerida',
+            'latitud.required' => 'Latitud es requerida',
+            'longitud.required' => 'Longitud es requerida',
         ];
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {

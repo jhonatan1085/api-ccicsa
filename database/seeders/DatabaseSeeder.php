@@ -47,6 +47,7 @@ class DatabaseSeeder extends Seeder
      $this->call(ModeloSeeder::class);
      $this->call(UnidadMovilSeeder::class);
      $this->call(UnidadMovilUserSeeder::class);
+     $this->call(TipoDemoraSeeder::class);
      
 
     Model::reguard();

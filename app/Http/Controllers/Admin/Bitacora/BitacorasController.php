@@ -9,11 +9,13 @@ use App\Models\Bitacora\Atencion;
 use App\Models\Bitacora\Bitacora;
 use App\Models\Bitacora\BitacoraAtencion;
 use App\Models\Bitacora\BitacoraBrigada;
+use App\Models\Bitacora\BitacoraDemora;
 use App\Models\Bitacora\CausaAveria;
 use App\Models\Bitacora\ConsecuenciaAveria;
 use App\Models\Bitacora\Red;
 use App\Models\Bitacora\Serv;
 use App\Models\Bitacora\TipoAveria;
+use App\Models\Bitacora\TipoDemora;
 use App\Models\Bitacora\TipoReparacion;
 use Carbon\Carbon;
 use Exception;
@@ -95,6 +97,25 @@ class BitacorasController extends Controller
             "causa" => $causa,
             "consecuencia" => $consecuencia,
             "tipoReparacion" => $tipoReparacion
+        ]);
+    }
+
+    public function demorasConfig()
+    {
+        $tipoDemoras = TipoDemora::select('id', 'nombre')->orderBy('nombre')->get();
+        
+        return response()->json([
+            "demoras" => $tipoDemoras
+        ]);
+    }
+
+    public function listarDemoras(string $id)
+    {
+        $demoras = BitacoraDemora::where('bitacora_id', $id)
+            ->orderBy('orden')->get();
+        return response()->json([
+            "total" => $demoras->count(),
+            "data" => $demoras,
         ]);
     }
 
@@ -218,7 +239,7 @@ class BitacorasController extends Controller
         $atenciones = json_decode($request->atenciones, 1);
         $bitacora = Bitacora::findOrFail($request->id);
         foreach ($bitacora->bitacora_atencion as $key => $atencion) {
-            BitacoraAtencion::where('parent_id',$atencion->id)->delete();
+            BitacoraAtencion::where('parent_id', $atencion->id)->delete();
             $atencion->delete();
         }
         foreach ($atenciones as $atencion) {
@@ -257,6 +278,34 @@ class BitacorasController extends Controller
         ]);
     }
 
+    public function addDemora(Request $request)
+    {
+        $demoras = json_decode($request->demoras, 1);
+        $bitacora = Bitacora::findOrFail($request->id);
+
+        foreach ($bitacora->bitacora_demora as $key => $demora) {
+            $demora->delete();
+        }
+        foreach ($demoras as $demora) {
+            foreach ($demora["bitacora_demora"] as $bitDemora) {
+                $demora = BitacoraDemora::create(
+                    [
+                        "bitacora_id" => $bitDemora["bitacora_id"],
+                        "tipo_demora_id" => $bitDemora["tipo_demora_id"],
+                        "fecha_inicio" => $bitDemora["fecha_inicio"],
+                        "fecha_fin" => $bitDemora["fecha_fin"],
+                        "orden" => $bitDemora["orden"]
+                    ]
+                );
+            }
+        }
+
+        return response()->json([
+            "message" => 200,
+            "message_text" => "ok",
+            "data" => $demoras
+        ]);
+    }
     /**
      * @OA\Get(
      *     path="/bitacoras/{id}",

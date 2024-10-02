@@ -119,6 +119,11 @@ class Bitacora extends Model
     {
         return $this->hasMany(BitacoraAtencion::class)->whereNull('parent_id');
     }
+    
+    public function bitacora_demora() 
+    {
+        return $this->hasMany(BitacoraDemora::class);
+    }
 
     public function atencion()
     {

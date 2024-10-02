@@ -83,6 +83,7 @@ Route::group([
     $endpoint = "bitacoras";
     // extras
     Route::get($endpoint."/atencion/{bitacora_id}",[BitacorasController::class,"listarAtenciones"]);
+    Route::get($endpoint."/demoras/{bitacora_id}",[BitacorasController::class,"listarDemoras"]);
     Route::post($endpoint."/atenciones",[BitacorasController::class,"addAtencion"]);
     Route::post($endpoint."/finalizar",[BitacorasController::class,"updateFinal"]);
     Route::post($endpoint."/localizacion",[BitacorasController::class,"updateLocation"]);
@@ -125,5 +126,6 @@ Route::group([
     Route::get($endpoint."/brigadas",[BrigadasController::class,"config"]);
     Route::get($endpoint."/bitacoras/start",[BitacorasController::class,"config"]);
     Route::get($endpoint."/bitacoras/end",[BitacorasController::class,"endConfig"]);
+    Route::get($endpoint."/bitacoras/demoras",[BitacorasController::class,"demorasConfig"]);
     Route::get($endpoint."/unidades-moviles",[UnidadMovilController::class,"config"]);
 });

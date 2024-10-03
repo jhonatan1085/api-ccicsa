@@ -280,30 +280,30 @@ class BitacorasController extends Controller
 
     public function addDemora(Request $request)
     {
-        $demoras = json_decode($request->demoras, 1);
-        $bitacora = Bitacora::findOrFail($request->id);
 
-        foreach ($bitacora->bitacora_demora as $key => $demora) {
-            $demora->delete();
+        BitacoraDemora::where('bitacora_id', $request->id)->delete();
+
+        /*  $date_clean = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $request->fecha_inicial);
+        $request->fecha_inicial = Carbon::parse($date_clean)->format("Y-m-d h:i:s"); */
+
+        foreach ($request->demo as $item) {
+          /*   $date_inicio = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $item["fecha_inicio"]);
+            $item["fecha_inicio"] = Carbon::parse($date_inicio)->format("Y-m-d h:i:s");
+            $date_fin = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $item["fecha_fin"]);
+            $item["fecha_fin"] = Carbon::parse($date_fin)->format("Y-m-d h:i:s"); */
+            BitacoraDemora::create([
+                "bitacora_id" => $item["bitacora_id"],
+                "tipo_demora_id" => $item["tipo_demora_id"],
+                "fecha_inicio" => $item["fecha_inicio"],
+                "fecha_fin" => $item["fecha_fin"],
+                "orden" => $item["orden"],
+            ]);
         }
-        foreach ($demoras as $demora) {
-            foreach ($demora["bitacora_demora"] as $bitDemora) {
-                $demora = BitacoraDemora::create(
-                    [
-                        "bitacora_id" => $bitDemora["bitacora_id"],
-                        "tipo_demora_id" => $bitDemora["tipo_demora_id"],
-                        "fecha_inicio" => $bitDemora["fecha_inicio"],
-                        "fecha_fin" => $bitDemora["fecha_fin"],
-                        "orden" => $bitDemora["orden"]
-                    ]
-                );
-            }
-        }
+
 
         return response()->json([
             "message" => 200,
-            "message_text" => "ok",
-            "data" => $demoras
+            "message_text" => "ok"
         ]);
     }
     /**

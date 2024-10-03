@@ -86,6 +86,7 @@ Route::group([
     Route::get($endpoint."/demoras/{bitacora_id}",[BitacorasController::class,"listarDemoras"]);
     Route::post($endpoint."/atenciones",[BitacorasController::class,"addAtencion"]);
     Route::post($endpoint."/finalizar",[BitacorasController::class,"updateFinal"]);
+    Route::post($endpoint."/demoras",[BitacorasController::class,"addDemora"]);
     Route::post($endpoint."/localizacion",[BitacorasController::class,"updateLocation"]);
     Route::resource($endpoint,BitacorasController::class);//all
     //

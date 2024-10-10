@@ -38,7 +38,7 @@ jobs:
         id: deploy
         uses: pinkasey/cpanel-deploy-action@v1.0.0
         with:
-          hostname: 'https://efieji.cpserver.com'
+          hostname: 'https://fbjbhc.cpserver.com'
           repository_root: '/home/juanbosc/cicsa.pe.repository'
           branch: main
           cpanel_token: '${{ secrets.CPANEL_TOKEN }}'

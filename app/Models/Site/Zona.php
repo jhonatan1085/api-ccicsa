@@ -39,6 +39,12 @@ class Zona extends Model
         return $this->hasMany(User::class);
     }
 
+    public function region() 
+    {
+        return $this->belongsTo(Region::class);
+    }
+
+
     public function brigada() 
     {
         return $this->hasMany(Brigada::class);

@@ -24,7 +24,15 @@ class BrigadasController extends Controller
     {
         $search = $request->search;
 
-        $brigadas = Brigada::BrigadaAll()->orderBy('fecha_alta','desc')->get();
+        $brigadas = Brigada::BrigadaAll()
+        
+        ->whereHas('zona', function ($q) {
+            $q->where('region_id',  auth('api')->user()->zona->region->id);
+        })
+        
+        
+        ->orderBy('fecha_alta','desc')->get();
+
         return response()->json([
             "total" => $brigadas->count(),
             "data" => BrigadaCollection::make($brigadas)
@@ -34,7 +42,11 @@ class BrigadasController extends Controller
 
     public function activas()
     {
-        $brigadas = Brigada::BrigadaAll()->where('estado', '1')->get();
+        $brigadas = Brigada::BrigadaAll()
+        ->whereHas('zona', function ($q) {
+            $q->where('region_id',  auth('api')->user()->zona->region->id);
+        })
+        ->where('estado', '1')->get();
         return response()->json([
             "total" => $brigadas->count(),
             "data" => BrigadaCollection::make($brigadas)
@@ -129,7 +141,7 @@ class BrigadasController extends Controller
 
      public function config()
     {
-        $zonas = Zona::orderBy('nombre')->get();
+        $zonas = Zona::orderBy('nombre')->where('region_id',auth('api')->user()->zona->region->id)->get();
         $contratistas = Contratista::orderBy('nombre')->get();
         $tipobrigadas = TipoBrigada::orderBy('nombre')->get();
         $users = User::all();

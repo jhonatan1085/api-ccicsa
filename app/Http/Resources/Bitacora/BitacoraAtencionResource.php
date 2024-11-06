@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Bitacora;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,7 +21,7 @@ class BitacoraAtencionResource extends JsonResource
                 "descripcion" => $this->atencion->descripcion,
             ] : NULL,
             "id" => $this->id,
-            "hora" => $this->hora,
+            "hora" =>  Carbon::parse($this->hora)->format('H:i'),
             "orden" => $this->orden,
             "is_coment" => $this->is_coment,
             "descripcion" => $this->descripcion,

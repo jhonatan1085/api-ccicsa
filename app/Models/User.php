@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Models\Brigada\Brigada;
 use App\Models\Brigada\BrigadaUser;
+use App\Models\Site\Region;
 use App\Models\Site\Zona;
 use App\Models\UnidadMovil\UnidadMovil;
 use App\Models\UnidadMovil\UnidadMovilUser;
@@ -56,6 +57,11 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->belongsTo(Zona::class);
     }
+
+ /*    public function region() 
+    {
+        return $this->belongsToThrough(Region::class,Zona::class);
+    } */
 
     public function brigada_user() 
     {

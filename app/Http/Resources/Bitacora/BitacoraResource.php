@@ -20,7 +20,8 @@ class BitacoraResource extends JsonResource
         return [
             "id" => $this->resource->id,
             "nombre" => $this->resource->nombre,
-            "fecha_inicial" => $this->resource->fecha_inicial  ? Carbon::parse($this->resource->fecha_inicial)->format("Y-m-d") : NULL,
+           // "fecha_inicial" => $this->resource->fecha_inicial  ? Carbon::parse($this->resource->fecha_inicial)->format("Y-m-d") : NULL,
+            "fecha_inicial" => $this->resource->fecha_inicial  ? $this->resource->fecha_inicial  : NULL,
             "sot" => $this->resource->sot,
             "incidencia" => $this->resource->incidencia,
             "tipo_averia" => $this->tipo_averia ? [

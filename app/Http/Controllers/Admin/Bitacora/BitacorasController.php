@@ -258,7 +258,7 @@ class BitacorasController extends Controller
                 foreach ($bitAtencion["bitacora_atencion"] as $bitAtencionHijos) {
                     BitacoraAtencion::create(
                         [
-                            "hora" => $bitAtencionHijos["hora"],
+                            "hora" =>  !empty($bitAtencionHijos["hora"]) ? $bitAtencionHijos["hora"] : null,// $bitAtencionHijos["hora"],
                             "orden" => $bitAtencionHijos["orden"],
                             "is_coment" => $bitAtencionHijos["is_coment"],
                             "descripcion" => $bitAtencionHijos["descripcion"],

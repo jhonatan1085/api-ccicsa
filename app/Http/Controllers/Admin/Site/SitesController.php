@@ -33,11 +33,16 @@ class SitesController extends Controller
     {
         $search = $request->search;
 
-        $sites = Site::where("codigo", "like", "%" . $search . "%")
+        $sites = Site::whereHas('zona', function ($q) {
+            $q->where('region_id',  auth('api')->user()->zona->region->id);
+        })
+        ->where(function ($query) use($search) {
+            $query->where("codigo", "like", "%" . $search . "%")
             ->orWhere("nombre", "like", "%" . $search . "%")
             ->orWhereHas("zona", function ($q) use ($search) {
                 $q->where("nombre", "like", "%" . $search . "%");
-            })
+            });
+        })
             ->orderBy("nombre", "asc")
             ->paginate(100);
         return response()->json([
@@ -143,6 +148,9 @@ class SitesController extends Controller
         $search = $request->search;
         $sites = Site::with('region:id,nombre', 'distrito:id,nombre,provincia_id', 'distrito.provincia:id,nombre,departamento_id', 'distrito.provincia.departamento:id,nombre', 'zona:id,nombre')
             ->select('id', 'nombre', 'codigo', 'latitud', 'longitud', 'region_id', 'distrito_id', 'zona_id')
+           // ->whereHas('zona', function ($q) {
+                ->where('region_id',  auth('api')->user()->zona->region->id)
+           
             ->orderBy("nombre", "asc")
             // ->take(10)
             ->get();
@@ -158,7 +166,8 @@ class SitesController extends Controller
     {
         $municipalidades = Municipalidade::orderBy('nombre')->get();
         $tiposites = TipoSite::all();
-        $zonas = Zona::orderBy('nombre')->get();
+        //$zonas = Zona::orderBy('nombre')->get();
+        $zonas = Zona::orderBy('nombre')->where('region_id',auth('api')->user()->zona->region->id)->orderBy('nombre')->get();
         $regions = Region::all();
         $regionGeograficas = RegionGeografica::all();
         $consesionarias = Consesionaria::orderBy('nombre')->get();

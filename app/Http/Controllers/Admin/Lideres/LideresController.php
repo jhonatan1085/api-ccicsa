@@ -29,6 +29,11 @@ class LideresController extends Controller
             $q->where("name", "like", "%Lider%")
                 ->orWhere("name", "like", "%Claro%");
         })
+
+        ->whereHas('zona', function ($q) {
+            $q->where('region_id',  auth('api')->user()->zona->region->id);
+        })
+
             ->where(function ($query) use ($search) {
                 $query->where("name", "like", "%" . $search . "%")
                     ->orWhere("surname", "like", "%" . $search . "%")
@@ -220,7 +225,8 @@ class LideresController extends Controller
     {
         $roles = Role::orderBy('name')->where("name", "like", "%Lider%")->orWhere("name", "like", "Claro")->get();
         $educacions = Educacion::orderBy('nombre')->get();
-        $zonas = Zona::orderBy('nombre')->get();
+       // $zonas = Zona::orderBy('nombre')->get();
+        $zonas = Zona::orderBy('nombre')->where('region_id',auth('api')->user()->zona->region->id)->orderBy('nombre')->get();
         return response()->json([
             "roles" => $roles,
             "educacions" => $educacions,

@@ -138,6 +138,14 @@ class AuthController extends Controller
             "user" => [
                 "name" => auth('api')->user()->name,
                 "surname" => auth('api')->user()->surname,
+                "zona" => [
+                    "id" => auth('api')->user()->zona->id,
+                    "nombre" => auth('api')->user()->zona->nombre,
+                ] ,
+                 "region" => [
+                    "id" => auth('api')->user()->zona->region->id,
+                    "nombre" => auth('api')->user()->zona->region->nombre,
+                ], 
                // "avatar" => auth('api')->user()->avatar,
                "email" => auth('api')->user()->email,
                "roles" => auth('api')->user()->getRoleNames(),

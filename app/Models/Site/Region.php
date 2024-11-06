@@ -2,6 +2,7 @@
 
 namespace App\Models\Site;
 
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -30,4 +31,14 @@ class Region extends Model
     {
         return $this->hasMany(Site::class);
     }
+
+    public function zona() 
+    {
+        return $this->hasMany(Zona::class);
+    }
+
+ /*     public function users() 
+    {
+        return $this->hasManyThrough(User::class,Zona::class);
+    }  */
 }

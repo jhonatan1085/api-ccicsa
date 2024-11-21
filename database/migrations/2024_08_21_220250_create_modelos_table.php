@@ -16,6 +16,10 @@ return new class extends Migration
             $table->string('nombre',15);
             $table->unsignedBigInteger('marca_id');
             $table->foreign('marca_id')->references('id')->on('marcas');
+            $table->unsignedBigInteger('user_created_by')->nullable();
+            $table->foreign('user_created_by')->references('id')->on('users');
+            $table->unsignedBigInteger('user_updated_by')->nullable();
+            $table->foreign('user_updated_by')->references('id')->on('users');
             $table->timestamps();
         });
     }

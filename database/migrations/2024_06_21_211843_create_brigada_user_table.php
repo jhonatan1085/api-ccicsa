@@ -20,6 +20,10 @@ return new class extends Migration
             $table->foreign('brigada_id')->references('id')->on('brigadas');
             $table->unsignedBigInteger('unidad_movil_id')->nullable();
             $table->foreign('unidad_movil_id')->references('id')->on('unidad_movils');
+            $table->unsignedBigInteger('user_created_by')->nullable();
+            $table->foreign('user_created_by')->references('id')->on('users');
+            $table->unsignedBigInteger('user_updated_by')->nullable();
+            $table->foreign('user_updated_by')->references('id')->on('users');
             $table->timestamps();
         });
     }

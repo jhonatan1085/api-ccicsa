@@ -11,6 +11,7 @@ class TipoAverias extends Seeder
     static $tipoaverias = [
         'Preventivo',
         'Correctivo',
+        'Sinergia'
     ];
     /**
      * Run the database seeds.

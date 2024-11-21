@@ -108,7 +108,7 @@ class PermissionsDemoSeeder extends Seeder
             'cel_corp'=> '915066230',
             'cel_per'=> '924040255',
             'dni'=> '73128120',
-            'zona_id'=> 18,
+            'zona_id'=> 16,
             'educacion_id'=> 6,
             'password' => bcrypt('73128120')
         ]);

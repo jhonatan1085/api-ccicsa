@@ -25,6 +25,12 @@ class Municipalidade extends Model
         $this->attributes["updated_at"]= Carbon::now();
     }
 
+    
+    public function distrito() 
+    {
+        return $this->belongsTo(Distrito::class);
+    }
+
     public function site() 
     {
         return $this->hasMany(Site::class);

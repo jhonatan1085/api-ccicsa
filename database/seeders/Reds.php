@@ -13,7 +13,9 @@ class Reds extends Seeder
         'HFC',
         'FTTH',
         'MOVIL',
-        'DORSAL'
+        'DORSAL COSTA',
+        'DORSAL SIERRA',
+        'PRONATEL'
     ];
     /**
      * Run the database seeds.

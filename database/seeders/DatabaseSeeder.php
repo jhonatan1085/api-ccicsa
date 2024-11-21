@@ -18,7 +18,6 @@ class DatabaseSeeder extends Seeder
 
      $this->call(ConsesionariaSeeder::class);
      $this->call(ContratistaSeeder::class);
-     $this->call(MunicipalidadeSeeder::class);
      $this->call(PrioridadSiteSeeder::class);
      $this->call(RegionGeograficaSeeder::class);
      $this->call(RegionSeeder::class);
@@ -30,6 +29,7 @@ class DatabaseSeeder extends Seeder
      $this->call(DepartamentoSeeder::class);
      $this->call(ProvinciaSeeder::class);
      $this->call(DistritoSeeder::class);
+     $this->call(MunicipalidadeSeeder::class);
      $this->call(SiteSeeder::class);
      $this->call(EducacionSeeder::class);
      $this->call(PermissionsDemoSeeder::class);
@@ -39,6 +39,7 @@ class DatabaseSeeder extends Seeder
      $this->call(TipoAverias::class);
      $this->call(TipoPlantaSeeder::class);
      $this->call(AtencionSeeder::class);
+     $this->call(TipoCausaAveriaSeeder::class);
      $this->call(CausaAveriaSeeder::class);
      $this->call(TipoReparacionSeeder::class);
      $this->call(ConsecuenciaAveriaSeeder::class);
@@ -48,8 +49,8 @@ class DatabaseSeeder extends Seeder
      $this->call(UnidadMovilSeeder::class);
      $this->call(UnidadMovilUserSeeder::class);
      $this->call(TipoDemoraSeeder::class);
-     
 
+     $this->call(AddTipoAveriaSeeder::class);
     Model::reguard();
         
         // \App\Models\User::factory(10)->create();

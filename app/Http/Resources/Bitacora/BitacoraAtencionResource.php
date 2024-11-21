@@ -17,11 +17,12 @@ class BitacoraAtencionResource extends JsonResource
     {
         return [
             "atencion" =>$this->atencion ? [
+                "id" => $this->atencion->id,
                 "orden" => $this->atencion->orden,
                 "descripcion" => $this->atencion->descripcion,
             ] : NULL,
             "id" => $this->id,
-            "hora" =>  Carbon::parse($this->hora)->format('H:i'),
+            "hora" => $this->hora, //Carbon::parse($this->hora)->format('H:i'),
             "orden" => $this->orden,
             "is_coment" => $this->is_coment,
             "descripcion" => $this->descripcion,

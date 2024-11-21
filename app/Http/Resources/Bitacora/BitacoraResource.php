@@ -20,13 +20,16 @@ class BitacoraResource extends JsonResource
         return [
             "id" => $this->resource->id,
             "nombre" => $this->resource->nombre,
+            "enlace_plano_site" => $this->resource->enlace_plano_site,
            // "fecha_inicial" => $this->resource->fecha_inicial  ? Carbon::parse($this->resource->fecha_inicial)->format("Y-m-d") : NULL,
             "fecha_inicial" => $this->resource->fecha_inicial  ? $this->resource->fecha_inicial  : NULL,
+            "fecha_ejecucion" => $this->resource->fecha_ejecucion  ? $this->resource->fecha_ejecucion  : NULL,
             "sot" => $this->resource->sot,
             "incidencia" => $this->resource->incidencia,
             "tipo_averia" => $this->tipo_averia ? [
                 "id" => $this->tipo_averia->id,
                 "nombre" => $this->tipo_averia->nombre,
+                "incidencia" => $this->tipo_averia->incidencia
             ] : NULL,
             "red" => $this->tipo_averia ? [
                 "id" => $this->red->id,
@@ -55,13 +58,14 @@ class BitacoraResource extends JsonResource
                 "id" => $this->site->id,
                 "nombre" => $this->site->nombre,
                 "region" =>  $this->site->region->nombre,
-                "distrito" => $this->site->distrito ? [
-                    "id" => $this->site->distrito->id,
-                    "nombre" => $this->site->distrito->nombre,
+
+                "distrito" => $this->site->municipalidade->distrito ? [
+                    "id" => $this->site->municipalidade->distrito->id,
+                    "nombre" => $this->site->municipalidade->distrito->nombre,
                 ] : NULL,
-                "departamento" => $this->site->distrito->provincia->departamento ? [
-                    "id" => $this->site->distrito->provincia->departamento->id,
-                    "nombre" => $this->site->distrito->provincia->departamento->nombre,
+                "departamento" => $this->site->municipalidade->distrito->provincia->departamento ? [
+                    "id" => $this->site->municipalidade->distrito->provincia->departamento->id,
+                    "nombre" => $this->site->municipalidade->distrito->provincia->departamento->nombre,
                 ] : NULL,
                 "tipo_site" => $this->site->tipo_site ? [
                     "id" => $this->site->tipo_site->id,
@@ -84,7 +88,9 @@ class BitacoraResource extends JsonResource
                 "id" => $this->tipo_reparacion->id,
                 "nombre" => $this->tipo_reparacion->nombre,
             ] : NULL,
-            "atenciones" => BitacoraAtencionResource::collection($this->bitacora_atencion->sortByDesc('orden'))
+            "atenciones" => BitacoraAtencionResource::collection($this->bitacora_atencion->sortByDesc('orden')),
+            "afect_servicio" => $this->afect_servicio,
+            "afect_masiva" =>  $this->afect_masiva
         ];
     }
 }

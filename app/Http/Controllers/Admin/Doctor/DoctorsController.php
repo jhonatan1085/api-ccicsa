@@ -49,7 +49,6 @@ class DoctorsController extends Controller
                     ];
                 }),
             ]);
-
         }
         return response()->json([
             "roles" => $roles,

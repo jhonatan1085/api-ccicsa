@@ -10,7 +10,8 @@ class TipoAveria extends Model
 {
     use HasFactory;
     protected $fillable = [
-        "nombre"
+        "nombre",
+        "incidencia"
     ];
 
     public function setCreatedAtAttribute($value)

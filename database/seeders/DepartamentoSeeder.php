@@ -9,14 +9,13 @@ use Illuminate\Support\Facades\DB;
 class DepartamentoSeeder extends Seeder
 {
     static $departamentos = [
-        'LA LIBERTAD',
-        'ANCASH',
-        'TUMBES',
-        'CAJAMARCA',
-        'LAMBAYEQUE',
         'AMAZONAS',
-        'PIURA',
-        'HUANUCO',
+'ANCASH',
+'CAJAMARCA',
+'LA LIBERTAD',
+'LAMBAYEQUE',
+'PIURA',
+'TUMBES',
         'N/D'
     ];
     /**

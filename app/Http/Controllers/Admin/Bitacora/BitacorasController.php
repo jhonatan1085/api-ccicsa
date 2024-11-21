@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin\Bitacora;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Bitacora\BitacoraCollection;
 use App\Http\Resources\Bitacora\BitacoraResource;
+use App\Http\Resources\Bitacora\BitacorasExportCollection;
+use App\Http\Resources\Bitacora\BitacorasExportResource;
 use App\Models\Bitacora\Atencion;
 use App\Models\Bitacora\Bitacora;
 use App\Models\Bitacora\BitacoraAtencion;
@@ -17,6 +19,8 @@ use App\Models\Bitacora\Serv;
 use App\Models\Bitacora\TipoAveria;
 use App\Models\Bitacora\TipoDemora;
 use App\Models\Bitacora\TipoReparacion;
+use App\Models\Brigada\Brigada;
+use App\Models\Brigada\BrigadaUser;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -83,7 +87,7 @@ class BitacorasController extends Controller
         }
 
         return response()->json([
-            "total" => $bitacoras->total(),
+            "total" => $bitacoras->count(),
             "data" => BitacoraCollection::make($bitacoras)
         ]);
     }
@@ -211,8 +215,8 @@ class BitacorasController extends Controller
                     'message_text' => $validator->errors()
                 ]);
             }
-            $date_clean = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $request->fecha_inicial);
-            $request["fecha_inicial"] = Carbon::parse($date_clean)->format("Y-m-d h:i:s");
+            /* $date_clean = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $request->fecha_inicial);
+            $request["fecha_inicial"] = Carbon::parse($date_clean)->format("Y-m-d h:i:s"); */
             $bitacora = Bitacora::create($request->all());
             //agregar los tecnicos seleccionados
             foreach ($request->brigadas as $brigada) {
@@ -364,8 +368,8 @@ class BitacorasController extends Controller
     {
         $bitacora = Bitacora::findOrFail($id);
 
-        $date_clean = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $request->fecha_inicial);
-        $request["fecha_inicial"] = Carbon::parse($date_clean)->format("Y-m-d h:i:s");
+       /*  $date_clean = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $request->fecha_inicial);
+        $request["fecha_inicial"] = Carbon::parse($date_clean)->format("Y-m-d h:i:s"); */
 
         /*  $date_clean = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $request->fecha_inicial);
         $request->fecha_inicial = Carbon::parse($date_clean)->format("Y-m-d h:i:s"); */
@@ -511,6 +515,46 @@ class BitacorasController extends Controller
             "tipoaveria" => $tipoaveria,
             "red" => $red,
             "serv" => $serv
+        ]);
+    }
+
+    public function exportaBitacoras(Request $request)
+    {
+        $search = $request->search;
+
+/*          $bitacoras = Bitacora::join('bitacora_brigada as bb', 'bb.bitacora_id', '=', 'bitacoras.id')
+            ->orderBy('bitacoras.id','desc')
+            ->get();
+
+            $brigada = Brigada::join('bitacora_brigada as bb', 'bb.brigada_id', '=', 'brigadas.id')
+            ->orderBy('bb.bitacora_id','desc')
+            ->get();
+            $detallebitacoras = collect([]);
+
+ 
+            foreach($bitacoras as $key => $bitacora){
+                // dd($schedule_hour);
+                 $detallebitacoras->push([
+                     "data" =>  $brigada->bitacora_id 
+                    ]);
+             } */
+            
+             $brigadaUser = BrigadaUser::get();
+
+      // $bitacoras = Bitacora::get();
+
+      $bitacoras = Bitacora::with('bitacora_brigada')->get()
+      ->flatMap(function ($bitacora) {
+          return $bitacora->bitacora_brigada->map(function ($brigada) use ($bitacora) {
+              return new BitacorasExportResource($bitacora->setRelation('bitacora_brigada', collect([$brigada])));
+          });
+      });
+
+
+
+        return response()->json([
+            "total" => $bitacoras->count(),
+            "data" => $bitacoras//BitacorasExportCollection::make($bitacoras)
         ]);
     }
 }

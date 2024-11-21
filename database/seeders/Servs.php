@@ -13,9 +13,9 @@ class Servs extends Seeder
         'HFC',
         'FTTH',
         'MOVIL',
-        'DORSAL',
-        'SITES',
-        'OTROS'
+        'DORSAL COSTA',
+        'DORSAL SIERRA',
+        'PRONATEL'
     ];
     /**
      * Run the database seeds.

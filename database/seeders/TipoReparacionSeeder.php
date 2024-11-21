@@ -11,6 +11,8 @@ class TipoReparacionSeeder extends Seeder
     static $tipoReparacions = [
         'Provisional',
         'Definitivo',
+        'Trunca',
+        'No aplica'
     ];
     /**
      * Run the database seeds.

@@ -20,6 +20,10 @@ return new class extends Migration
             $table->dateTime('fecha_inicio');
             $table->dateTime('fecha_fin');
             $table->integer('orden');
+            $table->unsignedBigInteger('user_created_by')->nullable();
+            $table->foreign('user_created_by')->references('id')->on('users');
+            $table->unsignedBigInteger('user_updated_by')->nullable();
+            $table->foreign('user_updated_by')->references('id')->on('users');
             $table->timestamps();
         });
     }

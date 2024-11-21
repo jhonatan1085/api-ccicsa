@@ -2,39 +2,27 @@
 
 namespace App\Models\Site;
 
+use App\Models\BaseModel;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Site extends Model
+class Site extends BaseModel
 {
     use HasFactory;
     protected $fillable = [
         "codigo",
         "nombre",
-        "suministro",
         "latitud",
         "longitud",
         "direccion",
-        "tiempo_sla",
-        "autonomia_bts",
-        "autonomia_tx",
-        "tiempo_auto",
-        "tiempo_caminata",
-        "tiempo_acceso",
-        "tipo_site_id",
         "zona_id",
         "region_id",
         "region_geografica_id",
-        "consesionaria_id",
-        "distrito_id",
-        "room_type_id",
-        "contratista_id",
-        "tipo_acceso_id",
-        "prioridad_site_id",
         "municipalidade_id",
-        "tipo_energia_id",
+        'tipo_site_id',
+        "observacion"
     ];
 
 
@@ -68,7 +56,12 @@ class Site extends Model
     {
         return $this->belongsTo(RegionGeografica::class);
     }
-    public function consesionaria() 
+    public function municipalidade() 
+    {
+        return $this->belongsTo(Municipalidade::class);
+    }
+
+/*     public function consesionaria() 
     {
         return $this->belongsTo(Consesionaria::class);
     }
@@ -87,17 +80,15 @@ class Site extends Model
     public function prioridad_site() 
     {
         return $this->belongsTo(PrioridadSite::class);
-    }
-    public function municipalidade() 
-    {
-        return $this->belongsTo(Municipalidade::class);
-    }
-    public function tipo_energia() 
+    } 
+        public function tipo_energia() 
     {
         return $this->belongsTo(TipoEnergia::class);
     }
     public function distrito() 
     {
         return $this->belongsTo(Distrito::class);
-    }
+    }*/
+
+    
 }

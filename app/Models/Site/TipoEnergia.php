@@ -24,8 +24,8 @@ class TipoEnergia extends Model
     	date_default_timezone_set("America/Lima");
         $this->attributes["updated_at"]= Carbon::now();
     }
-    public function site() 
+ /*    public function site() 
     {
         return $this->hasMany(Site::class);
-    }
+    } */
 }

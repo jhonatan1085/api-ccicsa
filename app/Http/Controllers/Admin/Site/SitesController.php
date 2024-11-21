@@ -143,14 +143,26 @@ class SitesController extends Controller
         ]);
     }
 
+    public function municipalidadPorDistrito(string $distrito_id)
+    {
+        $distritos = Municipalidade::where("distrito_id", $distrito_id)
+            ->orderBy("nombre", "asc")
+            ->get();
+        return response()->json([
+            "total" => $distritos->count(),
+            "data" => $distritos
+        ]);
+    }
+
     public function autocomplete(Request $request)
     {
         $search = $request->search;
-        $sites = Site::with('region:id,nombre', 'distrito:id,nombre,provincia_id', 'distrito.provincia:id,nombre,departamento_id', 'distrito.provincia.departamento:id,nombre', 'zona:id,nombre')
-            ->select('id', 'nombre', 'codigo', 'latitud', 'longitud', 'region_id', 'distrito_id', 'zona_id')
+       /*  $sites = Site::with('region:id,nombre', 'distrito:id,nombre,provincia_id', 'municipalidad.distrito.provincia:id,nombre,departamento_id', 'municipalidad.distrito.provincia.departamento:id,nombre', 'zona:id,nombre')
+            ->select('id', 'nombre', 'codigo', 'latitud', 'longitud', 'region_id', 'municipalidade_id', 'zona_id')
            // ->whereHas('zona', function ($q) {
-                ->where('region_id',  auth('api')->user()->zona->region->id)
+                ->where('region_id',  auth('api')->user()->zona->region->id) */
            
+            $sites = Site::where('region_id',  auth('api')->user()->zona->region->id)
             ->orderBy("nombre", "asc")
             // ->take(10)
             ->get();
@@ -158,7 +170,7 @@ class SitesController extends Controller
         // $sites = Site::get();
         return response()->json([
             "total" => $sites->count(),
-            "data" =>  $sites
+            "data" =>    SiteCollection::make($sites)
         ]);
     }
 

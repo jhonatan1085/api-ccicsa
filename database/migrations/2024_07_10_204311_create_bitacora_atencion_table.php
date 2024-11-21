@@ -22,6 +22,10 @@ return new class extends Migration
             $table->foreign('atencion_id')->references('id')->on('atencions');
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->foreign('parent_id')->references('id')->on('bitacora_atencion');
+            $table->unsignedBigInteger('user_created_by')->nullable();
+            $table->foreign('user_created_by')->references('id')->on('users');
+            $table->unsignedBigInteger('user_updated_by')->nullable();
+            $table->foreign('user_updated_by')->references('id')->on('users');
             $table->timestamps();
         });
     }

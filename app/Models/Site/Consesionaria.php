@@ -25,10 +25,10 @@ class Consesionaria extends Model
         $this->attributes["updated_at"]= Carbon::now();
     }
 
-    public function site() 
+/*     public function site() 
     {
         return $this->hasMany(Site::class);
-    }
+    } */
 
 
 }

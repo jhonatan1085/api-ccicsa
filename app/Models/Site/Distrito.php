@@ -25,13 +25,13 @@ class Distrito extends Model
         $this->attributes["updated_at"]= Carbon::now();
     }
 
-    public function site() 
-    {
-        return $this->hasMany(Site::class);
-    }
-
     public function provincia() 
     {
         return $this->belongsTo(Provincia::class);
+    }
+
+    public function municipalidade() 
+    {
+        return $this->hasMany(Municipalidade::class);
     }
 }

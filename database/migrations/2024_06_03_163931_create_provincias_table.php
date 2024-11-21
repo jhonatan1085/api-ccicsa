@@ -16,6 +16,10 @@ return new class extends Migration
             $table->string('nombre',25);
             $table->unsignedBigInteger('departamento_id');
             $table->foreign('departamento_id')->references('id')->on('departamentos');
+            $table->unsignedBigInteger('user_created_by')->nullable();
+            $table->foreign('user_created_by')->references('id')->on('users');
+            $table->unsignedBigInteger('user_updated_by')->nullable();
+            $table->foreign('user_updated_by')->references('id')->on('users');
             $table->timestamps();
         });
     }

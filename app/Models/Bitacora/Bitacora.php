@@ -2,6 +2,7 @@
 
 namespace App\Models\Bitacora;
 
+use App\Models\BaseModel;
 use App\Models\Brigada\Brigada;
 use App\Models\Site\Site;
 use App\Models\User;
@@ -36,12 +37,14 @@ use Illuminate\Database\Eloquent\Model;
  *     @OA\Property(property="updated_at", type="string", format="date-time", example="2024-08-22 14:30:00"),
  * )
  */
-class Bitacora extends Model
+class Bitacora extends BaseModel
 {
     use HasFactory;
     protected $fillable = [
         "nombre",
+        "enlace_plano_site",
         "fecha_inicial",
+        "fecha_ejecucion",
         "sot",
         "incidencia",
         "tipo_averia_id",
@@ -60,6 +63,8 @@ class Bitacora extends Model
         "tipo_reparacion_id",
         "herramientas",
         "tiempo_solucion",
+        "afect_servicio",
+        "afect_masiva",
     ];
 
     public function setCreatedAtAttribute($value)

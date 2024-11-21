@@ -16,6 +16,10 @@ return new class extends Migration
             $table->string('descripcion',80);
             $table->integer('orden');
             $table->char('estado',1)->default('1');
+            $table->unsignedBigInteger('user_created_by')->nullable();
+            $table->foreign('user_created_by')->references('id')->on('users');
+            $table->unsignedBigInteger('user_updated_by')->nullable();
+            $table->foreign('user_updated_by')->references('id')->on('users');
             $table->timestamps();
         });
     }

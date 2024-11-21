@@ -15,89 +15,50 @@ class SiteResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "id" => $this->resource->id,
-            "codigo" => $this->resource->codigo,
-            "nombre" => $this->resource->nombre,
-            "latitud" => $this->resource->latitud,
-            "longitud" => $this->resource->longitud,
-            "direccion" => $this->resource->direccion,
-
-            "municipalidade" => $this->resource->municipalidade ? [
-                "id" => $this->resource->municipalidade->id,
-                "nombre" => $this->resource->municipalidade->nombre,
+            "id" => $this->id,
+            "codigo" => $this->codigo,
+            "nombre" => $this->nombre,
+            "latitud" => $this->latitud,
+            "longitud" => $this->longitud,
+            "direccion" => $this->direccion,
+            "tipo_site" => $this->tipo_site ? [
+                "id" => $this->tipo_site->id,
+                "nombre" => $this->tipo_site->nombre,
             ]: NULL,
 
-            "distrito" => $this->resource->distrito ? [
-                "id" => $this->resource->distrito->id,
-                "nombre" => $this->resource->distrito->nombre,
+            "zona" => $this->zona ? [
+                "id" => $this->zona->id,
+                "nombre" => $this->zona->nombre,
             ]: NULL,
 
-            "tipo_site" => $this->resource->tipo_site ? [
-                "id" => $this->resource->tipo_site->id,
-                "nombre" => $this->resource->tipo_site->nombre,
+            "region" => $this->region ? [
+                "id" => $this->region->id,
+                "nombre" => $this->region->nombre,
             ]: NULL,
 
-            "zona" => $this->resource->zona ? [
-                "id" => $this->resource->zona->id,
-                "nombre" => $this->resource->zona->nombre,
+            "region_geografica" => $this->region_geografica ? [
+                "id" => $this->region_geografica->id,
+                "nombre" => $this->region_geografica->nombre,
             ]: NULL,
 
-            "region" => $this->resource->region ? [
-                "id" => $this->resource->region->id,
-                "nombre" => $this->resource->region->nombre,
+            "municipalidade" => $this->municipalidade ? [
+                "id" => $this->municipalidade->id,
+                "nombre" => $this->municipalidade->nombre,
             ]: NULL,
 
-            "region_geografica" => $this->resource->region_geografica ? [
-                "id" => $this->resource->region_geografica->id,
-                "nombre" => $this->resource->region_geografica->nombre,
+            "distrito" => $this->municipalidade->distrito ? [
+                "id" => $this->municipalidade ->distrito->id,
+                "nombre" => $this->municipalidade ->distrito->nombre,
             ]: NULL,
-
-            "tiempo_sla" => $this->resource->tiempo_sla,
-            "autonomia_bts" => $this->resource->autonomia_bts,
-            "autonomia_tx" => $this->resource->autonomia_tx,
-            "tiempo_auto" => $this->resource->tiempo_auto,
-            "tiempo_caminata" => $this->resource->tiempo_caminata,
-            "tiempo_acceso" => $this->resource->tiempo_acceso,
-            "suministro" => $this->resource->suministro,
-
-            "consesionaria" => $this->resource->consesionaria ? [
-                "id" => $this->resource->consesionaria->id,
-                "nombre" => $this->resource->consesionaria->nombre,
+            "provincia" => $this->municipalidade->distrito->provincia ? [
+                "id" => $this->municipalidade->distrito->provincia->id,
+                "nombre" => $this->municipalidade->distrito->provincia->nombre,
             ]: NULL,
-
-            "room_type" => $this->resource->room_type ? [
-                "id" => $this->resource->room_type->id,
-                "nombre" => $this->resource->room_type->nombre,
+            "departamento" => $this->municipalidade->distrito->provincia->departamento ? [
+                "id" => $this->municipalidade->distrito->provincia->departamento->id,
+                "nombre" => $this->municipalidade->distrito->provincia->departamento->nombre,
             ]: NULL,
-
-            "contratista" => $this->resource->contratista ? [
-                "id" => $this->resource->contratista->id,
-                "nombre" => $this->resource->contratista->nombre,
-            ]: NULL,
-
-            "tipo_acceso" => $this->resource->tipo_acceso ? [
-                "id" => $this->resource->tipo_acceso->id,
-                "nombre" => $this->resource->tipo_acceso->nombre,
-            ]: NULL,
-
-            "prioridad_site" => $this->resource->prioridad_site ? [
-                "id" => $this->resource->prioridad_site->id,
-                "nombre" => $this->resource->prioridad_site->nombre,
-            ]: NULL,
-
-            "tipo_energia" => $this->resource->tipo_energia ? [
-                "id" => $this->resource->tipo_energia->id,
-                "nombre" => $this->resource->tipo_energia->nombre,
-            ]: NULL,
-            "provincia" => $this->resource->distrito->provincia ? [
-                "id" => $this->resource->distrito->provincia->id,
-                "nombre" => $this->resource->distrito->provincia->nombre,
-            ]: NULL,
-            "departamento" => $this->resource->distrito->provincia->departamento ? [
-                "id" => $this->resource->distrito->provincia->departamento->id,
-                "nombre" => $this->resource->distrito->provincia->departamento->nombre,
-            ]: NULL,
-            "observacion" => $this->resource->observacion 
+            "observacion" => $this->observacion 
         ];
     }
 }

@@ -29,4 +29,10 @@ class CausaAveria extends Model
     {
         return $this->hasMany(Bitacora::class);
     }
+
+    
+    public function tipo_causa_averia()
+    {
+        return $this->belongsTo(TipoCausaAveria::class);
+    }
 }

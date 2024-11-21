@@ -17,6 +17,10 @@ return new class extends Migration
             $table->foreign('brigada_id')->references('id')->on('brigadas');
             $table->unsignedBigInteger('bitacora_id');
             $table->foreign('bitacora_id')->references('id')->on('bitacoras');
+            $table->unsignedBigInteger('user_created_by')->nullable();
+            $table->foreign('user_created_by')->references('id')->on('users');
+            $table->unsignedBigInteger('user_updated_by')->nullable();
+            $table->foreign('user_updated_by')->references('id')->on('users');
             $table->timestamps();
         });
     }

@@ -71,6 +71,7 @@ Route::group([
     $endpoint = "sites";
     // EXTRAS
     Route::get($endpoint."/autocomplete",[SitesController::class,"autocomplete"]);
+    Route::get($endpoint."/municipalidad/distrito/{distrito_id}",[SitesController::class,"municipalidadPorDistrito"]);
     Route::get($endpoint."/distritos/provincia/{provincia_id}",[SitesController::class,"distritosPorProvincia"]);
     Route::get($endpoint."/provincias/depto/{depto_id}",[SitesController::class,"provinciasPorDepto"]);
     Route::resource($endpoint,SitesController::class);//all
@@ -82,6 +83,7 @@ Route::group([
 
     $endpoint = "bitacoras";
     // extras
+    Route::get($endpoint."/exportaBitacoras",[BitacorasController::class,"exportaBitacoras"]);
     Route::get($endpoint."/atencion/{bitacora_id}",[BitacorasController::class,"listarAtenciones"]);
     Route::get($endpoint."/demoras/{bitacora_id}",[BitacorasController::class,"listarDemoras"]);
     Route::post($endpoint."/atenciones",[BitacorasController::class,"addAtencion"]);

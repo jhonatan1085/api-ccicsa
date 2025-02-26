@@ -46,6 +46,8 @@ class Bitacora extends BaseModel
         "fecha_inicial",
         "fecha_ejecucion",
         "sot",
+        "fecha_sot",
+        "estado_sot",
         "incidencia",
         "tipo_averia_id",
         "latitud",

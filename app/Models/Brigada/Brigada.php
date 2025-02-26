@@ -20,6 +20,7 @@ class Brigada extends Model
         "zona_id",
         "tipo_brigada_id",
         "contratista_id",
+        "nombre",
         "fecha_alta",
         "fecha_baja",
         "estado",

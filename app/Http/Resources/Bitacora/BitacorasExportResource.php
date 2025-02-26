@@ -16,20 +16,24 @@ class BitacorasExportResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        
+        $brigada = $this->bitacora_brigada->first();
+
+        $brigadas = BrigadaResource::collection($this->brigadas);
+
         return [
             
             "anio" => $this->fecha_inicial  ? Carbon::parse($this->fecha_inicial)->year  : NULL,
             "mes" => $this->fecha_inicial  ? Carbon::parse($this->fecha_inicial)->locale('es')->shortMonthName  : NULL,
             "semana" => $this->fecha_inicial  ? Carbon::parse($this->fecha_inicial)->weekOfYear  : NULL,
             "hora_asignacion" => $this->fecha_ejecucion  ? Carbon::parse($this->fecha_ejecucion)->format('H:i:s') : NULL,
-            "cuadrantes" =>"",
             "id" => $this->id,
             "nombre" => $this->nombre,
             "enlace_plano_site" => $this->enlace_plano_site,
             "fecha_inicial" => $this->fecha_inicial  ? $this->fecha_inicial  : NULL,
             "fecha_ejecucion" => $this->fecha_ejecucion  ? $this->fecha_ejecucion  : NULL,
             "sot" => $this->sot,
+            "fecha_sot" => $this->resource->fecha_sot,
+            "estado_sot" =>  $this->estado_sot ? "Pendiente":"Cerrada",
             "incidencia" => $this->incidencia,
             "tipo_averia" => $this->tipo_averia ? [
                 "id" => $this->tipo_averia->id,
@@ -87,6 +91,7 @@ class BitacorasExportResource extends JsonResource
                 ] : NULL,
             ] : NULL,
             "cliente" => $this->cliente,
+            "nombre_brigada" =>  $brigada->brigada->nombre ?? 'Sin Brigada',      
             "brigadas" => BrigadaResource::collection($this->brigadas),
             "tiempo_solucion" => $this->tiempo_solucion,
             "herramientas" => $this->herramientas,

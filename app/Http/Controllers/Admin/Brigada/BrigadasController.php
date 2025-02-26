@@ -64,12 +64,15 @@ class BrigadasController extends Controller
                 'tipo_brigada_id' => 'required',
                 'contratista_id' => 'required',
                 'tecnicos' => 'required',
+                'nombre' => 'required',
+
             ];
             $messages = [
                 'zona_id.required' => 'Debe ingresar zona',
                 'tipo_brigada_id.required' => 'Debe ingresar zona',
                 'contratista_id.required' => 'Debe ingresar zona',
                 'tecnicos.required' => 'No ingreso tecnicos',
+                'nombre.required' => 'No ingreso nombre',
             ];
 
             $validator = Validator::make($request->all(), $rules, $messages);

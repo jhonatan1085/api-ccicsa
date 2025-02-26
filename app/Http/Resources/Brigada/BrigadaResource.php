@@ -21,6 +21,7 @@ class BrigadaResource extends JsonResource
             "id" => $this->id,
             "estado" => $this->estado,
             "estadotext" => $this->estado == '1' ? "Activo": "inactivo",
+            "nombre" => $this->nombre,
             "contratista" => $this->contratista ? [
                 "id" => $this->contratista->id,
                 "nombre" => $this->contratista->nombre,

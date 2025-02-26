@@ -90,6 +90,7 @@ Route::group([
     Route::post($endpoint."/finalizar",[BitacorasController::class,"updateFinal"]);
     Route::post($endpoint."/demoras",[BitacorasController::class,"addDemora"]);
     Route::post($endpoint."/localizacion",[BitacorasController::class,"updateLocation"]);
+    Route::patch($endpoint."/closed-sot/{bitacora_id}",[BitacorasController::class,"closedSot"]);
     Route::resource($endpoint,BitacorasController::class);//all
     //
 

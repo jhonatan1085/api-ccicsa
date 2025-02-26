@@ -429,16 +429,16 @@ class BitacorasController extends Controller
     public function updateFinal(Request $request)
     {
         $rules = [
-            'causa' => 'required|exists:causa_averias,id',
-            'consecuencia' => 'required|exists:consecuencia_averias,id',
-            'tipoReparacion' => 'required|exists:tipo_reparacions,id',
-            'tiempo' => 'required',
+            'causa_averia_id' => 'required|exists:causa_averias,id',
+            'consecuencia_averia_id' => 'required|exists:consecuencia_averias,id',
+            'tipo_reparacion_id' => 'required|exists:tipo_reparacions,id',
+            'tiempo_solucion' => 'required',
         ];
         $messages = [
-            'causa.required' => 'Causa es requerida',
-            'consecuencia.required' => 'Consecuencia es requerida',
-            'tipoReparacion.required' => 'Tipo de Reparacion es requerida',
-            'tiempo.required' => 'Tiempo es requerido',
+            'causa_averia_id.required' => 'Causa es requerida',
+            'consecuencia_averia_id.required' => 'Consecuencia es requerida',
+            'tipo_reparacion_id.required' => 'Tipo de Reparacion es requerida',
+            'tiempo_solucion.required' => 'Tiempo es requerido',
         ];
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
@@ -448,11 +448,11 @@ class BitacorasController extends Controller
             ]);
         }
         $bitacora = Bitacora::findOrFail($request->id);
-        $bitacora->causa_averia_id = $request->causa;
-        $bitacora->consecuencia_averia_id = $request->consecuencia;
-        $bitacora->tipo_reparacion_id = $request->tipoReparacion;
+        $bitacora->causa_averia_id = $request->causa_averia_id;
+        $bitacora->consecuencia_averia_id = $request->consecuencia_averia_id;
+        $bitacora->tipo_reparacion_id = $request->tipo_reparacion_id;
         $bitacora->herramientas = $request->herramientas;
-        $bitacora->tiempo_solucion = $request->tiempo;
+        $bitacora->tiempo_solucion = $request->tiempo_solucion;
         $bitacora->estado = "0";
         $bitacora->save();
         return response()->json([
@@ -522,39 +522,32 @@ class BitacorasController extends Controller
     {
         $search = $request->search;
 
-/*          $bitacoras = Bitacora::join('bitacora_brigada as bb', 'bb.bitacora_id', '=', 'bitacoras.id')
-            ->orderBy('bitacoras.id','desc')
-            ->get();
+      $bitacoras = Bitacora::with(['bitacora_brigada.brigada', 'brigadas','bitacora_atencion'])
+    ->get()
+    ->flatMap(function ($bitacora) {
+        return $bitacora->bitacora_brigada->map(function ($bitacoraBrigada) use ($bitacora) {
+            $newBitacora = $bitacora->replicate();
+            $newBitacora->setRelation('bitacora_brigada', collect([$bitacoraBrigada]));
 
-            $brigada = Brigada::join('bitacora_brigada as bb', 'bb.brigada_id', '=', 'brigadas.id')
-            ->orderBy('bb.bitacora_id','desc')
-            ->get();
-            $detallebitacoras = collect([]);
-
- 
-            foreach($bitacoras as $key => $bitacora){
-                // dd($schedule_hour);
-                 $detallebitacoras->push([
-                     "data" =>  $brigada->bitacora_id 
-                    ]);
-             } */
-            
-             $brigadaUser = BrigadaUser::get();
-
-      // $bitacoras = Bitacora::get();
-
-      $bitacoras = Bitacora::with('bitacora_brigada')->get()
-      ->flatMap(function ($bitacora) {
-          return $bitacora->bitacora_brigada->map(function ($brigada) use ($bitacora) {
-              return new BitacorasExportResource($bitacora->setRelation('bitacora_brigada', collect([$brigada])));
-          });
-      });
-
-
-
+            return new BitacorasExportResource($newBitacora);
+        });
+    });
         return response()->json([
             "total" => $bitacoras->count(),
             "data" => $bitacoras//BitacorasExportCollection::make($bitacoras)
+        ]);
+    }
+
+
+    public function closedSot(string $id)
+    {
+        $bitacora = Bitacora::findOrFail($id);
+        $bitacora->estado_sot = false;
+        $bitacora->save();
+
+        return response()->json([
+            "message" => 200, 
+            "message_text"=>"ok"
         ]);
     }
 }

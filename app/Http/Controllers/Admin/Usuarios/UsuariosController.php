@@ -28,15 +28,15 @@ class UsuariosController extends Controller
         $search = $request->search;
         $users = User::whereHas("roles", function ($q) {
             $q->where("name", "like", "%Tecnico%")
-            ->orWhere("name", "like", "%Held Desk%");
+                ->orWhere("name", "like", "%Held Desk%");
         })
-        ->whereHas('zona', function ($q) {
-            $q->where('region_id',  auth('api')->user()->zona->region->id);
-        })
+            ->whereHas('zona', function ($q) {
+                $q->where('region_id',  auth('api')->user()->zona->region->id);
+            })
             ->where(function ($query) use ($search) {
                 $query->where("name", "like", "%" . $search . "%")
-                ->orWhere("surname", "like", "%" . $search . "%")
-                ->orWhere("email", "like", "%" . $search . "%");
+                    ->orWhere("surname", "like", "%" . $search . "%")
+                    ->orWhere("email", "like", "%" . $search . "%");
             })
             ->orderBy("id", "desc")
             ->get();
@@ -51,7 +51,7 @@ class UsuariosController extends Controller
      */
     public function store(Request $request)
     {
-       // $this->authorize('create', User::class);
+        // $this->authorize('create', User::class);
 
         $users_is_valid = User::where("email", $request->email)->first();
         if ($users_is_valid) {
@@ -102,7 +102,7 @@ class UsuariosController extends Controller
      */
     public function show(string $id)
     {
-       // $this->authorize('view', User::class);
+        // $this->authorize('view', User::class);
 
         $user = User::findOrFail($id);
 
@@ -171,7 +171,7 @@ class UsuariosController extends Controller
      */
     public function destroy(string $id)
     {
-      //  $this->authorize('delete', User::class);
+        //  $this->authorize('delete', User::class);
 
         $user = User::findOrFail($id);
         if ($user->avatar) {
@@ -205,7 +205,7 @@ class UsuariosController extends Controller
         $roles = Role::orderBy('name')->where("name", "like", "%Tecnico%")->orWhere("name", "like", "%Held Desk%")->get();
         $educacions = Educacion::orderBy('nombre')->get();
         //$zonas = Zona::orderBy('nombre')->get();
-        $zonas = Zona::orderBy('nombre')->where('region_id',auth('api')->user()->zona->region->id)->orderBy('nombre')->get();
+        $zonas = Zona::orderBy('nombre')->where('region_id', auth('api')->user()->zona->region->id)->orderBy('nombre')->get();
         return response()->json([
             "roles" => $roles,
             "educacions" => $educacions,
@@ -221,6 +221,12 @@ class UsuariosController extends Controller
             ->whereHas("roles", function ($q) {
                 $q->where("name", "like", "%Tecnico%");
             })
+            ->where(function ($query) {
+                // Técnicos no asignados a ninguna brigada activa (estado = 1)
+                $query->whereDoesntHave('brigada_user.brigada', function ($q) {
+                    $q->where('estado', '=', 1); // Excluir técnicos con brigadas activas
+                });
+            })
             ->orderBy("name", "asc")
             ->get();
 
@@ -233,8 +239,8 @@ class UsuariosController extends Controller
     public function usuariosResponsablesPorZona()
     {
         return response()->json([
-            "cicsa" =>  $this->usuariosPorZonaYTipo( "Lider"),
-            "claro" =>  $this->usuariosPorZonaYTipo( "Claro"),
+            "cicsa" =>  $this->usuariosPorZonaYTipo("Lider"),
+            "claro" =>  $this->usuariosPorZonaYTipo("Claro"),
         ]);
     }
     ////////////////////////////////////////////////////////////////
@@ -243,19 +249,17 @@ class UsuariosController extends Controller
     {
 
         return User::select('name', 'surname', 'id')
-        ->whereHas('zona', function ($q) {
-            $q->where('region_id',  auth('api')->user()->zona->region->id);
-        })
-        /*     ->whereHas("zona_user", function ($q) use ( $tipo) {
+            ->whereHas('zona', function ($q) {
+                $q->where('region_id',  auth('api')->user()->zona->region->id);
+            })
+            /*     ->whereHas("zona_user", function ($q) use ( $tipo) {
                 $q->where('is_user', $tipo)
                 //->where("zona_id", $zona_id)
                     ;
             }) */
-            ->whereHas("roles", function ($q)  use($tipo){
-                $q->where("name", "like", "%". $tipo ."%");
+            ->whereHas("roles", function ($q)  use ($tipo) {
+                $q->where("name", "like", "%" . $tipo . "%");
             })
             ->get();
-
-
     }
 }

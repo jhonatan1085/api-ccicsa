@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('servs', function (Blueprint $table) {
             $table->id();
-            $table->char('nombre',10);
+            $table->char('nombre',25);
             $table->unsignedBigInteger('user_created_by')->nullable();
             $table->foreign('user_created_by')->references('id')->on('users');
             $table->unsignedBigInteger('user_updated_by')->nullable();

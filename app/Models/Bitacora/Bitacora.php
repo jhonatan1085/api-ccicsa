@@ -55,6 +55,8 @@ class Bitacora extends BaseModel
         "distancia",
         "red_id",
         "serv_id",
+        "nro_tas",
+        "nro_crq",
         "site_id",
         "cliente",
         "resp_cicsa_id",

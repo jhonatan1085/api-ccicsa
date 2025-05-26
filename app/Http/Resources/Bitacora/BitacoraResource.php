@@ -42,6 +42,8 @@ class BitacoraResource extends JsonResource
                 "id" => $this->serv->id,
                 "nombre" => $this->serv->nombre,
             ] : NULL,
+            "nro_tas"=> $this->resource->nro_tas,
+            "nro_crq"=> $this->resource->nro_crq,
             "resp_cicsa" => $this->resp_cicsa ? [
                 "id" => $this->resp_cicsa->id,
                 "nombres" => $this->resp_cicsa->name . " " . $this->resp_cicsa->surname,

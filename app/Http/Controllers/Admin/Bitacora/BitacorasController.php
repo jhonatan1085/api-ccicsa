@@ -538,7 +538,6 @@ class BitacorasController extends Controller
         ]);
     }
 
-
     public function closedSot(string $id)
     {
         $bitacora = Bitacora::findOrFail($id);

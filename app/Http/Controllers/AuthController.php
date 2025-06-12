@@ -150,6 +150,7 @@ class AuthController extends Controller
                "email" => auth('api')->user()->email,
                "roles" => auth('api')->user()->getRoleNames(),
                "permissions" => $permissions,
+               "whatsapp" => auth('api')->user()->nro_whatsapp
             ],
         ]);
     }

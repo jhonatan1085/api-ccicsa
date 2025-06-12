@@ -83,6 +83,7 @@ Route::group([
 
     $endpoint = "bitacoras";
     // extras
+    Route::get($endpoint."/group-whastApp/{bitacora_id}",[BitacorasController::class,"groupWhatsApp"]);
     Route::get($endpoint."/exportaBitacoras",[BitacorasController::class,"exportaBitacoras"]);
     Route::get($endpoint."/atencion/{bitacora_id}",[BitacorasController::class,"listarAtenciones"]);
     Route::get($endpoint."/demoras/{bitacora_id}",[BitacorasController::class,"listarDemoras"]);

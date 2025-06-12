@@ -31,4 +31,9 @@ class TipoAveria extends Model
         return $this->hasMany(Bitacora::class);
     }
 
+    public function whatsapp_group(){
+        return $this->hasMany(whatsappGroup::class);
+    }
+
+
 }

@@ -19,6 +19,7 @@ use App\Models\Bitacora\Serv;
 use App\Models\Bitacora\TipoAveria;
 use App\Models\Bitacora\TipoDemora;
 use App\Models\Bitacora\TipoReparacion;
+use App\Models\Bitacora\whatsappGroup;
 use App\Models\Brigada\Brigada;
 use App\Models\Brigada\BrigadaUser;
 use Carbon\Carbon;
@@ -64,7 +65,7 @@ class BitacorasController extends Controller
                 //->orderBy("fecha_inicial", "desc")
                 ->orderBy("id", "desc")
                 ->paginate(10);
-            // dd($id );
+            // dd($id);
         } else {
             $bitacoras = Bitacora::whereHas('brigadas.user', function ($q) use ($id) {
                 $q->where('users.id',  $id);
@@ -107,7 +108,7 @@ class BitacorasController extends Controller
     public function demorasConfig()
     {
         $tipoDemoras = TipoDemora::select('id', 'nombre')->orderBy('nombre')->get();
-        
+
         return response()->json([
             "demoras" => $tipoDemoras
         ]);
@@ -262,7 +263,7 @@ class BitacorasController extends Controller
                 foreach ($bitAtencion["bitacora_atencion"] as $bitAtencionHijos) {
                     BitacoraAtencion::create(
                         [
-                            "hora" =>  !empty($bitAtencionHijos["hora"]) ? $bitAtencionHijos["hora"] : null,// $bitAtencionHijos["hora"],
+                            "hora" =>  !empty($bitAtencionHijos["hora"]) ? $bitAtencionHijos["hora"] : null, // $bitAtencionHijos["hora"],
                             "orden" => $bitAtencionHijos["orden"],
                             "is_coment" => $bitAtencionHijos["is_coment"],
                             "descripcion" => $bitAtencionHijos["descripcion"],
@@ -291,7 +292,7 @@ class BitacorasController extends Controller
         $request->fecha_inicial = Carbon::parse($date_clean)->format("Y-m-d h:i:s"); */
 
         foreach ($request->demo as $item) {
-          /*   $date_inicio = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $item["fecha_inicio"]);
+            /*   $date_inicio = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $item["fecha_inicio"]);
             $item["fecha_inicio"] = Carbon::parse($date_inicio)->format("Y-m-d h:i:s");
             $date_fin = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $item["fecha_fin"]);
             $item["fecha_fin"] = Carbon::parse($date_fin)->format("Y-m-d h:i:s"); */
@@ -368,7 +369,7 @@ class BitacorasController extends Controller
     {
         $bitacora = Bitacora::findOrFail($id);
 
-       /*  $date_clean = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $request->fecha_inicial);
+        /*  $date_clean = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $request->fecha_inicial);
         $request["fecha_inicial"] = Carbon::parse($date_clean)->format("Y-m-d h:i:s"); */
 
         /*  $date_clean = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $request->fecha_inicial);
@@ -507,7 +508,6 @@ class BitacorasController extends Controller
 
     public function config()
     {
-
         $tipoaveria = TipoAveria::orderBy('nombre')->get();
         $red = Red::orderBy('nombre')->get();
         $serv = Serv::orderBy('nombre')->get();
@@ -522,19 +522,19 @@ class BitacorasController extends Controller
     {
         $search = $request->search;
 
-      $bitacoras = Bitacora::with(['bitacora_brigada.brigada', 'brigadas','bitacora_atencion'])
-    ->get()
-    ->flatMap(function ($bitacora) {
-        return $bitacora->bitacora_brigada->map(function ($bitacoraBrigada) use ($bitacora) {
-            $newBitacora = $bitacora->replicate();
-            $newBitacora->setRelation('bitacora_brigada', collect([$bitacoraBrigada]));
+        $bitacoras = Bitacora::with(['bitacora_brigada.brigada', 'brigadas', 'bitacora_atencion'])
+            ->get()
+            ->flatMap(function ($bitacora) {
+                return $bitacora->bitacora_brigada->map(function ($bitacoraBrigada) use ($bitacora) {
+                    $newBitacora = $bitacora->replicate();
+                    $newBitacora->setRelation('bitacora_brigada', collect([$bitacoraBrigada]));
 
-            return new BitacorasExportResource($newBitacora);
-        });
-    });
+                    return new BitacorasExportResource($newBitacora);
+                });
+            });
         return response()->json([
             "total" => $bitacoras->count(),
-            "data" => $bitacoras//BitacorasExportCollection::make($bitacoras)
+            "data" => $bitacoras //BitacorasExportCollection::make($bitacoras)
         ]);
     }
 
@@ -545,8 +545,31 @@ class BitacorasController extends Controller
         $bitacora->save();
 
         return response()->json([
-            "message" => 200, 
-            "message_text"=>"ok"
+            "message" => 200,
+            "message_text" => "ok"
+        ]);
+    }
+
+    public function groupWhatsApp(string $id)
+    {
+        $regionId = auth()->user()?->zona?->region?->id;
+
+        if (!$regionId) {
+            return response()->json([
+                'message' => 403,
+                'message_text' => 'El usuario no tiene una región asignada'
+            ], 403);
+        }
+
+        $grupos = WhatsappGroup::query()
+        ->where('region_id', $regionId)
+        ->where('tipo_averia_id', $id)
+        // Seleccionamos group_name con alias "nombre"
+        ->get(['group_name as nombre']);
+
+        return response()->json([
+            'total' => $grupos->count(),
+            'data' => $grupos
         ]);
     }
 }

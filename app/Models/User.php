@@ -44,7 +44,8 @@ class User extends Authenticatable implements JWTSubject
         'address',
         'avatar',
         'educacion_id',
-        'zona_id'
+        'zona_id',
+        'nro_whatsapp'
     ];
 
 

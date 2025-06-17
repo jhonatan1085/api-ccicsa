@@ -41,6 +41,7 @@ class Bitacora extends BaseModel
 {
     use HasFactory;
     protected $fillable = [
+        "correlativo",
         "nombre",
         "enlace_plano_site",
         "fecha_inicial",
@@ -69,6 +70,7 @@ class Bitacora extends BaseModel
         "tiempo_solucion",
         "afect_servicio",
         "afect_masiva",
+        "user_created_by",
     ];
 
     public function setCreatedAtAttribute($value)
@@ -128,8 +130,8 @@ class Bitacora extends BaseModel
     {
         return $this->hasMany(BitacoraAtencion::class)->whereNull('parent_id');
     }
-    
-    public function bitacora_demora() 
+
+    public function bitacora_demora()
     {
         return $this->hasMany(BitacoraDemora::class);
     }
@@ -153,4 +155,52 @@ class Bitacora extends BaseModel
     {
         return $this->belongsTo(TipoReparacion::class);
     }
+
+    public function userCreatedBy()
+    {
+        return $this->belongsTo(User::class, 'user_created_by');
+    }
+
+   /* protected static function booted()
+    {
+        static::creating(function ($bitacora) {
+            $user = auth('api')->user();
+
+            // Obtener la región del usuario a través de su zona
+            $regionId = optional($user->zona)->region_id;
+            logger('Región detectada: ' . $regionId);
+
+           
+            if (!$regionId) {
+                throw new \Exception("El usuario no tiene una zona o región asignada.");
+            }
+
+            // Verificar si el tipo de avería es "correctivo"
+            $tipoAveria = TipoAveria::find($bitacora->tipo_averia_id);
+
+            logger('Tipo avería: ' . optional($tipoAveria)->nombre);
+            if (!$tipoAveria) {
+                throw new \Exception("Tipo de avería no válido.");
+            }
+
+            if (trim(strtolower(optional($tipoAveria)->nombre)) === 'correctivo') {
+                
+                // Obtener último correlativo de la región
+                $lastCorrelativo = static::whereHas('userCreatedBy.zona.region', function ($query) use ($regionId) {
+                    $query->where('id', $regionId);
+                })->whereHas('tipo_averia', function ($query) {
+                    $query->whereRaw("LOWER(nombre) = 'Correctivo'");
+                })->max('correlativo') ?? 0;
+
+                logger('Último correlativo encontrado: ' . $lastCorrelativo);
+
+                $bitacora->correlativo = $lastCorrelativo + 1;
+            } else {
+                $bitacora->correlativo = null;
+                logger('no entro al iff ');
+            }
+
+            $bitacora->user_created_by = $user->id;
+        });
+    }*/
 }

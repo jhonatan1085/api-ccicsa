@@ -21,7 +21,7 @@ class BitacorasExportResource extends JsonResource
         $brigadas = BrigadaResource::collection($this->brigadas);
 
         return [
-            
+            "correlativo" =>$this->correlativo,
             "anio" => $this->fecha_inicial  ? Carbon::parse($this->fecha_inicial)->year  : NULL,
             "mes" => $this->fecha_inicial  ? Carbon::parse($this->fecha_inicial)->locale('es')->shortMonthName  : NULL,
             "semana" => $this->fecha_inicial  ? Carbon::parse($this->fecha_inicial)->weekOfYear  : NULL,

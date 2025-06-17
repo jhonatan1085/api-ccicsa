@@ -52,7 +52,7 @@ class BitacorasController extends Controller
         $roles = auth('api')->user()->getRoleNames();
         $id = auth('api')->user()->id;
 
-        if ($roles[0] == "Admin" || $roles[0] == "Held Desk") {
+        if ($roles[0] == "Admin" || $roles[0] == "Held Desk" || $roles[0] == "Lider") {
             $bitacoras = Bitacora::where('nombre', "like", "%" . $search . "%")
                 ->orWhereHas("red", function ($q) use ($search) {
                     $q->where("nombre", "like", "%" . $search . "%");
@@ -62,9 +62,10 @@ class BitacorasController extends Controller
                 })
                 ->orWhere("incidencia", "like", "%" . $search . "%")
                 ->orWhere("sot", "like", "%" . $search . "%")
+                ->orWhere("correlativo", "like", "%" . $search . "%")
                 //->orderBy("fecha_inicial", "desc")
                 ->orderBy("id", "desc")
-                ->paginate(10);
+                ->paginate($request->get('perPage', 10));
             // dd($id);
         } else {
             $bitacoras = Bitacora::whereHas('brigadas.user', function ($q) use ($id) {
@@ -74,6 +75,7 @@ class BitacorasController extends Controller
                     $query->where('nombre', "like", "%" . $search . "%")
                         ->orWhere("incidencia", "like", "%" . $search . "%")
                         ->orWhere("sot", "like", "%" . $search . "%")
+                        ->orWhere("correlativo", "like", "%" . $search . "%")
                         ->orWhereHas("red", function ($q) use ($search) {
                             $q->where("nombre", "like", "%" . $search . "%");
                         })
@@ -83,12 +85,12 @@ class BitacorasController extends Controller
                 })
                 //->orderBy("fecha_inicial", "desc")
                 ->orderBy("id", "desc")
-                ->paginate(10);
+                ->paginate($request->get('perPage', 10));
             //dd($id );
         }
 
         return response()->json([
-            "total" => $bitacoras->count(),
+            "total" => $bitacoras->total(),
             "data" => BitacoraCollection::make($bitacoras)
         ]);
     }
@@ -210,15 +212,60 @@ class BitacorasController extends Controller
                 "brigadas.required" => 'No selecciono cuadrilla'
             ];
             $validator = Validator::make($request->all(), $rules, $messages);
+
             if ($validator->fails()) {
                 return response()->json([
-                    "message" => 403,
+                    "message" => 1,//403,
                     'message_text' => $validator->errors()
                 ]);
             }
-            /* $date_clean = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $request->fecha_inicial);
-            $request["fecha_inicial"] = Carbon::parse($date_clean)->format("Y-m-d h:i:s"); */
+
+
+            $user = auth('api')->user();
+            if (!$user) {
+                return response()->json([
+                    "message" => 2,//401,
+                    "message_text" => "Usuario no autenticado"
+                ]);
+            }
+
+            $regionId = optional($user->zona)->region_id;
+            if (!$regionId) {
+                return response()->json([
+                    "message" => 3,//403,
+                    "message_text" => "El usuario no tiene región asignada"
+                ]);
+            }
+
+            $tipoAveria = TipoAveria::find($request->tipo_averia_id);
+            if (!$tipoAveria) {
+                return response()->json([
+                    "message" => 4,//403,
+                    "message_text" => "Tipo de avería no válido"
+                ]);
+            }
+
+
+            // Asignar correlativo si es correctivo
+            if (trim(strtolower($tipoAveria->nombre)) === 'correctivo') {
+                $lastCorrelativo = Bitacora::whereHas('userCreatedBy.zona.region', function ($query) use ($regionId) {
+                    $query->where('id', $regionId);
+                })->whereHas('tipo_averia', function ($query) {
+                    $query->whereRaw("LOWER(nombre) = 'correctivo'");
+                })->max('correlativo') ?? 0;
+
+                $request['correlativo'] = $lastCorrelativo + 1;
+            } else {
+                $request['correlativo'] = null;
+            }
+
+            $request['user_created_by'] = $user->id;
+
+            // Crear bitácora
             $bitacora = Bitacora::create($request->all());
+
+
+            //$bitacora = Bitacora::create($data);
             //agregar los tecnicos seleccionados
             foreach ($request->brigadas as $brigada) {
                 BitacoraBrigada::create([
@@ -234,7 +281,7 @@ class BitacorasController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 "message" => 403,
-                "message_text" => $e
+                "message_text" => $e->getMessage()
             ]);
         }
     }
@@ -562,10 +609,10 @@ class BitacorasController extends Controller
         }
 
         $grupos = WhatsappGroup::query()
-        ->where('region_id', $regionId)
-        ->where('tipo_averia_id', $id)
-        // Seleccionamos group_name con alias "nombre"
-        ->get(['group_name as nombre']);
+            ->where('region_id', $regionId)
+            ->where('tipo_averia_id', $id)
+            // Seleccionamos group_name con alias "nombre"
+            ->get(['group_name as nombre']);
 
         return response()->json([
             'total' => $grupos->count(),

@@ -19,6 +19,7 @@ class BitacoraResource extends JsonResource
         parent::wrap(null);
         return [
             "id" => $this->resource->id,
+            "correlativo" =>$this->resource->correlativo,
             "nombre" => $this->resource->nombre,
             "enlace_plano_site" => $this->resource->enlace_plano_site,
             // "fecha_inicial" => $this->resource->fecha_inicial  ? Carbon::parse($this->resource->fecha_inicial)->format("Y-m-d") : NULL,

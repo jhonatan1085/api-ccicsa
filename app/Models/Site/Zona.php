@@ -3,6 +3,7 @@
 namespace App\Models\Site;
 
 use App\Models\Brigada\Brigada;
+use App\Models\Inventario\Almacen;
 use App\Models\User;
 use App\Models\User\ZonaUser;
 use Carbon\Carbon;
@@ -59,6 +60,11 @@ class Zona extends Model
         return $this->belongsToMany(User::class)
                                     ->withPivot('estado')
                                     ->where('estado','1');
+    }
+
+    public function almacenes()
+    {
+        return $this->hasMany(Almacen::class);
     }
 
 

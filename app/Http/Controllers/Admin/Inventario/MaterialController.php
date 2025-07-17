@@ -58,11 +58,11 @@ class MaterialController extends Controller
     }
 
 
-  public function autocomplete($almacen_id)
+  public function autocomplete($brigada_id)
     {
 
         $existencias = Existencia::with('material')
-        ->where('almacen_id', $almacen_id)
+        ->where('brigada_id', $brigada_id)
         ->get();
 
         $materiales = $existencias->map(function ($existencia) {
@@ -86,28 +86,28 @@ class MaterialController extends Controller
     {
         $request->validate([
             'bitacora_id' => 'required|exists:bitacoras,id',
-            'almacen_id' => 'required|exists:almacenes,id',
+            'brigada_id' => 'required|exists:brigadas,id',
         ]);
 
         $bitacoraId = $request->bitacora_id;
-        $almacenId = $request->almacen_id;
+        $brigadaId = $request->brigada_id;
 
         $movimientos = Movimiento::where('bitacora_id', $bitacoraId)
-            ->where('almacen_id', $almacenId)
+            ->where('brigada_id', $brigadaId)
             ->where('tipo', 'salida')
             ->with('material') // relación con el modelo Material
             ->get()
             ->map(function ($mov) {
                 return [
                     'cantidad' => $mov->cantidad,
-                    'almacen_id' => $mov->almacen_id,
+                    'brigada_id' => $mov->brigada_id,
                     'material' => [
                         'id' => $mov->material->id,
                         'codigo' => $mov->material->codigo,
                         'nombre' => $mov->material->nombre,
                         'unidad_medida' => $mov->material->unidad_medida,
                         'stock_actual' => optional(
-                            $mov->material->existencias->where('almacen_id', $mov->almacen_id)->first()
+                            $mov->material->existencias->where('brigada_id', $mov->brigada_id)->first()
                         )->stock_actual ?? 0,
                     ],
                 ];

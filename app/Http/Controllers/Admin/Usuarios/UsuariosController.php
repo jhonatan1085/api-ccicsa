@@ -221,12 +221,12 @@ class UsuariosController extends Controller
             ->whereHas("roles", function ($q) {
                 $q->where("name", "like", "%Tecnico%");
             })
-            ->where(function ($query) {
+           /* ->where(function ($query) {
                 // Técnicos no asignados a ninguna brigada activa (estado = 1)
                 $query->whereDoesntHave('brigada_user.brigada', function ($q) {
                     $q->where('estado', '=', 1); // Excluir técnicos con brigadas activas
                 });
-            })
+            })*/
             ->orderBy("name", "asc")
             ->get();
 

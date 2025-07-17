@@ -34,7 +34,7 @@ class BrigadaResource extends JsonResource
                 "id" => $this->zona->id,
                 "nombre" => $this->zona->nombre,
             ]: NULL,
-             "user_movil" => BrigadaUserResource::collection($this->brigada_user),
+             "user_movil" => BrigadaUserResource::collection($this->whenLoaded('brigada_user_activos')),
         ];
     }
 }

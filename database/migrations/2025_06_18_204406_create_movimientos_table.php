@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('movimientos', function (Blueprint $table) {
             $table->id();
              // Relaciones principales
-            $table->foreignId('almacen_id')->constrained('almacenes')->onDelete('cascade');
+            $table->foreignId('brigada_id')->constrained('brigadas')->onDelete('cascade');
             $table->foreignId('material_id')->constrained('materiales')->onDelete('cascade');
             // Detalle del movimiento
             $table->enum('tipo', ['ingreso', 'salida', 'ajuste']);

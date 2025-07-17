@@ -49,60 +49,68 @@ class User extends Authenticatable implements JWTSubject
     ];
 
 
-    public function educacion() 
+    public function educacion()
     {
         return $this->belongsTo(Educacion::class);
     }
 
-    public function zona() 
+    public function zona()
     {
         return $this->belongsTo(Zona::class);
     }
 
- /*    public function region() 
+    /*    public function region() 
     {
         return $this->belongsToThrough(Region::class,Zona::class);
     } */
 
-    public function brigada_user() 
+    public function brigada_user()
     {
         return $this->hasMany(BrigadaUser::class);
     }
 
-    public function brigada() 
+    public function brigada()
     {
         return $this->belongsToMany(Brigada::class);
+    }
+
+    public function brigada_activa()
+    {
+        return $this->belongsToMany(Brigada::class, 'brigada_user')
+            ->wherePivot('estado', true);
     }
 
     public function unidad_movil()
     {
         return $this->belongsToMany(UnidadMovil::class)
-        ->withPivot('estado')
-        ->where('unidad_movil_user.estado','1');
+            ->withPivot('estado')
+            ->where('unidad_movil_user.estado', '1');
     }
-    
+
     public function unidad_movil_user()
     {
-        return $this->hasMany(UnidadMovilUser::class)->where('estado','1');
+        return $this->hasMany(UnidadMovilUser::class)->where('estado', '1');
     }
 
     public function zona_user()
     {
-        return $this->hasMany(ZonaUser::class)->where('estado','1');
+        return $this->hasMany(ZonaUser::class)->where('estado', '1');
     }
 
     public function zonas()
     {
         return $this->belongsToMany(Zona::class)
-                                    ->withPivot('estado')
-                                    ->where('estado','1');
-                                    //->where('is_user','1');
+            ->withPivot('estado')
+            ->where('estado', '1');
+        //->where('is_user','1');
     }
 
-    protected function setNameAttribute($value){
+    protected function setNameAttribute($value)
+    {
         $this->attributes['name'] = ucfirst(strtolower($value));
     }
-    protected function setSurnameAttribute($value){
+    protected function setSurnameAttribute($value)
+    {
         $this->attributes['surname'] = ucfirst(strtolower($value));
     }
 
@@ -135,7 +143,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->getKey();
     }
- 
+
     /**
      * Return a key value array, containing any custom claims to be added to the JWT.
      *

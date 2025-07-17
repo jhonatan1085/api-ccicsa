@@ -17,7 +17,10 @@ class BrigadaUser extends Model
         "is_lider",
         "user_id",
         "brigada_id",
-        "unidad_movil_id"
+        "unidad_movil_id",
+        'estado',
+         'fecha_alta', 
+         'fecha_baja'
     ];
 
     public function setCreatedAtAttribute($value)

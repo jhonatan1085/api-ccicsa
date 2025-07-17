@@ -3,6 +3,7 @@
 namespace App\Models\Inventario;
 
 use App\Models\Bitacora\Bitacora;
+use App\Models\Brigada\Brigada;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,7 +13,7 @@ class Movimiento extends Model
     use HasFactory;
 
     protected $fillable = [
-        'almacen_id',
+        'brigada_id',
         'material_id',
         'tipo',
         'cantidad',
@@ -24,9 +25,9 @@ class Movimiento extends Model
         'user_updated_by'
     ];
 
-    public function almacen()
+    public function brigada()
     {
-        return $this->belongsTo(Almacen::class);
+        return $this->belongsTo(Brigada::class);
     }
 
     public function material()

@@ -11,6 +11,7 @@ use App\Models\Bitacora\Atencion;
 use App\Models\Bitacora\Bitacora;
 use App\Models\Bitacora\BitacoraAtencion;
 use App\Models\Bitacora\BitacoraBrigada;
+use App\Models\Bitacora\BitacoraBrigadaUser;
 use App\Models\Bitacora\BitacoraDemora;
 use App\Models\Bitacora\CausaAveria;
 use App\Models\Bitacora\ConsecuenciaAveria;
@@ -68,9 +69,17 @@ class BitacorasController extends Controller
                 ->paginate($request->get('perPage', 10));
             // dd($id);
         } else {
-            $bitacoras = Bitacora::whereHas('brigadas.user', function ($q) use ($id) {
+            $bitacoras = Bitacora::with([
+                'brigadas',
+                'bitacora_brigada.usuarios',
+                'bitacora_brigada.usuarios.unidad_movil',
+            ])
+                /*->whereHas('brigadas.user', function ($q) use ($id) {
                 $q->where('users.id',  $id);
-            })
+            })*/
+               ->whereHas('bitacora_brigada.usuarios', function ($q) use ($id) {
+                    $q->where('user_id', $id);
+                })
                 ->where(function ($query) use ($search) {
                     $query->where('nombre', "like", "%" . $search . "%")
                         ->orWhere("incidencia", "like", "%" . $search . "%")
@@ -215,7 +224,7 @@ class BitacorasController extends Controller
 
             if ($validator->fails()) {
                 return response()->json([
-                    "message" => 1,//403,
+                    "message" => 1, //403,
                     'message_text' => $validator->errors()
                 ]);
             }
@@ -224,7 +233,7 @@ class BitacorasController extends Controller
             $user = auth('api')->user();
             if (!$user) {
                 return response()->json([
-                    "message" => 2,//401,
+                    "message" => 2, //401,
                     "message_text" => "Usuario no autenticado"
                 ]);
             }
@@ -232,7 +241,7 @@ class BitacorasController extends Controller
             $regionId = optional($user->zona)->region_id;
             if (!$regionId) {
                 return response()->json([
-                    "message" => 3,//403,
+                    "message" => 3, //403,
                     "message_text" => "El usuario no tiene región asignada"
                 ]);
             }
@@ -240,7 +249,7 @@ class BitacorasController extends Controller
             $tipoAveria = TipoAveria::find($request->tipo_averia_id);
             if (!$tipoAveria) {
                 return response()->json([
-                    "message" => 4,//403,
+                    "message" => 4, //403,
                     "message_text" => "Tipo de avería no válido"
                 ]);
             }
@@ -264,15 +273,33 @@ class BitacorasController extends Controller
             // Crear bitácora
             $bitacora = Bitacora::create($request->all());
 
-
-            //$bitacora = Bitacora::create($data);
-            //agregar los tecnicos seleccionados
+            // Crear nuevamente registros de brigadas asociadas a la bitácora
             foreach ($request->brigadas as $brigada) {
-                BitacoraBrigada::create([
+                $bitacoraBrigada = BitacoraBrigada::create([
                     "brigada_id" => $brigada["id"],
                     "bitacora_id" => $bitacora->id
                 ]);
+
+                // Obtener técnicos activos en esa brigada
+                $usuariosActivos = BrigadaUser::where('brigada_id', $brigada["id"])
+                    ->where('estado', true)
+                    ->get();
+
+                foreach ($usuariosActivos as $usuario) {
+                    BitacoraBrigadaUser::create([
+                        "bitacora_brigada_id" => $bitacoraBrigada->id, // clave importante
+                        "user_id" => $usuario->user_id,
+                        "unidad_movil_id" => $usuario->unidad_movil_id,
+                        "is_lider" => $usuario->is_lider
+                    ]);
+                }
             }
+
+
+
+
+
+
             return response()->json([
                 "message" => 200,
                 "message_text" => "ok",
@@ -416,26 +443,38 @@ class BitacorasController extends Controller
     {
         $bitacora = Bitacora::findOrFail($id);
 
-        /*  $date_clean = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $request->fecha_inicial);
-        $request["fecha_inicial"] = Carbon::parse($date_clean)->format("Y-m-d h:i:s"); */
-
-        /*  $date_clean = preg_replace("/\(.*\)|[A-Z]{3}-\d{4}/", '', $request->fecha_inicial);
-        $request->fecha_inicial = Carbon::parse($date_clean)->format("Y-m-d h:i:s"); */
-
-
+        // Actualizar campos de la bitácora
         $bitacora->update($request->all());
 
+        // 1. Obtener los bitacora_brigada_id asociados a esta bitácora
+        $bitacoraBrigadaIds = BitacoraBrigada::where('bitacora_id', $bitacora->id)->pluck('id');
 
-        foreach ($bitacora->bitacora_brigada as $key => $brigada) {
+        // 2. Eliminar los registros en bitacora_brigada_user asociados
+        BitacoraBrigadaUser::whereIn('bitacora_brigada_id', $bitacoraBrigadaIds)->delete();
 
-            $brigada->delete();
-        }
+        // Eliminar registros antiguos de bitacora_brigada
+        BitacoraBrigada::where('bitacora_id', $bitacora->id)->delete();
 
+        // Crear nuevamente registros de brigadas asociadas a la bitácora
         foreach ($request->brigadas as $brigada) {
-            BitacoraBrigada::create([
+            $bitacoraBrigada = BitacoraBrigada::create([
                 "brigada_id" => $brigada["id"],
                 "bitacora_id" => $bitacora->id
             ]);
+
+            // Obtener técnicos activos en esa brigada
+            $usuariosActivos = BrigadaUser::where('brigada_id', $brigada["id"])
+                ->where('estado', true)
+                ->get();
+
+            foreach ($usuariosActivos as $usuario) {
+                BitacoraBrigadaUser::create([
+                    "bitacora_brigada_id" => $bitacoraBrigada->id, // clave importante
+                    "user_id" => $usuario->user_id,
+                    "unidad_movil_id" => $usuario->unidad_movil_id,
+                    "is_lider" => $usuario->is_lider
+                ]);
+            }
         }
 
         return response()->json([
@@ -617,6 +656,26 @@ class BitacorasController extends Controller
         return response()->json([
             'total' => $grupos->count(),
             'data' => $grupos
+        ]);
+    }
+
+
+    public function getBrigadasDeBitacora(string $bitacoraId)
+    {
+        $bitacora = Bitacora::with('brigadas') // solo esos campos
+            ->findOrFail($bitacoraId);
+
+        $brigadas = $bitacora->brigadas->map(function ($brigada) {
+            return [
+                'id' => $brigada->id,
+                'nombre' => $brigada->nombre
+            ];
+        });
+
+        return response()->json([
+            'message' => 200,
+            'message_text' => 'Brigadas obtenidas correctamente',
+            'data' => $brigadas,
         ]);
     }
 }

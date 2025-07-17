@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('existencias', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('almacen_id')->constrained('almacenes')->onDelete('cascade');
+            $table->foreignId('brigada_id')->constrained('brigadas')->onDelete('cascade');
             $table->foreignId('material_id')->constrained('materiales')->onDelete('cascade');
             $table->decimal('stock_actual', 10, 2)->default(0);
             $table->timestamps();

@@ -86,6 +86,10 @@ Route::group([
 
     $endpoint = "bitacoras";
     // extras
+
+
+
+    Route::get($endpoint."/brigadas-bitacora/{bitacora_id}",[BitacorasController::class,"getBrigadasDeBitacora"]);
     Route::get($endpoint."/group-whastApp/{bitacora_id}",[BitacorasController::class,"groupWhatsApp"]);
     Route::get($endpoint."/exportaBitacoras",[BitacorasController::class,"exportaBitacoras"]);
     Route::get($endpoint."/atencion/{bitacora_id}",[BitacorasController::class,"listarAtenciones"]);
@@ -128,7 +132,7 @@ Route::group([
     $endpoint = "materiales";
     // EXTRAS
     Route::post($endpoint."/materiales-bitacora",[MaterialController::class,"obtenerMaterialesRegistrados"]);
-    Route::get($endpoint."/autocomplete/{almacen_id}",[MaterialController::class,"autocomplete"]);
+    Route::get($endpoint."/autocomplete/{brigada_id}",[MaterialController::class,"autocomplete"]);
     Route::resource($endpoint,MaterialController::class);//all
 
 

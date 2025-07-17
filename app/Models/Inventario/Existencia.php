@@ -2,6 +2,7 @@
 
 namespace App\Models\Inventario;
 
+use App\Models\Brigada\Brigada;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +11,7 @@ class Existencia extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['almacen_id', 'material_id', 'stock_actual'];
+    protected $fillable = ['brigada_id', 'material_id', 'stock_actual'];
 
     public function setCreatedAtAttribute($value)
     {
@@ -24,9 +25,9 @@ class Existencia extends Model
         $this->attributes["updated_at"]= Carbon::now();
     }
 
-    public function almacen()
+    public function brigada()
     {
-        return $this->belongsTo(Almacen::class);
+        return $this->belongsTo(Brigada::class);
     }
 
     public function material()

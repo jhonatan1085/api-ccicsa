@@ -4,6 +4,7 @@ namespace App\Models\Bitacora;
 
 use App\Models\BaseModel;
 use App\Models\Brigada\Brigada;
+use App\Models\Inventario\Movimiento;
 use App\Models\Site\Site;
 use App\Models\User;
 use Carbon\Carbon;
@@ -120,11 +121,22 @@ class Bitacora extends BaseModel
         return $this->hasMany(BitacoraBrigada::class);
     }
 
-
-    public function brigadas()
+     public function brigadas()
     {
         return $this->belongsToMany(Brigada::class);
     }
+
+   /* public function brigadas()
+    {
+        return $this->hasManyThrough(
+            Brigada::class,
+            BitacoraBrigada::class,
+            'bitacora_id',  // Foreign key on bitacora_brigada table...
+            'id',           // Local key on brigada table...
+            'id',           // Local key on bitacora table...
+            'brigada_id'    // Foreign key on bitacora_brigada table...
+        );
+    }*/
 
     public function bitacora_atencion()
     {
@@ -134,6 +146,11 @@ class Bitacora extends BaseModel
     public function bitacora_demora()
     {
         return $this->hasMany(BitacoraDemora::class);
+    }
+
+    public function movimientos()
+    {
+        return $this->hasMany(Movimiento::class);
     }
 
     public function atencion()
@@ -161,7 +178,7 @@ class Bitacora extends BaseModel
         return $this->belongsTo(User::class, 'user_created_by');
     }
 
-   /* protected static function booted()
+    /* protected static function booted()
     {
         static::creating(function ($bitacora) {
             $user = auth('api')->user();

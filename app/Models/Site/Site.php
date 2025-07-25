@@ -3,6 +3,7 @@
 namespace App\Models\Site;
 
 use App\Models\BaseModel;
+use App\Models\Bitacora\Bitacora;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,39 +30,49 @@ class Site extends BaseModel
 
     public function setCreatedAtAttribute($value)
     {
-    	date_default_timezone_set('America/Lima');
-        $this->attributes["created_at"]= Carbon::now();
+        date_default_timezone_set('America/Lima');
+        $this->attributes["created_at"] = Carbon::now();
     }
 
     public function setUpdatedAtAttribute($value)
     {
-    	date_default_timezone_set("America/Lima");
-        $this->attributes["updated_at"]= Carbon::now();
+        date_default_timezone_set("America/Lima");
+        $this->attributes["updated_at"] = Carbon::now();
     }
-    
+
     public function zona()
     {
-        return $this->belongsTo(Zona::class)->orderBy('nombre','asc');
+        return $this->belongsTo(Zona::class)->orderBy('nombre', 'asc');
     }
     public function tipo_site()
     {
         return $this->belongsTo(TipoSite::class);
     }
 
-    public function region() 
+    public function region()
     {
         return $this->belongsTo(Region::class);
     }
-    public function region_geografica() 
+    public function region_geografica()
     {
         return $this->belongsTo(RegionGeografica::class);
     }
-    public function municipalidade() 
+    public function municipalidade()
     {
         return $this->belongsTo(Municipalidade::class);
     }
 
-/*     public function consesionaria() 
+    public function bitacoras()
+    {
+        return $this->hasMany(Bitacora::class, 'site_id');
+    }
+
+    public function bitacorasFin()
+    {
+        return $this->hasMany(Bitacora::class, 'site_fin_id');
+    }
+
+    /*     public function consesionaria() 
     {
         return $this->belongsTo(Consesionaria::class);
     }
@@ -89,6 +100,4 @@ class Site extends BaseModel
     {
         return $this->belongsTo(Distrito::class);
     }*/
-
-    
 }

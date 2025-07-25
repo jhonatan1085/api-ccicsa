@@ -60,6 +60,7 @@ class Bitacora extends BaseModel
         "nro_tas",
         "nro_crq",
         "site_id",
+        "site_fin_id",
         "cliente",
         "resp_cicsa_id",
         "resp_claro_id",
@@ -98,7 +99,12 @@ class Bitacora extends BaseModel
 
     public function site()
     {
-        return $this->belongsTo(Site::class);
+        return $this->belongsTo(Site::class, "site_id");
+    }
+
+    public function site_fin()
+    {
+        return $this->belongsTo(Site::class, "site_fin_id");
     }
 
     public function serv()

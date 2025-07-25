@@ -78,6 +78,26 @@ class BitacoraResource extends JsonResource
                     "nombre" => $this->site->tipo_site->nombre == 'POP' ?  $this->site->tipo_site->nombre : 'SITE',
                 ] : NULL,
             ] : NULL,
+
+            "site_fin" =>    $this->site_fin ? [
+                "id" => $this->site_fin->id,
+                "nombre" => $this->site_fin->nombre,
+                "region" =>  $this->site_fin->region->nombre,
+
+                "distrito" => $this->site_fin->municipalidade->distrito ? [
+                    "id" => $this->site_fin->municipalidade->distrito->id,
+                    "nombre" => $this->site_fin->municipalidade->distrito->nombre,
+                ] : NULL,
+                "departamento" => $this->site_fin->municipalidade->distrito->provincia->departamento ? [
+                    "id" => $this->site_fin->municipalidade->distrito->provincia->departamento->id,
+                    "nombre" => $this->site_fin->municipalidade->distrito->provincia->departamento->nombre,
+                ] : NULL,
+                "tipo_site" => $this->site_fin->tipo_site ? [
+                    "id" => $this->site_fin->tipo_site->id,
+                    "nombre" => $this->site_fin->tipo_site->nombre == 'POP' ?  $this->site_fin->tipo_site->nombre : 'SITE',
+                ] : NULL,
+            ] : NULL,
+
             "cliente" => $this->cliente,
             "brigadas" => BitacoraBrigadaResource::collection($this->bitacora_brigada),
             "tiempo_solucion" => $this->tiempo_solucion,

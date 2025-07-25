@@ -538,7 +538,6 @@ class BitacorasController extends Controller
         $bitacora->causa_averia_id = $request->causa_averia_id;
         $bitacora->consecuencia_averia_id = $request->consecuencia_averia_id;
         $bitacora->tipo_reparacion_id = $request->tipo_reparacion_id;
-        $bitacora->herramientas = $request->herramientas;
         $bitacora->tiempo_solucion = $request->tiempo_solucion;
         $bitacora->estado = "0";
         $bitacora->save();

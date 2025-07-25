@@ -11,7 +11,7 @@ class Material extends Model
     use HasFactory;
     protected $table = "materiales";
     
-    protected $fillable = ['codigo', 'nombre', 'descripcion', 'unidad_medida', 'stock_minimo'];
+    protected $fillable = ['codigo', 'codigoSAP','nombre', 'descripcion','codigoAX','sub_categoria_id','precio' ,'unidad_medida', 'stock_minimo'];
 
         public function setCreatedAtAttribute($value)
     {
@@ -33,5 +33,10 @@ class Material extends Model
     public function movimientos()
     {
         return $this->hasMany(Movimiento::class);
+    }
+
+    public function subcategoria()
+    {
+        return $this->belongsTo(SubCategoria::class, 'sub_categoria_id');
     }
 }

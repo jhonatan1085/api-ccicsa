@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Admin\Inventario;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Inventario\MaterialCollection;
 use App\Models\Inventario\Existencia;
 use App\Models\Inventario\Material;
 use App\Models\Inventario\Movimiento;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Exception;
 
 class MaterialController extends Controller
 {
@@ -16,12 +19,15 @@ class MaterialController extends Controller
     public function index(Request $request)
     {
         $search = $request->search;
+        $material = Material::with('subcategoria.categoria') // <-- Cargamos relaciones
+            ->where('nombre', "like", "%" . $search . "%")
+             ->orWhere("codigo", "like", "%" . $search . "%")
+             ->paginate($request->get('perPage', 10));
 
-        $material = Material::paginate() ;
 
         return response()->json([
             "total" => $material->total(),
-            "data" => $material //BitacoraCollection::make($bitacoras)
+            "data" => MaterialCollection::make($material)
         ]);
     }
 
@@ -30,7 +36,49 @@ class MaterialController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+
+            $rules = [
+                'codigo' => 'required|unique:materiales,codigo',
+                'nombre' => 'required',
+                'sub_categoria_id' => 'required',
+                'precio' => 'required',
+                'unidad_medida' => 'required',
+                'stock_minimo' => 'required',
+
+            ];
+            $messages = [
+                'codigo.required' => 'Codigo Requerido',
+                'codigo.unique' => 'El código de material ya existe',
+                'nombre.required' => 'Nombre Requerido',
+                'sub_categoria_id.required' => 'DSub Categoria Requerido',
+                'precio.required' => 'Precio Requerido',
+                'unidad_medida.required' => 'UM Requerido',
+                'stock_minimo.required' => 'Stock Minimo Requerido',
+            ];
+
+            $validator = Validator::make($request->all(), $rules, $messages);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    "message" => 403,
+                    "errors" => $validator->errors()  // <-- asegúrate que es 'errors' y no 'error'
+                ], 422); // <-- este código también ayuda a Angular a reconocerlo como error de validación
+            }
+
+            $material =   Material::create($request->all());
+
+            return response()->json([
+                "message" => 200,
+                "message_text" => "ok",
+                "data" => $material
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                "message" => 403,
+                "error" => $e->getMessage()
+            ]);
+        }
     }
 
     /**
@@ -46,7 +94,53 @@ class MaterialController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+
+            $rules = [
+                'codigo' => 'required|unique:materiales,codigo,' . $id,
+                'nombre' => 'required',
+                'sub_categoria_id' => 'required',
+                'precio' => 'required',
+                'unidad_medida' => 'required',
+                'stock_minimo' => 'required',
+
+            ];
+            $messages = [
+                'codigo.required' => 'Codigo Requerido',
+                'codigo.unique' => 'El código ya está registrado',
+                'nombre.required' => 'Nombre Requerido',
+                'sub_categoria_id.required' => 'DSub Categoria Requerido',
+                'precio.required' => 'Precio Requerido',
+                'unidad_medida.required' => 'UM Requerido',
+                'stock_minimo.required' => 'Stock Minimo Requerido',
+            ];
+
+            $validator = Validator::make($request->all(), $rules, $messages);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    "message" => 403,
+                    "error" => $validator->errors()
+                ]);
+            }
+
+            $material = Material::findOrFail($id);
+            // Forzar a que el código nunca se actualice
+            $requestData = $request->except('codigo'); // ignora código
+
+            $material->update($requestData);
+
+            return response()->json([
+                "message" => 200,
+                "message_text" => "ok",
+                "data" => $material
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                "message" => 403,
+                "error" => $e->getMessage()
+            ]);
+        }
     }
 
     /**
@@ -58,22 +152,22 @@ class MaterialController extends Controller
     }
 
 
-  public function autocomplete($brigada_id)
+    public function autocomplete($brigada_id)
     {
 
         $existencias = Existencia::with('material')
-        ->where('brigada_id', $brigada_id)
-        ->get();
+            ->where('brigada_id', $brigada_id)
+            ->get();
 
         $materiales = $existencias->map(function ($existencia) {
-        return [
-            'id' => $existencia->material->id,
-            'codigo' => $existencia->material->codigo,
-            'nombre' => $existencia->material->nombre,
-            'unidad_medida' => $existencia->material->unidad_medida,
-            'stock_actual' => $existencia->stock_actual,
-        ];
-    });
+            return [
+                'id' => $existencia->material->id,
+                'codigo' => $existencia->material->codigo,
+                'nombre' => $existencia->material->nombre,
+                'unidad_medida' => $existencia->material->unidad_medida,
+                'stock_actual' => $existencia->stock_actual,
+            ];
+        });
 
         // $sites = Site::get();
         return response()->json([
@@ -118,5 +212,28 @@ class MaterialController extends Controller
             'message_text' => 'Materiales obtenidos correctamente',
             'data' => $movimientos,
         ]);
+    }
+
+    public function cargaMasiva(Request $request)
+    {
+        $materiales = $request->all(); // array de materiales
+
+        foreach ($materiales as $item) {
+            Material::updateOrCreate(
+                ['codigo' => $item['codigo']],
+                [
+                    'codigoSAP' => $item['codigoSAP'] ?? null,
+                    'nombre' => $item['nombre'],
+                    'descripcion' => $item['descripcion'] ?? null,
+                    'codigoAX' => $item['codigoAX'] ?? null,
+                    'sub_categoria_id' => $item['sub_categoria_id'],
+                    'precio' => $item['precio'],
+                    'unidad_medida' => $item['unidad_medida'],
+                    'stock_minimo' => $item['stock_minimo'],
+                ]
+            );
+        }
+
+        return response()->json(['message' => 200, 'message_text' => 'Carga masiva exitosa']);
     }
 }

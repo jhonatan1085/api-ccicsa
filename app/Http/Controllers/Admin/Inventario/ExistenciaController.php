@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Inventario;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Inventario\ExistenciaCollection;
 use App\Models\Inventario\Existencia;
 use Illuminate\Http\Request;
 
@@ -14,12 +15,19 @@ class ExistenciaController extends Controller
     public function index(Request $request)
     {
         $search = $request->search;
-
-        $existencia = Existencia::paginate() ;
+        $existencias = Existencia::with('brigada', 'material') // <-- Cargamos relaciones
+            ->whereHas('brigada', function ($q) use ($search) {
+                $q->where('nombre', 'LIKE', '%' . $search . '%');
+            })
+            ->orWhereHas("material", function ($q) use ($search) {
+                    $q->where("nombre", "like", "%" . $search . "%")
+                    ->orwhere("codigo", "like", "%" . $search . "%");
+                })
+            ->paginate($request->get('perPage', 10));
 
         return response()->json([
-            "total" => $existencia->total(),
-            "data" => $existencia //BitacoraCollection::make($bitacoras)
+            "total" => $existencias->total(),
+            "data" => ExistenciaCollection::make($existencias)
         ]);
     }
 

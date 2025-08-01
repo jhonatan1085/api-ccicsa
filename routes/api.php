@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\Brigada\BrigadasController;
 use App\Http\Controllers\Admin\Doctor\DoctorsController;
 use App\Http\Controllers\Admin\Doctor\SpecialityController;
 use App\Http\Controllers\Admin\Inventario\CategoriaController;
+use App\Http\Controllers\Admin\Inventario\ExistenciaController;
 use App\Http\Controllers\Admin\Inventario\MaterialController;
 use App\Http\Controllers\Admin\Inventario\MovimientoController;
 use App\Http\Controllers\Admin\Lideres\LideresController;
@@ -132,20 +133,27 @@ Route::group([
 
     $endpoint = "materiales";
 
-
-
-
     // EXTRAS
     Route::post($endpoint."/carga-masiva",[MaterialController::class,"cargaMasiva"]);
     Route::post($endpoint."/materiales-bitacora",[MaterialController::class,"obtenerMaterialesRegistrados"]);
-    Route::get($endpoint."/autocomplete/{brigada_id}",[MaterialController::class,"autocomplete"]);
+    Route::get($endpoint."/autocomplete",[MaterialController::class,"autocomplete"]);
+  
+    
     Route::resource($endpoint,MaterialController::class);//all
 
 
     $endpoint = "movimientos";
     // EXTRAS
+    
+    Route::post($endpoint."/agrega-material-brigada",[MovimientoController::class,"agregaMaterialesBrigada"]);
     Route::post($endpoint."/materiales-bitacora",[MovimientoController::class,"agregaMateriales"]);
     Route::resource($endpoint,MovimientoController::class);//all
+
+
+    $endpoint = "existencias";
+    // EXTRAS
+   // Route::post($endpoint."/materiales-bitacora",[MovimientoController::class,"agregaMateriales"]);
+    Route::resource($endpoint,ExistenciaController::class);//all
 
     ////////////////
     // configs   //

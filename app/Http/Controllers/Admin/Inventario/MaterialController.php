@@ -21,8 +21,8 @@ class MaterialController extends Controller
         $search = $request->search;
         $material = Material::with('subcategoria.categoria') // <-- Cargamos relaciones
             ->where('nombre', "like", "%" . $search . "%")
-             ->orWhere("codigo", "like", "%" . $search . "%")
-             ->paginate($request->get('perPage', 10));
+            ->orWhere("codigo", "like", "%" . $search . "%")
+            ->paginate($request->get('perPage', 10));
 
 
         return response()->json([
@@ -152,29 +152,43 @@ class MaterialController extends Controller
     }
 
 
-    public function autocomplete($brigada_id)
+    public function autocomplete(Request $request)
     {
 
-        $existencias = Existencia::with('material')
-            ->where('brigada_id', $brigada_id)
-            ->get();
+        $brigada_id = $request->query('brigada_id');
+        if ($brigada_id) {
 
-        $materiales = $existencias->map(function ($existencia) {
-            return [
-                'id' => $existencia->material->id,
-                'codigo' => $existencia->material->codigo,
-                'nombre' => $existencia->material->nombre,
-                'unidad_medida' => $existencia->material->unidad_medida,
-                'stock_actual' => $existencia->stock_actual,
-            ];
-        });
+            $existencias = Existencia::with('material')
+                ->where('brigada_id', $brigada_id)
+                ->get();
 
+            $materiales = $existencias->map(function ($existencia) {
+                return [
+                    'id' => $existencia->material->id,
+                    'codigo' => $existencia->material->codigo,
+                    'nombre' => $existencia->material->nombre,
+                    'unidad_medida' => $existencia->material->unidad_medida,
+                    'stock_actual' => $existencia->stock_actual,
+                ];
+            });
+        } else {
+            $materiales = Material::get()->map(function ($material) {
+                return [
+                    'id' => $material->id,
+                    'codigo' => $material->codigo,
+                    'nombre' => $material->nombre,
+                    'unidad_medida' => $material->unidad_medida,
+                ];
+            });
+        }
         // $sites = Site::get();
         return response()->json([
             "total" => $materiales->count(),
             "data" =>    $materiales
         ]);
     }
+
+
 
     public function obtenerMaterialesRegistrados(Request $request)
     {

@@ -8,6 +8,7 @@ use App\Models\Inventario\Material;
 use App\Models\Inventario\Movimiento;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Validator;
 use Exception;
 
 class MovimientoController extends Controller
@@ -60,6 +61,80 @@ class MovimientoController extends Controller
         //
     }
 
+
+    public function agregaMaterialesBrigada(Request $request)
+    {
+        try {
+
+            $rules = [
+
+                '*.material_id' => 'required|exists:materiales,id',
+                '*.brigada_id' => 'required|exists:brigadas,id',
+                '*.cantidad' => 'required|numeric|min:0.01'
+            ];
+            $messages = [
+                '*.material_id.required' => 'Material requerido.',
+                '*.material_id.exists' => 'Material no válido.',
+                '*.brigada_id.required' => 'Brigada requerida.',
+                '*.brigada_id.exists' => 'Brigada no válida.',
+                '*.cantidad.required' => 'Cantidad requerida.',
+                '*.cantidad.numeric' => 'Cantidad debe ser numérica.',
+                '*.cantidad.min' => 'La cantidad debe ser mayor a cero.'
+            ];
+
+            $validator = Validator::make($request->all(), $rules, $messages);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    "message" => "Validación fallida",
+                    "errors" => $validator->errors()
+                ], 422);
+            }
+            $userId = auth()->id();
+
+            foreach ($request->all() as $item) {
+                $material_id = $item['material_id'];
+                $brigada_id = $item['brigada_id'];
+                $cantidad = $item['cantidad'];
+
+                // Registrar movimiento
+                Movimiento::create([
+                    'material_id' => $material_id,
+                    'brigada_id' => $brigada_id,
+                    'tipo' => 'ingreso', // o "salida" si más adelante deseas manejar salidas
+                    'cantidad' => $cantidad,
+                    'fecha_movimiento' => now(),
+                    'user_created_by' => $userId,
+                ]);
+
+                // Actualizar o crear existencia
+                $existencia = Existencia::where('brigada_id', $brigada_id)
+                    ->where('material_id', $material_id)
+                    ->first();
+
+                if ($existencia) {
+                    $existencia->increment('stock_actual', $cantidad);
+                } else {
+                    Existencia::create([
+                        'material_id' => $material_id,
+                        'brigada_id' => $brigada_id,
+                        'stock_actual' => $cantidad,
+                    ]);
+                }
+            }
+
+            return response()->json([
+                "message" => 200,
+                "message_text" => "ok",
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                "message" => 403,
+                "error" => $e->getMessage()
+            ]);
+        }
+    }
+
     public function agregaMateriales(Request $request)
     {
 
@@ -68,9 +143,6 @@ class MovimientoController extends Controller
             $id = auth('api')->user()->id;
 
             $brigadaId = $request->materiales[0]['brigada_id'];
-
-
-
 
             $request->validate([
                 'materiales' => 'required|array',
@@ -105,7 +177,6 @@ class MovimientoController extends Controller
                     ->first();
 
                 if (!$existencia || $existencia->stock_actual < $item['cantidad']) {
-
 
                     $materialNombre = Material::find($item['material_id'])?->nombre ?? 'desconocido';
 
@@ -148,5 +219,4 @@ class MovimientoController extends Controller
             ]);
         }
     }
-    
 }
